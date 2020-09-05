@@ -5,13 +5,6 @@ import Header from './components/Header'
 import Footer from './components/Footer'
 
 function App(){
-
-  const sayHello = () => {
-    console.log('hello');
-  }
-
-  const counter = 0;
-
   return (
     <div className="App">
       <Header />
