@@ -2,6 +2,8 @@ const pets = require("../controllers/pet.controller.js");
 
 const router = require("express").Router();
 
+// Root: "/api/pets"
+
 // Create a new Pet
 router.post("/", pets.create);
 

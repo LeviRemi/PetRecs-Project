@@ -2,6 +2,8 @@ const accounts = require("../controllers/account.controller.js");
 
 const router = require("express").Router();
 
+// Root: "/api/accounts"
+
 // Create a new Account
 router.post("/", accounts.create);
 

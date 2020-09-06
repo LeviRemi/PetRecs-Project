@@ -21,6 +21,7 @@ db.pet = require("./pet.model.js")(sequelize, Sequelize);
 db.species = require("./species.model")(sequelize, Sequelize);
 db.breed = require("./breed.model")(sequelize, Sequelize);
 db.account = require("./account.model")(sequelize, Sequelize);
-db.petweight = require("./pet-weight.model")(sequelize, Sequelize);
+db.petWeight = require("./pet-weight.model")(sequelize, Sequelize);
+db.petEvent = require("./pet-event.model")(sequelize, Sequelize);
 
 module.exports = db;

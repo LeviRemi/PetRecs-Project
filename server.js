@@ -54,6 +54,9 @@ app.use('/api/pet-weights', apiPetWeight);
 const apiAccount = require('./routes/account.routes');
 app.use('/api/accounts', apiAccount);
 
+const apiPetEvent = require('./routes/pet-event.routes');
+app.use('/api/pet-events', apiPetEvent);
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`App is listening on port ${PORT}.`);

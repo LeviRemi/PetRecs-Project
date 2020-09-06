@@ -1,5 +1,5 @@
 const db = require("../models");
-const PetWeight = db.petweight;
+const PetWeight = db.petWeight;
 
 // Create and Save a new Pet Weight
 exports.create = (req, res) => {
