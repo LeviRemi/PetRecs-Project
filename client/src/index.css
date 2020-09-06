@@ -11,3 +11,45 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+.loginRegForm {
+  width: 420px;
+  text-align: left;
+  margin: auto;
+}
+
+.form-label {
+  font-weight: bold;
+}
+
+.formBox {
+  background-color: white;
+  width: 480px;
+  text-align: center;
+  margin: auto;
+  padding: 40px 0px 80px 0px;
+  border-radius: 20px;
+}
+
+.formTitle {
+  text-align: center;
+  font-size: 48px;
+  font-weight: bold;
+}
+
+.fullPageContainer {
+  background-color: black;
+  height: 100%;
+  margin: 0px;
+}
+
+.fill-window {
+  height: 100%;
+  position: absolute;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  background: rgb(255,255,255);
+  background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(232,234,245,1) 50%, rgba(230,236,255,1) 100%);
+}
