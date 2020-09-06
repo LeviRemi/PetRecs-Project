@@ -12,22 +12,21 @@ function Login() {
         <div className="fill-window">
             
             <div className="formBox">
-
                 <div className="formTitle">
                     LOGIN
                 </div>
-                <br />
                 <Form className="loginRegForm">
-                <Form.Group controlId="formBasicEmail">
-                    <Form.Label>EMAIL ADDRESS</Form.Label>
-                    <Form.Control type="email" placeholder="example@mail.com" />
-                </Form.Group>
+                    <Form.Group controlId="formBasicEmail">
+                        <Form.Label>EMAIL ADDRESS</Form.Label>
+                        <Form.Control type="email" placeholder="example@mail.com" />
+                    </Form.Group>
 
-                <Form.Group controlId="formBasicPassword">
-                    <Form.Label>PASSWORD</Form.Label>
-                    <Form.Control type="password" placeholder="Password" />
-                </Form.Group>
-                <Button variant="primary" type="submit">TEST FORM LOGIN BUTTON -- log in</Button>
+                    <Form.Group controlId="formBasicPassword">
+                        <Form.Label>PASSWORD</Form.Label>
+                        <Form.Control type="password" placeholder="Password" />
+                    </Form.Group>
+                    <br />
+                    <Button variant="secondary" size="sm" className="btn-form" type="submit">Log in</Button>
                 </Form>
                 
                 <br /><br />

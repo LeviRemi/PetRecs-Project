@@ -12,6 +12,12 @@ code {
     monospace;
 }
 
+.btn-form {
+  margin: auto;
+  height: 36px;
+  width: 30%;
+  text-align: left;
+}
 
 .loginRegForm {
   width: 420px;
@@ -21,6 +27,7 @@ code {
 
 .form-label {
   font-weight: bold;
+  font-size: 14px;
 }
 
 .formBox {
@@ -29,13 +36,13 @@ code {
   text-align: center;
   margin: auto;
   padding: 40px 0px 80px 0px;
-  border-radius: 20px;
 }
 
 .formTitle {
   text-align: center;
-  font-size: 48px;
+  font-size: 36px;
   font-weight: bold;
+  padding: 0px 0px 40px 0px;
 }
 
 .fullPageContainer {
