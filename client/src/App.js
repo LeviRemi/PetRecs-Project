@@ -7,6 +7,7 @@ import Login from './components/Login'
 import Register from './components/Register'
 import About from './components/About'
 import Pets from './components/Pets'
+import PetRecords from './components/PetRecords'
 
 function App(){
   return (
@@ -16,6 +17,7 @@ function App(){
       <Route path="/register" exact component={Register} />
       <Route path="/about" exact component={About} />
       <Route path="/pets" exact component={Pets} />
+      <Route path="/petrecords" exact component={PetRecords} />
     </Router>
   );
 }

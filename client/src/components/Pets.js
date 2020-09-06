@@ -58,6 +58,8 @@ function Pets() {
                 </div>
             </div>
             </Link>
+
+            <Link to="/petrecords" className="btn btn-secondary">Pet Records</Link>
             
             <br/><br/>
             
