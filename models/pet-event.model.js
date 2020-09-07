@@ -8,16 +8,20 @@ module.exports = (sequelize) => {
             primaryKey: true
         },
         EventTypeId: {
-            type: DataTypes.INTEGER
+            type: DataTypes.INTEGER,
+            allowNull: false
         },
         PetId: {
-            type: DataTypes.INTEGER
+            type: DataTypes.INTEGER,
+            allowNull: false
         },
         EventDescription: {
-            type: DataTypes.STRING(300)
+            type: DataTypes.STRING(300),
+            allowNull: false
         },
         Date: {
-            type: DataTypes.DATE
+            type: DataTypes.DATE,
+            allowNull: false
         }
     }, {
         // creates a model named PetEvent, pointing to a table named PetEvent

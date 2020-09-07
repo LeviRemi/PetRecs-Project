@@ -9,12 +9,14 @@ module.exports = (sequelize) => {
         },
         SpeciesId: {
             type: DataTypes.INTEGER,
+            allowNull: false
         },
         BreedId: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.INTEGER
         },
         PetName: {
-            type: DataTypes.STRING(45)
+            type: DataTypes.STRING(45),
+            allowNull: false
         },
         PetGender: {
             type: DataTypes.STRING(2)

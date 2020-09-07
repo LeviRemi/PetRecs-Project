@@ -14,16 +14,16 @@ const corsOptions = { // was var
 };
 app.use(cors(corsOptions));
 
-// parse requests of content-type - application/json
-app.use(express.json());
+// Makes it more difficult for users to see we are running express. Helps against targeted attacks.
+app.disable('x-powered-by');
 
-// parse requests of content-type - application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: true }));
+// Express middleware that allows POSTing data
+// -parse requests of content-type - application/json
+app.use(express.json());
+// -parse requests of content-type - application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: true }));
 
 const db = require("./models");
-
-// Create the tables if they do not exist (and do nothing if they already exist)
-db.sequelize.sync();
 
 // This is just a test. Should be changed to serve up the homepage.
 app.get("/", (req, res) => {
@@ -31,7 +31,7 @@ app.get("/", (req, res) => {
 })
 
 // Serve the static files from the React app
-app.use(express.static(path.join(__dirname, '/client/build/')));
+app.use(express.static(path.join(__dirname, '/client/public/')));
 
 // An api endpoint that returns a short list of items
 /*app.get('/', (req,res) => {
@@ -58,7 +58,13 @@ const apiPetEvent = require('./routes/pet-event.routes');
 app.use('/api/pet-events', apiPetEvent);
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-    console.log(`App is listening on port ${PORT}.`);
+
+// Create the tables if they do not exist (and do nothing if they already exist)
+db.sequelize.sync().then(() => {
+    // Only start the server if a connection to the DB has been made
+    app.listen(PORT, () => {
+        console.log(`App is listening on port ${PORT}.`);
+    })
 })
+
 

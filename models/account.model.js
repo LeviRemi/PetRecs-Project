@@ -8,19 +8,26 @@ module.exports = (sequelize) => {
             primaryKey: true
         },
         FirstName: {
-            type: DataTypes.STRING(45)
+            type: DataTypes.STRING(45),
+            allowNull: false
         },
         LastName: {
-            type: DataTypes.STRING(45)
+            type: DataTypes.STRING(45),
+            allowNull: false
         },
         Email: {
-            type: DataTypes.STRING(45)
+            type: DataTypes.STRING(45),
+            unique: true,
+            allowNull: false,
+            isEmail: true
         },
         Password: {
-            type: DataTypes.STRING(45)
+            type: DataTypes.STRING(45),
+            allowNull: false
         },
         AccountTypeId: {
-            type: DataTypes.INTEGER
+            type: DataTypes.INTEGER,
+            allowNull: false
         }
     }, {
         // creates a model named Account, pointing to a table named Account

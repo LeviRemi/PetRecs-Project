@@ -1,5 +1,6 @@
 const db = require("../models");
 const Account = db.account;
+const bcrypt = require("bcrypt");
 
 // Create and Save a new Account
 exports.create = (req, res) => {
@@ -19,6 +20,20 @@ exports.create = (req, res) => {
         Password: req.body.Password,
         AccountTypeId: req.body.AccountTypeId
     };
+
+    // hash password before account creation
+    Account.beforeCreate((account) => {
+        return bcrypt.hash(req.body.Password, 10)
+            .then(hash => {
+                account.Password = hash;
+            })
+            .catch(err => {
+                res.status(500).send({
+                    message:
+                        err.message || "Some error occurred while hashing the password"
+                });
+            });
+    });
 
     // Save Account to database
     Account.create(account)

@@ -8,13 +8,17 @@ module.exports = (sequelize) => {
             primaryKey: true
         },
         PetId: {
-            type: DataTypes.INTEGER
+            type: DataTypes.INTEGER,
+            allowNull: false
         },
         Weight: {
-            type: DataTypes.INTEGER
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            isInt: true
         },
         Date: {
-            type: DataTypes.DATE
+            type: DataTypes.DATE,
+            allowNull: false
         }
     }, {
         // creates a model named PetWeight, pointing to a table named PetWeight
