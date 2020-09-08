@@ -1,4 +1,5 @@
 // Pets.js
+// Currently, this is the main page once the user is logged in to the website
 
 import React from 'react'
 import { Link } from 'react-router-dom';
@@ -18,11 +19,11 @@ function Pets() {
     };
 
     const circleStyle = {
-            width: 135,
-            height: 135,
-            borderRadius: 135/2,
-            borderStyle: "solid",
-            borderColor: "gray"
+        width: 135,
+        height: 135,
+        borderRadius: 135/2,
+        borderStyle: "solid",
+        borderColor: "gray"
     };
 
     const nameStyle = {

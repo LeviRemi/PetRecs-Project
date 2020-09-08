@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Red+Hat+Text&display=swap');
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -15,27 +17,62 @@ code {
 /* homepage and login/register styling.
 these styles are pre-login */
 
+.fullPageContainer {
+  height: 100%;
+  margin: auto;
+  width: 1024px;
+  font-family: 'Red Hat Text';
+}
+
 .homePageHeader {
   text-align: right;
-  background-color: red;
+  background: rgb(255,255,255);
+  background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(252,252,252,1) 100%);
+  display: flex;
+  align-content: flex-start;
+  justify-content: top;
+}
+
+.homePageBody {
+  padding: 20px 10px;
+  text-align: left;
+  background-color: white;
+  font-size: 20px;
+  width: 100%;
+}
+
+.homePageFooter{
+  text-align: right;
+  background: rgb(252,252,252);
+  background: linear-gradient(0deg, rgba(252,252,252,1) 0%, rgba(255,255,255,1) 100%);
+  padding: 20px 10px;
   display: flex;
 }
 
 .homePageHeaderItem {
   padding: 10px;
-  background-color: pink;
+  font-size: 48px;
+  font-weight: bold;
 }
 
 .push-right {
   margin-left: auto;
 }
 .btn-homepage-header {
-  margin: auto;
-  height: 36px;
-  width: 120px;
+  background-color: rgba(0, 0, 255, 0);
+  padding: 12px 32px;
+  font-size: 15px;
+  font-weight: bold;
+  vertical-align: middle;
+  border:none;
+}
+
+.btn-homepage-header-register {
+  background-color: #005dff;
+  color: white;
+  padding: 12px 32px;
   text-align: center;
-  background-color: white;
-  float: right;
+  border-radius: 4px;
 }
 
 .btn-form {
@@ -79,11 +116,4 @@ these styles are pre-login */
   overflow: hidden;
   background: rgb(255,255,255);
   background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(232,234,245,1) 50%, rgba(230,236,255,1) 100%);
-}
-
-.fullPageContainer {
-  background-color: lightgray;
-  height: 100%;
-  margin: auto;
-  width: 1024px;
 }
