@@ -9,20 +9,25 @@ import { Link } from 'react-router-dom';
 
 function Login() {
     return (
-        <div className="fill-window">
-            
+        <div className="fill-window fullPageContainer">
+            <div className="loginRegPageHeader">
+                <div className="homePageHeaderItem">
+                    <img src={require('../pet-recs-logo_low-qual.png')} width='48' height='55' />
+                    PetRecs
+                </div>
+            </div>
             <div className="formBox">
                 <div className="formTitle">
-                    LOGIN
+                    Log In
                 </div>
                 <Form className="loginRegForm">
                     <Form.Group controlId="formBasicEmail">
-                        <Form.Label>EMAIL ADDRESS</Form.Label>
+                        <Form.Label>E-Mail Address</Form.Label>
                         <Form.Control type="email" placeholder="example@mail.com" />
                     </Form.Group>
 
                     <Form.Group controlId="formBasicPassword">
-                        <Form.Label>PASSWORD</Form.Label>
+                        <Form.Label>Passord</Form.Label>
                         <Form.Control type="password" placeholder="Password" />
                     </Form.Group>
                     <br />
