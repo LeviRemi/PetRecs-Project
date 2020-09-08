@@ -12,6 +12,32 @@ code {
     monospace;
 }
 
+/* homepage and login/register styling.
+these styles are pre-login */
+
+.homePageHeader {
+  text-align: right;
+  background-color: red;
+  display: flex;
+}
+
+.homePageHeaderItem {
+  padding: 10px;
+  background-color: pink;
+}
+
+.push-right {
+  margin-left: auto;
+}
+.btn-homepage-header {
+  margin: auto;
+  height: 36px;
+  width: 120px;
+  text-align: center;
+  background-color: white;
+  float: right;
+}
+
 .btn-form {
   margin: auto;
   height: 36px;
@@ -45,12 +71,6 @@ code {
   padding: 0px 0px 40px 0px;
 }
 
-.fullPageContainer {
-  background-color: black;
-  height: 100%;
-  margin: 0px;
-}
-
 .fill-window {
   height: 100%;
   position: absolute;
@@ -59,4 +79,11 @@ code {
   overflow: hidden;
   background: rgb(255,255,255);
   background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(232,234,245,1) 50%, rgba(230,236,255,1) 100%);
+}
+
+.fullPageContainer {
+  background-color: lightgray;
+  height: 100%;
+  margin: auto;
+  width: 1024px;
 }

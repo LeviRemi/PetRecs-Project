@@ -7,7 +7,7 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 
 function Header() {
     return (
-        <div>
+        <div className="headerContainer">
             <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
             <Navbar.Brand href="#home">PetRecs</Navbar.Brand>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
