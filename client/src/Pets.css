@@ -1,0 +1,36 @@
+#PetContainer {
+    width: 135px;
+    height: 170px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    margin-left: 12.5px;
+    margin-right: 12.5px;
+    display: inline-block;
+}
+
+#ImageCircle {
+    width: 135px;
+    height: 135px;
+    border-radius: 135px;
+    border-style: solid;
+    border-color: gray;
+}
+
+#NameText {
+    text-align: center;
+    font-weight: 700px;
+    font-size: 23;
+}
+
+#PetText {
+    text-align: center;
+    font-weight: 700px;
+    font-size: 23;
+    padding-top: 45px;
+    color: gray;
+}
+
+#PetLink {
+    text-decoration: none;
+    color: gray;
+}

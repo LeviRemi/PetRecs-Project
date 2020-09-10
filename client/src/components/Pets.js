@@ -1,72 +1,65 @@
 // Pets.js
-// Currently, this is the main page once the user is logged in to the website
 
-import React from 'react'
+import React, { Component } from 'react'
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import '../Pets.css'
 
 import Header from './Header.js';
 import Footer from './Footer.js';
 
-function Pets() {
+const PetObject = props => (
+    <Link id="PetLink" to="/Pets">
+        <div id="PetContainer">
+            <div id="ImageCircle">
+                <p id="PetText">Add Pet</p>
+            </div>
+            <div>
+                <p id="NameText">{props.petObject.PetName}</p>
+            </div>
+        </div>
+    </Link>
+)
 
-    const petContainerStyle = {
-        width: 135,
-        height: 170,
-        marginTop: 25,
-        marginBottom: 25,
-        marginLeft: 12.5,
-        marginRight: 12.5
-    };
+export default class Pets extends Component {
 
-    const circleStyle = {
-        width: 135,
-        height: 135,
-        borderRadius: 135/2,
-        borderStyle: "solid",
-        borderColor: "gray"
-    };
+    state = { pets: [] }
 
-    const nameStyle = {
-        textAlign: "center",
-        fontWeight: 700,
-        fontSize: 23
-    };
+    componentDidMount() {
+        axios.get("http://localhost:5000/api/pets/")
+            .then(response=>{
+                const pets = response.data;
+                this.setState({ pets });
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+    }
 
-    const addTextStyle = {
-        textAlign: "center",
-        fontWeight: 700,
-        fontSize: 23,
-        paddingTop: 45,
-        color: "gray"
-    };
-
-    const linkStyle = {
-        textDecoration: "none",
-        color: "gray"
-    };
-
+    render() {
     return (
-        
         <div>
             <Header />
-            <Link style={linkStyle} to="/Pets">
-            <div style={petContainerStyle}>
-                <div style={circleStyle}>
-                    <p style={addTextStyle}>Add Pet</p>
-                </div>
-                <div>
-                    <p style={nameStyle}>Pet Name</p>
-                </div>
-            </div>
-            </Link>
-
+            { this.state.pets.map(pet => 
+                <Link id="PetLink" to="/Pets">
+                    <div id="PetContainer">
+                        <div id="ImageCircle">
+                            <p id="PetText">Add Pet</p>
+                        </div>
+                        <div>
+                            <p id="NameText">{pet.PetName}</p>
+                        </div>
+                    </div>
+                </Link>
+            )}
+            <br />
             <Link to="/petrecords" className="btn btn-secondary">Pet Records</Link>
-            
             <br/><br/>
             
             <Footer />
         </div>
     )
+    }
 }
 
-export default Pets
+//export default Pets
