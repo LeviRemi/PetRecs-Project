@@ -12,7 +12,6 @@ function Register(props) {
 
     const { register, handleSubmit, errors, watch } = useForm();
     const onSubmit = (data) => {
-        alert("starting submit...")
         axios.post('http://localhost:5000/api/accounts/', {
             FirstName: "",
             LastName: "",
@@ -22,9 +21,10 @@ function Register(props) {
         })
             .then((res) => {
                 console.log(res);
-                alert("hello");
+                alert("Account created");
             }, (err) => {
                 console.log(err);
+                alert("Error creating account");
             })
     }
 

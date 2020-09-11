@@ -7,6 +7,9 @@ const router = require("express").Router();
 // Create a new Account
 router.post("/", accounts.create);
 
+// Login to an existing Account
+router.post("/login", accounts.validate);
+
 // Retrieve all Accounts
 router.get("/", accounts.findAll);
 

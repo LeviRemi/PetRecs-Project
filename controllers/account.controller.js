@@ -48,6 +48,34 @@ exports.create = (req, res) => {
         })
 };
 
+// Validate that account exists
+exports.validate = (req, res) => {
+    console.log("Validating...");
+    const email = req.body.Email;
+    const pass = req.body.Password;
+
+    Account.findAll( {
+        where: {Email: email}
+    })
+        .then(data => {
+            // check to see if input password matches stored hash
+            bcrypt.compare(pass, data[0].Password.toString()).then(function(result) {
+                if (result) {
+                    res.status(200).send("Account credentials are valid")
+                } else {
+                    res.status(400).send("Account credentials do not match")
+                }
+            });
+
+        })
+        .catch(err => {
+            res.status(500).send({
+                message:
+                    err.message || "Some error occurred while validating Account credentials"
+            });
+        });
+}
+
 // Retrieve all Accounts from the database
 exports.findAll = (req, res) => {
     Account.findAll()

@@ -21,7 +21,7 @@ module.exports = (sequelize) => {
             isEmail: true
         },
         Password: {
-            type: DataTypes.STRING(45),
+            type: DataTypes.STRING(60),
             allowNull: false
         },
         AccountTypeId: {
