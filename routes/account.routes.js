@@ -10,8 +10,11 @@ router.post("/", accounts.create);
 // Retrieve all Accounts
 router.get("/", accounts.findAll);
 
-// Retrieve a single Account with id
+// Retrieve a single Account via id
 router.get("/:id", accounts.findOne);
+
+// Retrieve a single Account via email
+router.get("/email/:Email", accounts.findOneByEmail);
 
 // Update an Account with id
 router.put("/:id", accounts.update);

@@ -1,3 +1,4 @@
+const bcrypt = require("bcrypt");
 const { DataTypes } = require("sequelize"); // Import the built-in data types
 
 module.exports = (sequelize) => {
@@ -8,12 +9,10 @@ module.exports = (sequelize) => {
             primaryKey: true
         },
         FirstName: {
-            type: DataTypes.STRING(45),
-            allowNull: false
+            type: DataTypes.STRING(45)
         },
         LastName: {
-            type: DataTypes.STRING(45),
-            allowNull: false
+            type: DataTypes.STRING(45)
         },
         Email: {
             type: DataTypes.STRING(45),
@@ -32,6 +31,13 @@ module.exports = (sequelize) => {
     }, {
         // creates a model named Account, pointing to a table named Account
         freezeTableName: true,
-        timestamps: false
+        timestamps: false,
+
+        // compares hashed input password to stored hashed password for login
+        instanceMethods: {
+            validPassword: function(password) {
+                return bcrypt.compareSync(password, this.Password);
+            }
+        }
     });
 };

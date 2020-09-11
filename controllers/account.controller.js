@@ -5,14 +5,14 @@ const bcrypt = require("bcrypt");
 // Create and Save a new Account
 exports.create = (req, res) => {
     // Validate request
-    if (!req.body.FirstName || !req.body.LastName || !req.body.Email || !req.body.Password || !req.body.AccountTypeId) {
+    if (!req.body.Email || !req.body.Password || !req.body.AccountTypeId) {
         res.status(400).send({
             message: "Error. Essential fields are empty."
         });
         return;
     }
 
-    // Create Account (passing password as plaintext until we figure out encryption)
+    // Create Account
     const account = {
         FirstName: req.body.FirstName,
         LastName: req.body.LastName,
@@ -75,6 +75,23 @@ exports.findOne = (req, res) => {
             });
         });
 };
+
+// Find a single Account with an email
+exports.findOneByEmail = (req, res) => {
+    const email = req.params.Email;
+    Account.findAll( {
+        where: {Email: email}
+    })
+        .then(data => {
+            res.send(data);
+        })
+        .catch(err => {
+            res.status(500).send({
+                message:
+                    err.message || "Some error occurred while retrieving Account for Email=" + email
+            });
+        });
+}
 
 // Update a single Account identified by the request id
 exports.update = (req, res) => {
