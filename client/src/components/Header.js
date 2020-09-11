@@ -12,16 +12,13 @@ function Header() {
             <div className="mainPageHeaderItem">
                 <img src={require('../pet-recs-logo_low-qual.png')} width='48' height='55' />
                     PetRecs
-            </div>
+            </div>                
             <div className="mainPageHeaderItem push-right">
                 <Link to="/pets">
                     <button className="btn-homepage-header">
                         Pets
                     </button>
                 </Link>
-            </div>
-
-            <div className="mainPageHeaderItem push-right">
                 <Link to="/account">
                     <button className="btn-homepage-header">
                         Account

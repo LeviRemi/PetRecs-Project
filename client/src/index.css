@@ -26,6 +26,14 @@ code {
   margin: 0 !important;
 }
 
+.push-left {
+  margin-right: auto;
+}
+
+.push-right {
+  margin-left: auto;
+}
+
 /* homepage and login/register styling.
 these styles are pre-login */
 
@@ -58,10 +66,6 @@ these styles are pre-login */
   background: linear-gradient(0deg, rgba(252,252,252,1) 0%, rgba(255,255,255,1) 100%);
   padding: 20px 10px;
   display: flex;
-}
-
-.push-right {
-  margin-left: auto;
 }
 
 .btn-homepage-header {
@@ -151,13 +155,6 @@ these styles are post-login */
   font-weight: bold;
 }
 
-.mainPageSideBtnGroup {
-  padding-top: 20px;
-  padding-left: 20px;
-  background-color: white;
-  text-align: left;
-}
-
 .mainPageContents {
   padding-top: 20px;
   padding-left: 10px;
@@ -167,11 +164,37 @@ these styles are post-login */
   height: 480px;
 }
 
-.btn-mainpage-side {
-  background-color: white;
-  padding: 10px 0px;
-  font-size: 16px;
+.petProfileNavBar {
+  text-align: center;
+  background: lightgrey;
+  justify-content: center;
+}
+
+.btn-petprofile-nav {
+  background-color: rgba(0, 0, 255, 0);
+  padding: 6px 24px;
+  font-size: 14px;
   font-weight: bold;
   vertical-align: middle;
   border:none;
+}
+.petProfileBody {
+  border-style: solid;
+  border-color: lightgrey;
+  border-width: 0px 1px 2px 1px;
+  background: white;
+  height: 400px;
+  padding: 10px;
+}
+
+.petProfileCard {
+  border-style: solid;
+  border-color: black;
+  border-width: 2px 1px 2px 1px;
+}
+
+.petProfileWindow {
+  border-style: solid;
+  border-color: white;
+  border-width: 2px 1px 2px 1px;
 }

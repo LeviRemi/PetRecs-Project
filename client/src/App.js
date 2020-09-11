@@ -7,6 +7,7 @@ import Login from './components/Login'
 import Register from './components/Register'
 import About from './components/About'
 import Pets from './components/Pets'
+import PetProfile from './components/PetProfile'
 import PetRecords from './components/PetRecords'
 
 function App(){
@@ -17,6 +18,7 @@ function App(){
       <Route path="/register" exact component={Register} />
       <Route path="/about" exact component={About} />
       <Route path="/pets" exact component={Pets} />
+      <Route path="/petprofile" exact component={PetProfile} />
       <Route path="/petrecords" exact component={PetRecords} />
     </Router>
   );

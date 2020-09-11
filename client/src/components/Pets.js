@@ -52,26 +52,6 @@ export default class Pets extends Component {
             <Row>
               <Col xs="2" className="nopadding">
               <div className="mainPageSideBtnGroup">
-                <Link to="/petrecords">
-                  <button className="btn-mainpage-side">
-                    Records
-                  </button>
-                </Link><br />
-                <Link to="/pethealth">
-                  <button className="btn-mainpage-side">
-                    Health
-                  </button>
-                </Link><br />
-                <Link to="/petevents">
-                  <button className="btn-mainpage-side">
-                    Events
-                  </button>
-                </Link><br />
-                <Link to="/petreminders">
-                  <button className="btn-mainpage-side">
-                    Reminders
-                  </button>
-                </Link>
                 </div>
               </Col>
 
