@@ -25,20 +25,27 @@ function PetRecords() {
           <Container fluid>
             <Row>
               <Col xs="2" className="nopadding">
-                <div className="mainPageSideBtnGroup">
+              <div className="mainPageSideBtnGroup">
+                <Link to="/petrecords">
                   <button className="btn-mainpage-side">
                     Records
-                  </button><br />
+                  </button>
+                </Link><br />
+                <Link to="/health">
                   <button className="btn-mainpage-side">
                     Health
-                  </button><br />
+                  </button>
+                </Link><br />
+                <Link to="/events">
                   <button className="btn-mainpage-side">
-                    Event
-                  </button><br />
+                    Events
+                  </button>
+                </Link><br />
+                <Link to="/reminders">
                   <button className="btn-mainpage-side">
                     Reminders
                   </button>
-                  
+                </Link>
                 </div>
               </Col>
 
