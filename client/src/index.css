@@ -14,15 +14,20 @@ code {
     monospace;
 }
 
-/* homepage and login/register styling.
-these styles are pre-login */
-
 .fullPageContainer {
   height: 100%;
   margin: auto;
   width: 1024px;
   font-family: 'Red Hat Text';
 }
+
+.nopadding {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* homepage and login/register styling.
+these styles are pre-login */
 
 .homePageHeader {
   text-align: right;
@@ -31,6 +36,12 @@ these styles are pre-login */
   display: flex;
   align-content: flex-start;
   justify-content: top;
+}
+
+.homePageHeaderItem {
+  padding: 10px;
+  font-size: 48px;
+  font-weight: bold;
 }
 
 .homePageBody {
@@ -49,15 +60,10 @@ these styles are pre-login */
   display: flex;
 }
 
-.homePageHeaderItem {
-  padding: 10px;
-  font-size: 48px;
-  font-weight: bold;
-}
-
 .push-right {
   margin-left: auto;
 }
+
 .btn-homepage-header {
   background-color: rgba(0, 0, 255, 0);
   padding: 12px 32px;
@@ -125,4 +131,47 @@ these styles are pre-login */
   overflow: hidden;
   background: rgb(255,255,255);
   background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(232,234,245,1) 50%, rgba(230,236,255,1) 100%);
+}
+
+/* pet and main site styling.
+these styles are post-login */
+
+.mainPageHeader {
+  text-align: right;
+  background: rgb(255,255,255);
+  background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(252,252,252,1) 100%);
+  display: flex;
+  align-content: flex-start;
+  justify-content: top;
+}
+
+.mainPageHeaderItem {
+  padding: 10px;
+  font-size: 32px;
+  font-weight: bold;
+}
+
+.mainPageSideBtnGroup {
+  padding-top: 20px;
+  padding-left: 20px;
+  background-color: white;
+  text-align: left;
+}
+
+.mainPageContents {
+  padding-top: 20px;
+  padding-left: 10px;
+  padding-bottom: 10px;
+  padding-right: 10px;
+  background-color: white;
+  height: 480px;
+}
+
+.btn-mainpage-side {
+  background-color: white;
+  padding: 10px 0px;
+  font-size: 16px;
+  font-weight: bold;
+  vertical-align: middle;
+  border:none;
 }
