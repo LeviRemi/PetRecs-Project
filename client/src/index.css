@@ -14,15 +14,28 @@ code {
     monospace;
 }
 
-/* homepage and login/register styling.
-these styles are pre-login */
-
 .fullPageContainer {
   height: 100%;
   margin: auto;
   width: 1024px;
   font-family: 'Red Hat Text';
 }
+
+.nopadding {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.push-left {
+  margin-right: auto;
+}
+
+.push-right {
+  margin-left: auto;
+}
+
+/* homepage and login/register styling.
+these styles are pre-login */
 
 .homePageHeader {
   text-align: right;
@@ -31,6 +44,12 @@ these styles are pre-login */
   display: flex;
   align-content: flex-start;
   justify-content: top;
+}
+
+.homePageHeaderItem {
+  padding: 10px;
+  font-size: 48px;
+  font-weight: bold;
 }
 
 .homePageBody {
@@ -49,15 +68,6 @@ these styles are pre-login */
   display: flex;
 }
 
-.homePageHeaderItem {
-  padding: 10px;
-  font-size: 48px;
-  font-weight: bold;
-}
-
-.push-right {
-  margin-left: auto;
-}
 .btn-homepage-header {
   background-color: rgba(0, 0, 255, 0);
   padding: 12px 32px;
@@ -125,4 +135,66 @@ these styles are pre-login */
   overflow: hidden;
   background: rgb(255,255,255);
   background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(232,234,245,1) 50%, rgba(230,236,255,1) 100%);
+}
+
+/* pet and main site styling.
+these styles are post-login */
+
+.mainPageHeader {
+  text-align: right;
+  background: rgb(255,255,255);
+  background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(252,252,252,1) 100%);
+  display: flex;
+  align-content: flex-start;
+  justify-content: top;
+}
+
+.mainPageHeaderItem {
+  padding: 10px;
+  font-size: 32px;
+  font-weight: bold;
+}
+
+.mainPageContents {
+  padding-top: 20px;
+  padding-left: 10px;
+  padding-bottom: 10px;
+  padding-right: 10px;
+  background-color: white;
+  height: 480px;
+}
+
+.petProfileNavBar {
+  text-align: center;
+  background: lightgrey;
+  justify-content: center;
+}
+
+.btn-petprofile-nav {
+  background-color: rgba(0, 0, 255, 0);
+  padding: 6px 24px;
+  font-size: 14px;
+  font-weight: bold;
+  vertical-align: middle;
+  border:none;
+}
+.petProfileBody {
+  border-style: solid;
+  border-color: lightgrey;
+  border-width: 0px 1px 2px 1px;
+  background: white;
+  height: 400px;
+  padding: 10px;
+}
+
+.petProfileCard {
+  border-style: solid;
+  border-color: black;
+  border-width: 2px 1px 2px 1px;
+}
+
+.petProfileWindow {
+  border-style: solid;
+  border-color: white;
+  border-width: 2px 1px 2px 1px;
 }

@@ -1,33 +1,35 @@
 // Header.js
 
 import React from 'react'
+import { Link } from 'react-router-dom';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 
 function Header() {
     return (
-        <div className="headerContainer">
-            <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-            <Navbar.Brand href="#home">PetRecs</Navbar.Brand>
-            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-            <Navbar.Collapse id="responsive-navbar-nav">
-                <Nav className="mr-auto">
-                <Nav.Link href="#link1">Link1</Nav.Link>
-                <Nav.Link href="#link2">Link2</Nav.Link>
-                <NavDropdown title="My Account" id="collasible-nav-dropdown">
-                    <NavDropdown.Item href="#action/3.1">Action1</NavDropdown.Item>
-                    <NavDropdown.Item href="#action/3.2">Action2</NavDropdown.Item>
-                    <NavDropdown.Divider />
-                    <NavDropdown.Item href="#action/3.3">Sign out</NavDropdown.Item>
-                </NavDropdown>
-                </Nav>
-                <Nav>
-                    <Nav.Link href="#details1">Details1</Nav.Link>
-                    <Nav.Link href="#details2">Details2</Nav.Link>
-                </Nav>
-            </Navbar.Collapse>
-            </Navbar>
+        <div className="mainPageHeader">
+            <div className="mainPageHeaderItem">
+                <img src={require('../pet-recs-logo_low-qual.png')} width='48' height='55' />
+                    PetRecs
+            </div>                
+            <div className="mainPageHeaderItem push-right">
+                <Link to="/pets">
+                    <button className="btn-homepage-header">
+                        Pets
+                    </button>
+                </Link>
+                <Link to="/account">
+                    <button className="btn-homepage-header">
+                        Account
+                    </button>
+                </Link>
+                <Link to="/logout">
+                    <button className="btn-homepage-header">
+                        Log Out
+                    </button>
+                </Link>
+            </div>
         </div>
     )
 }

@@ -8,6 +8,10 @@ import '../Pets.css'
 import Header from './Header.js';
 import Footer from './Footer.js';
 
+import Container from 'react-bootstrap/Container';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
+
 const PetObject = props => (
     <Link id="PetLink" to="/Pets">
         <div id="PetContainer">
@@ -38,26 +42,33 @@ export default class Pets extends Component {
 
     render() {
     return (
+        <div className="fullPageContainer">
+        
         <div>
-            <Header />
-            { this.state.pets.map(pet => 
-                <Link id="PetLink" to="/Pets">
-                    <div id="PetContainer">
-                        <div id="ImageCircle">
-                            <p id="PetText">Add Pet</p>
-                        </div>
-                        <div>
-                            <p id="NameText">{pet.PetName}</p>
-                        </div>
-                    </div>
-                </Link>
-            )}
-            <br />
-            <Link to="/petrecords" className="btn btn-secondary">Pet Records</Link>
-            <br/><br/>
-            
-            <Footer />
+          <Header />
         </div>
+        <div className="mainPageBody nopadding">
+          <Container fluid>
+              <div className="mainPageContents">
+                { this.state.pets.map(pet => 
+                <Link id="PetLink" to="/Pets">
+                  <div id="PetContainer">
+                    <div id="ImageCircle">
+                        <p id="PetText">Add Pet</p>
+                    </div>
+                    <div>
+                        <p id="NameText">{pet.PetName}</p>
+                    </div>
+                  </div>
+                </Link>
+                )}
+              </div>
+            </Container>
+          </div>
+        <div className="mainPageFooter">
+          <Footer />
+        </div> 
+    </div>
     )
     }
 }
