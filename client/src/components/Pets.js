@@ -49,35 +49,26 @@ export default class Pets extends Component {
         </div>
         <div className="mainPageBody nopadding">
           <Container fluid>
-            <Row>
-              <Col xs="2" className="nopadding">
-              <div className="mainPageSideBtnGroup">
-                </div>
-              </Col>
-
-              <Col lg={true} className="nopadding">
-                <div className="mainPageContents">
-                    { this.state.pets.map(pet => 
-                    <Link id="PetLink" to="/Pets">
-                        <div id="PetContainer">
-                            <div id="ImageCircle">
-                                <p id="PetText">Add Pet</p>
-                            </div>
-                            <div>
-                                <p id="NameText">{pet.PetName}</p>
-                            </div>
-                        </div>
-                    </Link>
-                    )}
-                </div>
-              </Col>
-            </Row>
-          </Container>
-        </div>
+              <div className="mainPageContents">
+                { this.state.pets.map(pet => 
+                <Link id="PetLink" to="/Pets">
+                  <div id="PetContainer">
+                    <div id="ImageCircle">
+                        <p id="PetText">Add Pet</p>
+                    </div>
+                    <div>
+                        <p id="NameText">{pet.PetName}</p>
+                    </div>
+                  </div>
+                </Link>
+                )}
+              </div>
+            </Container>
+          </div>
         <div className="mainPageFooter">
           <Footer />
         </div> 
-      </div>
+    </div>
     )
     }
 }
