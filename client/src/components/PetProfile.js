@@ -37,22 +37,22 @@ function PetProfile() {
             <Col sm="1">
             </Col>
             <Col>
-                <Link to="/petrecords">
+                <Link to="/pets/records">
                   <button className="btn-petprofile-nav">
                     Records
                   </button>
                 </Link>
-                <Link to="/pethealth">
+                <Link to="/pets/health">
                   <button className="btn-petprofile-nav">
                     Health
                   </button>
                 </Link>
-                <Link to="/petevents">
+                <Link to="/pets/events">
                   <button className="btn-petprofile-nav">
                     Events
                   </button>
                 </Link>
-                <Link to="/petreminders">
+                <Link to="/pets/reminders">
                   <button className="btn-petprofile-nav">
                     Reminders
                   </button>

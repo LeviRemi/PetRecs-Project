@@ -43,32 +43,31 @@ export default class Pets extends Component {
     render() {
     return (
         <div className="fullPageContainer">
-        
-        <div>
-          <Header />
-        </div>
-        <div className="mainPageBody nopadding">
-          <Container fluid>
-              <div className="mainPageContents">
-                { this.state.pets.map(pet => 
-                <Link id="PetLink" to="/Pets">
-                  <div id="PetContainer">
-                    <div id="ImageCircle">
-                        <p id="PetText">Add Pet</p>
-                    </div>
-                    <div>
-                        <p id="NameText">{pet.PetName}</p>
-                    </div>
-                  </div>
-                </Link>
-                )}
-              </div>
-            </Container>
+          <div>
+            <Header />
           </div>
-        <div className="mainPageFooter">
-          <Footer />
-        </div> 
-    </div>
+          <Container fluid>
+            <div className="mainPageBody nopadding">
+                <div className="mainPageContents">
+                  { this.state.pets.map(pet => 
+                  <Link id="PetLink" to="/Pets">
+                    <div id="PetContainer">
+                      <div id="ImageCircle">
+                          <p id="PetText">Add Pet</p>
+                      </div>
+                      <div>
+                          <p id="NameText">{pet.PetName}</p>
+                      </div>
+                    </div>
+                  </Link>
+                  )}
+                </div>
+            </div>
+          </Container>
+          <div className="mainPageFooter">
+            <Footer />
+          </div> 
+        </div>
     )
     }
 }
