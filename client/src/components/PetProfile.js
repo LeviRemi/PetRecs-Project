@@ -22,15 +22,37 @@ function PetProfile() {
           <Header />
         </div>
         <Container fluid className="petProfileWindow">
-        <div classname="petProfileCard">
-            <Jumbotron>
-                <Link to="/pets">
-                  <button className="btn-petprofile-nav">
-                     &lt;&lt;Back
-                  </button>
-                </Link>
-                Pet Profile Card Placeholder
-            </Jumbotron>
+
+        <div className="petProfileCard_off">
+            <Row>
+                <Col sm="2">
+                    <Link to="/pets">
+                    <button className="btn-petprofile-nav">
+                        <b>&lt;&lt;Back</b>
+                    </button>
+                    </Link>
+                </Col>
+                <Col>
+                    <div className="petProfileCard">
+                        <Row>
+                            <Col sm="3">
+                                <br />
+                                [image here?]<br />
+                                [image here?]<br />
+                                [image here?]<br /><br />
+                            </Col>
+                            <Col>
+                                test<br />
+                                test<br />
+                                test<br />
+                                test<br />
+                            </Col>
+                        </Row>
+                    </div>
+                </Col>
+                <Col sm="2">
+                </Col>
+            </Row>
         </div>
         <div className="petProfileNavBar">
             <Row>
@@ -43,7 +65,7 @@ function PetProfile() {
                   </button>
                 </Link>
                 <Link to="/pets/health">
-                  <button className="btn-petprofile-nav">
+                  <button className="btn-petprofile-nav shadow-none">
                     Health
                   </button>
                 </Link>

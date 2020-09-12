@@ -166,7 +166,7 @@ these styles are post-login */
 
 .petProfileNavBar {
   text-align: center;
-  background: lightgrey;
+  background: white;
   justify-content: center;
 }
 
@@ -178,9 +178,43 @@ these styles are post-login */
   vertical-align: middle;
   border:none;
 }
+
+.btn-petprofile-nav:hover {
+  color: grey;
+  transition: 0.1s;
+}
+
+.btn-petprofile-nav:active {
+  background-color: lightgrey;
+  margin: 0;
+  transition: 0.1s;
+}
+
+.btn-mainpage-header {
+  color: black;
+  background-color: rgba(0, 0, 0, 0);
+  padding: 0px 28px;
+  font-size: 15px;
+  font-weight: bold;
+  vertical-align: middle;
+  border: none !important;
+  outline: none !important;
+}
+
+.btn-mainpage-header:hover {
+  color: grey;
+  transition: 0.1s;
+}
+
+.btn-mainpage-header:active {
+  background-color: lightgrey;
+  margin: 0;
+  transition: 0.1s;
+}
+
 .petProfileBody {
   border-style: solid;
-  border-color: lightgrey;
+  border-color: white;
   border-width: 0px 1px 2px 1px;
   background: white;
   height: 400px;
