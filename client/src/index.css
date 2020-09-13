@@ -207,7 +207,6 @@ these styles are post-login */
 }
 
 .btn-mainpage-header:active {
-  background-color: lightgrey;
   margin: 0;
   transition: 0.1s;
 }
