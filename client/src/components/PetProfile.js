@@ -12,12 +12,15 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 
 //function PetProfile() {
+  
 export default class PetProfile extends Component {
-
+  
   state = { pet: {} }
 
   componentDidMount() {
-    axios.get("http://localhost:5000/api/pets/1")
+    const { match: { params } } = this.props;
+
+    axios.get(`http://localhost:5000/api/pets/${params.PetId}`)
         .then(response=>{
             //console.log(response.data);
             //const pet = response.data;

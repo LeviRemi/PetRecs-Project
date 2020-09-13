@@ -32,7 +32,6 @@ export default class Pets extends Component {
     componentDidMount() {
         axios.get("http://localhost:5000/api/pets/")
             .then(response=>{
-                console.log(response);
                 const pets = response.data;
                 this.setState({ pets });
             })
@@ -51,7 +50,7 @@ export default class Pets extends Component {
             <div className="mainPageBody nopadding">
                 <div className="mainPageContents">
                   { this.state.pets.map(pet => 
-                  <Link id="PetLink" to={"/Pets/" + pet.PetId}>
+                  <Link id="PetLink" to={"/Pets/Profile/" + pet.PetId}>
                     <div id="PetContainer">
                       <div id="ImageCircle">
                           <p id="PetText">Add Pet</p>

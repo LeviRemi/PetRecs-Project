@@ -18,7 +18,7 @@ function App(){
       <Route path="/register" exact component={Register} />
       <Route path="/about" exact component={About} />
       <Route path="/pets" exact component={Pets} />
-      <Route path="/pets/profile" exact component={PetProfile} />
+      <Route path="/pets/profile/:PetId" exact component={PetProfile} />
       <Route path="/pets/records" exact component={PetRecords} />
     </Router>
   );
