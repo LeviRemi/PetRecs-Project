@@ -1,7 +1,8 @@
 // PetProfile.js
 
-import React from 'react'
+import React, { Component } from 'react'
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 import Header from './Header.js';
 import Footer from './Footer.js';
@@ -9,81 +10,85 @@ import Footer from './Footer.js';
 import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import Jumbotron from 'react-bootstrap/Jumbotron';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import Button from 'react-bootstrap/Button';
-import DropdownButton from 'react-bootstrap/DropdownButton';
-import Dropdown from 'react-bootstrap/Dropdown';
 
-function PetProfile() {
+//function PetProfile() {
+export default class PetProfile extends Component {
+
+  state = { pet: {} }
+
+  componentDidMount() {
+    axios.get("http://localhost:5000/api/pets/1")
+        .then(response=>{
+            //console.log(response.data);
+            //const pet = response.data;
+            this.setState({ pet: response.data });
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+}
+
+  render() {
+    const { pet } = this.state;
     return (
       <div className="fullPageContainer">
         <div>
           <Header />
         </div>
-        <Container fluid className="petProfileWindow">
 
-        <div className="petProfileCard_off">
+        <Container fluid className="petProfileWindow">
+          <div className="petProfileCard">
             <Row>
-                <Col sm="2">
-                    <Link to="/pets">
+              <Col>
+                <Link to="/pets">
+                <button className="btn-petprofile-nav">
+                    &lt;&lt;Back
+                </button>
+                </Link>
+              </Col>
+                  name: {pet.PetName} <br />
+                  gender: {pet.PetGender} <br />
+                  birthday: {pet.PetAgeMonth}/{pet.PetAgeDay}/{pet.PetAgeYear}<br />
+                  allergies: {pet.AllergyNotes}<br />
+                  care notes: {pet.CareNotes}<br />
+                  food notes: {pet.FoodNotes}<br />
+              <Col>
+              </Col>
+              <Col>
+              </Col>
+            </Row>
+          </div>
+
+          <div className="petProfileNavBar">
+              <Row>
+              <Col sm="1">
+              </Col>
+              <Col>
+                  <Link to="/petrecords">
                     <button className="btn-petprofile-nav">
-                        <b>&lt;&lt;Back</b>
+                      Records
                     </button>
-                    </Link>
-                </Col>
-                <Col>
-                    <div className="petProfileCard">
-                        <Row>
-                            <Col sm="3">
-                                <br />
-                                [image here?]<br />
-                                [image here?]<br />
-                                [image here?]<br /><br />
-                            </Col>
-                            <Col>
-                                test<br />
-                                test<br />
-                                test<br />
-                                test<br />
-                            </Col>
-                        </Row>
-                    </div>
-                </Col>
-                <Col sm="2">
-                </Col>
-            </Row>
-        </div>
-        <div className="petProfileNavBar">
-            <Row>
-            <Col sm="1">
-            </Col>
-            <Col>
-                <Link to="/pets/records">
-                  <button className="btn-petprofile-nav">
-                    Records
-                  </button>
-                </Link>
-                <Link to="/pets/health">
-                  <button className="btn-petprofile-nav shadow-none">
-                    Health
-                  </button>
-                </Link>
-                <Link to="/pets/events">
-                  <button className="btn-petprofile-nav">
-                    Events
-                  </button>
-                </Link>
-                <Link to="/pets/reminders">
-                  <button className="btn-petprofile-nav">
-                    Reminders
-                  </button>
-                </Link>
-            </Col>
-            <Col sm="1">
-            </Col>
-            </Row>
-        </div>
+                  </Link>
+                  <Link to="/pethealth">
+                    <button className="btn-petprofile-nav">
+                      Health
+                    </button>
+                  </Link>
+                  <Link to="/petevents">
+                    <button className="btn-petprofile-nav">
+                      Events
+                    </button>
+                  </Link>
+                  <Link to="/petreminders">
+                    <button className="btn-petprofile-nav">
+                      Reminders
+                    </button>
+                  </Link>
+              </Col>
+              <Col sm="1">
+              </Col>
+              </Row>
+          </div>
         <div className="petProfileBody">
             <h4> Pet Profile details here - Pet Profile details here - Pet Profile details here <br />
             Pet Profile details here - Pet Profile details here - Pet Profile details here <br />
@@ -100,5 +105,6 @@ function PetProfile() {
       </div>
     )
 }
+}
 
-export default PetProfile
+//export default PetProfile
