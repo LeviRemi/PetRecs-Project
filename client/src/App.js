@@ -9,6 +9,7 @@ import About from './components/About'
 import Pets from './components/Pets'
 import PetProfile from './components/PetProfile'
 import PetRecords from './components/PetRecords'
+import PetHealth from './components/PetHealth'
 
 function App(){
   return (
@@ -19,6 +20,7 @@ function App(){
       <Route path="/about" exact component={About} />
       <Route path="/pets" exact component={Pets} />
       <Route path="/pets/profile/:PetId" exact component={PetProfile} />
+      <Route path="/pets/health/:PetId" exact component={PetHealth} />
       <Route path="/pets/records" exact component={PetRecords} />
     </Router>
   );

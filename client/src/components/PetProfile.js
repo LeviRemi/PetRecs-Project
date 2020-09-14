@@ -22,7 +22,7 @@ export default class PetProfile extends Component {
 
     axios.get(`http://localhost:5000/api/pets/${params.PetId}`)
         .then(response=>{
-            //console.log(response.data);
+            console.log(response.data);
             //const pet = response.data;
             this.setState({ pet: response.data });
         })
@@ -51,10 +51,6 @@ export default class PetProfile extends Component {
               </Col>
                   name: {pet.PetName} <br />
                   gender: {pet.PetGender} <br />
-                  birthday: {pet.PetAgeMonth}/{pet.PetAgeDay}/{pet.PetAgeYear}<br />
-                  allergies: {pet.AllergyNotes}<br />
-                  care notes: {pet.CareNotes}<br />
-                  food notes: {pet.FoodNotes}<br />
               <Col>
               </Col>
               <Col>
@@ -93,13 +89,15 @@ export default class PetProfile extends Component {
               </Row>
           </div>
         <div className="petProfileBody">
-            <h4> Pet Profile details here - Pet Profile details here - Pet Profile details here <br />
-            Pet Profile details here - Pet Profile details here - Pet Profile details here <br />
-            Pet Profile details here - Pet Profile details here - Pet Profile details here <br />
-            Pet Profile details here - Pet Profile details here - Pet Profile details here <br />
-            Pet Profile details here - Pet Profile details here - Pet Profile details here <br />
-            Pet Profile details here - Pet Profile details here - Pet Profile details here <br />
-            </h4>
+            <h4> Pet Profile </h4>
+              name: {pet.PetName} <br />
+              gender: {pet.PetGender} <br />
+              birthday: {pet.PetAgeMonth}/{pet.PetAgeDay}/{pet.PetAgeYear}<br />
+              allergies: {pet.AllergyNotes}<br />
+              care notes: {pet.CareNotes}<br />
+              food notes: {pet.FoodNotes}<br />
+              pet ID: {pet.PetId}<br />
+              species ID:{pet.SpeciesId}<br />
         </div>
         </Container>
         <div className="mainPageFooter">
