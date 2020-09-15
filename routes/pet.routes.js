@@ -7,7 +7,7 @@ const router = require("express").Router();
 // Create a new Pet
 router.post("/", pets.create);
 
-// Retrieve all Pets
+// Retrieve all Pets for logged in user
 router.get("/", pets.findAll);
 
 // Retrieve a single Pet with id

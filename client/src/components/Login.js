@@ -7,22 +7,19 @@ import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import {useForm} from "react-hook-form"
+import {useHistory} from "react-router";
 
 
 function Login() {
-
+    const history = useHistory();
     const { register, handleSubmit, errors } = useForm();
     const onSubmit = (data) => {
-        console.log(JSON.stringify(data));
-
         axios.post('http://localhost:5000/api/accounts/login/', {
-            // need to see if ok to send password in POST request
             Email: data.email,
             Password: data.password
-        })
+        }, { withCredentials: true })
             .then((res) => {
-                console.log(res);
-                alert("Your account credentials are valid!")
+                history.push('/pets');
             }, (err) => {
                 console.log(err);
                 alert("These credentials do not match anything in our database")

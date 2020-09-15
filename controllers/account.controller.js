@@ -1,6 +1,7 @@
 const db = require("../models");
 const Account = db.account;
 const bcrypt = require("bcrypt");
+const sessionizeAccount = require("../util/helpers");
 
 // Create and Save a new Account
 exports.create = (req, res) => {
@@ -21,7 +22,7 @@ exports.create = (req, res) => {
         AccountTypeId: req.body.AccountTypeId
     };
 
-    // hash password before account creation
+    // hash password before saving account to DB
     Account.beforeCreate((account) => {
         return bcrypt.hash(req.body.Password, 10)
             .then(hash => {
@@ -48,8 +49,15 @@ exports.create = (req, res) => {
         })
 };
 
-// Validate that account exists
-exports.validate = (req, res) => {
+// Validate that account exists then grants user a session
+exports.login = (req, res) => {
+    // Validate request
+    if (!req.body.Email || !req.body.Password) {
+        res.status(400).send({
+            message: "Error. Essential fields are empty."
+        });
+        return;
+    }
     console.log("Validating...");
     const email = req.body.Email;
     const pass = req.body.Password;
@@ -61,9 +69,10 @@ exports.validate = (req, res) => {
             // check to see if input password matches stored hash
             bcrypt.compare(pass, data[0].Password.toString()).then(function(result) {
                 if (result) {
-                    res.status(200).send("Account credentials are valid")
+                    req.session.user = sessionizeAccount(data[0]);
+                    res.status(200).send(req.session);
                 } else {
-                    res.status(400).send("Account credentials do not match")
+                    res.status(400).send("Wrong email or password")
                 }
             });
 

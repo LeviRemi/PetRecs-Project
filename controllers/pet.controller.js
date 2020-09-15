@@ -14,6 +14,7 @@ exports.create = (req, res) => {
     // Create Pet
     const pet = {
         SpeciesId: req.body.SpeciesId,
+        AccountId: req.session.user.AccountId,
         BreedId: req.body.BreedId,
         PetName: req.body.PetName,
         PetGender: req.body.PetGender,
@@ -38,9 +39,15 @@ exports.create = (req, res) => {
         })
 };
 
-// Retrieve all Pets from the database (this is temporary until we figure out user authentication)
+// Retrieve all Pets from the database belonging to specific user
 exports.findAll = (req, res) => {
-    Pet.findAll()
+    if(!req.session.user) {
+        res.status(401).send("You are not logged in.");
+        return;
+    }
+    Pet.findAll( {
+        where: { AccountId: req.session.user.AccountId }
+    })
         .then(data => {
             res.send(data);
         })

@@ -1,15 +1,17 @@
 // Register.js
 
 import React from 'react'
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
-import axios from 'axios';
+import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
+import axios from 'axios'
 import {useForm} from "react-hook-form"
 
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom'
+import {useHistory} from "react-router";
 
-function Register(props) {
 
+function Register() {
+    const history = useHistory();
     const { register, handleSubmit, errors, watch } = useForm();
     const onSubmit = (data) => {
         axios.post('http://localhost:5000/api/accounts/', {
@@ -18,13 +20,13 @@ function Register(props) {
             Email: data.email,
             Password: data.password,
             AccountTypeId: data.accountType
-        })
+        }, { withCredentials: true })
             .then((res) => {
                 console.log(res);
                 alert("Account created");
+                history.push('/login');
             }, (err) => {
                 console.log(err);
-                alert("Error creating account");
             })
     }
 

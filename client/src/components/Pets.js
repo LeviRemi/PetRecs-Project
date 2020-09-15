@@ -30,7 +30,7 @@ export default class Pets extends Component {
     state = { pets: [] }
 
     componentDidMount() {
-        axios.get("http://localhost:5000/api/pets/")
+        axios.get("http://localhost:5000/api/pets/", { withCredentials: true })
             .then(response=>{
                 const pets = response.data;
                 this.setState({ pets });
