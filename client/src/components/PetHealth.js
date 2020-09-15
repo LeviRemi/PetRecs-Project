@@ -15,7 +15,7 @@ import Row from 'react-bootstrap/Row';
   
 export default class PetHealth extends Component {
   
-  state = { PetId: "1", Weight: "2", Date: "2012-01-12"}
+  state = { PetId: "1", Weight: "5", Date: "2012-01-12"}
 
   handleChange = event => {
     //this.setState({ PetId: event.target.value, Weight: event.target.value, Date: event.target.value });
@@ -32,13 +32,16 @@ export default class PetHealth extends Component {
       Date: this.state.Date,
     };
 
-    axios.post(`http://localhost:5000/api/pet-weights/`, { data })
+    axios.post(`http://localhost:5000/api/pet-weights/`, { PetId: this.state.PetId, Weight: this.state.Weight, Date: this.state.Date, })
         .then(response=>{
             console.log(response);
             console.log(response.data);
         })
         .catch((error) => {
             console.log(data);
+            console.log(this.state.PetId);
+            console.log(this.state.Weight);
+            console.log(this.state.Date);
             console.log(error);
         })
 
