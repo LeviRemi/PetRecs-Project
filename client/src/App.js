@@ -22,7 +22,7 @@ function App(){
       <Route path="/about" exact component={()=>isUserLoggedIn()?<About/> : <HomePage/>} />
       <Route path="/pets" exact component={()=>isUserLoggedIn()?<Pets/> : <HomePage/>} />
       <Route path="/pets/profile/:PetId" exact component={()=>isUserLoggedIn()?<PetProfile/> : <HomePage/>} />
-      <Route path="/pets/health/:PetId" exact component={PetHealth} />
+      <Route path="/pets/health/:PetId" exact component={()=>isUserLoggedIn()?<PetHealth/> : <HomePage/>} />
       <Route path="/pets/records" exact component={()=>isUserLoggedIn()?<PetRecords/> : <HomePage/>} />
       <Route path="/logout" exact component={()=>isUserLoggedIn()?<Logout/> : <HomePage/>} />
     </Router>
