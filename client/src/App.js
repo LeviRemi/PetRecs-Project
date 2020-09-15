@@ -21,8 +21,8 @@ function App(){
       <Route path="/register" exact component={()=>isUserLoggedIn()?<Pets/> : <Register/>} />
       <Route path="/about" exact component={()=>isUserLoggedIn()?<About/> : <HomePage/>} />
       <Route path="/pets" exact component={()=>isUserLoggedIn()?<Pets/> : <HomePage/>} />
-      <Route path="/pets/profile/:PetId" exact component={()=>isUserLoggedIn()?<PetProfile/> : <HomePage/>} />
-      <Route path="/pets/health/:PetId" exact component={()=>isUserLoggedIn()?<PetHealth/> : <HomePage/>} />
+      <Route path="/pets/profile/:PetId" exact component={(props)=>isUserLoggedIn()?<PetProfile {...props} /> : <HomePage/>} />
+      <Route path="/pets/health/:PetId" exact component={(props)=>isUserLoggedIn()?<PetHealth {...props} /> : <HomePage/>} />
       <Route path="/pets/records" exact component={()=>isUserLoggedIn()?<PetRecords/> : <HomePage/>} />
       <Route path="/logout" exact component={()=>isUserLoggedIn()?<Logout/> : <HomePage/>} />
     </Router>

@@ -18,9 +18,9 @@ export default class PetProfile extends Component {
   state = { pet: {} }
 
   componentDidMount() {
-    //const { match: { params } } = this.props;
+    const { match: { params } } = this.props;
 
-    axios.get(`http://localhost:5000/api/pets/1`, {withCredentials: true} )
+    axios.get(`http://localhost:5000/api/pets/${params.PetId}`, {withCredentials: true} )
         .then(response=>{
             console.log(response.data);
             //const pet = response.data;
