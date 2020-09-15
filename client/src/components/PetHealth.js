@@ -32,7 +32,7 @@ export default class PetHealth extends Component {
       Date: this.state.Date,
     };
 
-    axios.post(`http://localhost:5000/api/pet-weights/`, { PetId: this.state.PetId, Weight: this.state.Weight, Date: this.state.Date, })
+    axios.post(`http://localhost:5000/api/pet-weights/`, data, {withCredentials: true} )
         .then(response=>{
             console.log(response);
             console.log(response.data);
