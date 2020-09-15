@@ -15,17 +15,17 @@ function Header() {
             </div>                
             <div className="mainPageHeaderItem push-right">
                 <Link to="/pets">
-                    <button className="btn-homepage-header">
+                    <button className="btn-mainpage-header">
                         Pets
                     </button>
                 </Link>
                 <Link to="/account">
-                    <button className="btn-homepage-header">
+                    <button className="btn-mainpage-header">
                         Account
                     </button>
                 </Link>
                 <Link to="/logout">
-                    <button className="btn-homepage-header">
+                    <button className="btn-mainpage-header">
                         Log Out
                     </button>
                 </Link>
