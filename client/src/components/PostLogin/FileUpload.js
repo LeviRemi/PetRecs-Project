@@ -1,7 +1,7 @@
 // FileUpload.js
 
 import React, {useState} from 'react'
-import { storage } from "../firebase";
+import { storage } from "../../firebase";
 import { render } from "react-dom"
 
 function FileUpload() {

@@ -3,7 +3,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { storage } from "../firebase";
+import { storage } from "../../firebase";
 
 import '../../Pets.css'
 
