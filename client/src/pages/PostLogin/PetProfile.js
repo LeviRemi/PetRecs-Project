@@ -1,11 +1,11 @@
-// PetHealth.js
+// PetProfile.js
 
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
-import Header from './Header.js';
-import Footer from './Footer.js';
+import Header from '../../components/Header.js';
+import Footer from '../../components/Footer.js';
 
 import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
@@ -13,39 +13,23 @@ import Row from 'react-bootstrap/Row';
 
 //function PetProfile() {
   
-export default class PetHealth extends Component {
+export default class PetProfile extends Component {
   
-  state = { PetId: "1", Weight: "5", Date: "2012-01-12"}
+  state = { pet: {} }
 
-  handleChange = event => {
-    //this.setState({ PetId: event.target.value, Weight: event.target.value, Date: event.target.value });
-  }
+  componentDidMount() {
+    const { match: { params } } = this.props;
 
-  handleSubmit = event => {
-    event.preventDefault();
-
-    //const { match: { params } } = this.props;
-
-    const data = {
-      PetId: this.state.PetId,
-      Weight: this.state.Weight,
-      Date: this.state.Date,
-    };
-
-    axios.post(`http://localhost:5000/api/pet-weights/`, data, {withCredentials: true} )
+    axios.get(`http://localhost:5000/api/pets/${params.PetId}`, {withCredentials: true} )
         .then(response=>{
-            console.log(response);
             console.log(response.data);
+            //const pet = response.data;
+            this.setState({ pet: response.data });
         })
         .catch((error) => {
-            console.log(data);
-            console.log(this.state.PetId);
-            console.log(this.state.Weight);
-            console.log(this.state.Date);
             console.log(error);
         })
-
-  }
+}
 
   render() {
     const { pet } = this.state;
@@ -65,8 +49,8 @@ export default class PetHealth extends Component {
                 </button>
                 </Link>
               </Col>
-                  name:  pet.PetName  <br />
-                  gender: pet.PetGender  <br />
+                  name: {pet.PetName} <br />
+                  gender: {pet.PetGender} <br />
               <Col>
               </Col>
               <Col>
@@ -105,29 +89,23 @@ export default class PetHealth extends Component {
               </Row>
           </div>
         <div className="petProfileBody">
-          <form onSubmit={this.handleSubmit}>
-            <label>
-              pet id:
-              <input type="text" name="PetId" onChange={this.handleChange} />
-            </label>
-            <label>
-              pet weight:
-              <input type="text" name="Weight" onChange={this.handleChange} />
-            </label>
-            <label>
-              date:
-              <input type="date" name="Date" onChange={this.handleChange} />
-            </label>
-            <button type="submit"> add weight </button>
-          </form>
+            <h4> Pet Profile </h4>
+              name: {pet.PetName} <br />
+              gender: {pet.PetGender} <br />
+              birthday: {pet.PetAgeMonth}/{pet.PetAgeDay}/{pet.PetAgeYear}<br />
+              allergies: {pet.AllergyNotes}<br />
+              care notes: {pet.CareNotes}<br />
+              food notes: {pet.FoodNotes}<br />
+              pet ID: {pet.PetId}<br />
+              species ID:{pet.SpeciesId}<br />
         </div>
         </Container>
-
         <div className="mainPageFooter">
           <Footer />
         </div> 
-
       </div>
     )
 }
 }
+
+//export default PetProfile

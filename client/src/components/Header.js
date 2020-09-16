@@ -10,7 +10,7 @@ function Header() {
     return (
         <div className="mainPageHeader">
             <div className="mainPageHeaderItem">
-                <img src={require(`../../pet-recs-logo_low-qual.png`)} width='48' height='55' />
+                <img src={require(`../pet-recs-logo_low-qual.png`)} width='48' height='55' />
                     PetRecs
             </div>                
             <div className="mainPageHeaderItem push-right">

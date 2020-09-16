@@ -42,6 +42,7 @@ app.get("/", (req, res) => {
 })
 
 // Serve the static files from the React app
+// TODO: Might need to change to build
 app.use(express.static(path.join(__dirname, '/client/public/')));
 
 const apiPet = require('./routes/pet.routes');

@@ -3,13 +3,13 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { storage } from "../../firebase";
+import { storage } from "../../../firebase";
 
-import '../../Pets.css'
+import './Pets.css'
 
-import Header from './Header.js';
-import Footer from './Footer.js';
-import FileUpload from './FileUpload.js';
+import Header from '../../../components/Header.js';
+import Footer from '../../../components/Footer.js';
+import FileUpload from '../../../utils/FileUpload.js';
 
 import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
@@ -62,6 +62,7 @@ export default class Pets extends Component {
           <Container fluid>
             <div className="mainPageBody nopadding">
                 <div className="mainPageContents">
+                  
                   { this.state.pets.map(pet => 
                   <Link id="PetLink" to={"/Pets/Profile/" + pet.PetId}>
                     <div id="PetContainer">

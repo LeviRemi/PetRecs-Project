@@ -2,17 +2,17 @@ import React from 'react';
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import HomePage from './components/HomePage'
-import Login from './components/Login'
-import Register from './components/Register'
-import About from './components/About'
-import Pets from './components/PostLogin/Pets'
-import PetProfile from './components/PostLogin/PetProfile'
-import PetRecords from './components/PostLogin/PetRecords'
-import PetHealth from './components/PostLogin/PetHealth'
-import PetTestPage from './components/PostLogin/PetTestPage'
-import isUserLoggedIn from "./utils/AuthApi"
-import Logout from './components/Logout'
+import HomePage from '../pages/HomePage'
+import Login from '../pages/Login'
+import Register from '../pages/Register'
+import About from '../pages/About'
+import Pets from '../pages/PostLogin/Pets/Pets'
+import PetProfile from '../pages/PostLogin/PetProfile'
+import PetRecords from '../pages/PostLogin/PetRecords'
+import PetHealth from '../pages/PostLogin/PetHealth'
+import PetTestPage from '../pages/PostLogin/PetTestPage'
+import isUserLoggedIn from "../utils/AuthApi"
+import Logout from '../utils/Logout'
 
 function App(){
   return (
