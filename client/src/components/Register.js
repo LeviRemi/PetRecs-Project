@@ -94,9 +94,6 @@ function Register() {
                     <br />
                     <Button variant="secondary" size="sm" className="btn-form" type="submit">Register</Button>
                 </Form>
-                
-                <br /><br />
-                <Link to="/" className="btn btn-secondary">Register</Link>
             </div>
         </div>
     )

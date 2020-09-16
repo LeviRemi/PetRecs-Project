@@ -61,9 +61,6 @@ function Login() {
                     <br />
                     <Button variant="secondary" size="sm" className="btn-form" type="submit">Log in</Button>
                 </Form>
-                
-                <br /><br />
-                <Link to="/Pets" className="btn btn-secondary">Login</Link>
             </div>
 
 
