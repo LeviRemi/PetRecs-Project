@@ -8,12 +8,22 @@
     display: inline-block;
 }
 
-#ImageCircle {
+#CircleShape {
     width: 135px;
     height: 135px;
     border-radius: 135px;
     border-style: solid;
     border-color: gray;
+}
+
+.ImageCircle {
+
+    width: 129px;
+    height: 129px;
+    border-radius: 129px;
+    object-fit: cover;
+    position: relative;
+    left: 0px;
 }
 
 #NameText {
