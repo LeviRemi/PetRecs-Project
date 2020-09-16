@@ -6,10 +6,11 @@ import HomePage from './components/HomePage'
 import Login from './components/Login'
 import Register from './components/Register'
 import About from './components/About'
-import Pets from './components/Pets'
-import PetProfile from './components/PetProfile'
-import PetRecords from './components/PetRecords'
-import PetHealth from './components/PetHealth'
+import Pets from './components/PostLogin/Pets'
+import PetProfile from './components/PostLogin/PetProfile'
+import PetRecords from './components/PostLogin/PetRecords'
+import PetHealth from './components/PostLogin/PetHealth'
+import PetTestPage from './components/PostLogin/PetTestPage'
 import isUserLoggedIn from "./utils/AuthApi"
 import Logout from './components/Logout'
 
@@ -25,6 +26,8 @@ function App(){
       <Route path="/pets/health/:PetId" exact component={(props)=>isUserLoggedIn()?<PetHealth {...props} /> : <HomePage/>} />
       <Route path="/pets/records" exact component={()=>isUserLoggedIn()?<PetRecords/> : <HomePage/>} />
       <Route path="/logout" exact component={()=>isUserLoggedIn()?<Logout/> : <HomePage/>} />
+
+      <Route path="/pets/testpage/" exact component={(props)=> < PetTestPage {...props} />} />
     </Router>
   );
 }

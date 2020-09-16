@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { storage } from "../firebase";
 
-import '../Pets.css'
+import '../../Pets.css'
 
 import Header from './Header.js';
 import Footer from './Footer.js';

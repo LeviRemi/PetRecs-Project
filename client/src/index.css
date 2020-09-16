@@ -95,7 +95,7 @@ these styles are pre-login */
 .loginRegPageHeader {
   width: 480px;
   margin: auto;
-  margin-top: 64px;
+  margin-top: 20px;
   text-align: center;
   background: rgb(255,255,255);
   background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(252,252,252,1) 100%);
@@ -116,8 +116,8 @@ these styles are pre-login */
   background-color: white;
   width: 480px;
   text-align: center;
-  margin: auto;
-  padding: 40px 0px 80px 0px;
+  margin: 0px auto 0px auto;
+  padding: 20px 0px 32px 0px;
 }
 
 .formTitle {
