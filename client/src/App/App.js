@@ -18,6 +18,8 @@ import PetTestProfile from '../pages/PostLogin/PetTestProfile'
 import PetTestRecords from '../pages/PostLogin/PetTestRecords'
 import isUserLoggedIn from "../utils/AuthApi"
 import Logout from '../utils/Logout'
+import {Redirect, Switch} from "react-router-dom";
+import NotFound from "../pages/NotFound";
 
 library.add(faPlus)
 
@@ -25,19 +27,23 @@ function App(){
   return (
     <div>
       <Router>
-        <Route path="/" exact component={()=>isUserLoggedIn()?<Pets/> : <HomePage/> } />
-        <Route path="/login" exact component={()=>isUserLoggedIn()?<Pets/> : <Login/>} />
-        <Route path="/register" exact component={()=>isUserLoggedIn()?<Pets/> : <Register/>} />
-        <Route path="/about" exact component={()=>isUserLoggedIn()?<About/> : <HomePage/>} />
-        <Route path="/pets" exact component={()=>isUserLoggedIn()?<Pets/> : <HomePage/>} />
-        <Route path="/pets/profile/:PetId" exact component={(props)=>isUserLoggedIn()?<PetProfile {...props} /> : <HomePage/>} />
-        <Route path="/pets/health/:PetId" exact component={(props)=>isUserLoggedIn()?<PetHealth {...props} /> : <HomePage/>} />
-        <Route path="/pets/events/:PetId" exact component={(props)=>isUserLoggedIn()?<PetEvents {...props} /> : <HomePage/>} />
-        <Route path="/pets/records/:PetId" exact component={(props)=>isUserLoggedIn()?<PetRecords {...props} /> : <HomePage/>} />
-        <Route path="/logout" exact component={()=>isUserLoggedIn()?<Logout/> : <HomePage/>} />
-        <Route path="/pets/testpage/:PetId" exact component={(props)=> < PetTestPage {...props } />} />
-        <Route path="/pets/testpage/:PetId/TestProfile" component={(props)=> < PetTestProfile {...props  } /> } />
-        <Route path="/pets/testpage/:PetId/TestRecords" component={(props)=> < PetTestRecords {...props  } /> } />
+        <Switch>
+          <Route path="/" exact component={()=>isUserLoggedIn()?<Redirect to={"/pets"}/> : <HomePage/> } />
+          <Route path="/login" exact component={()=>isUserLoggedIn()?<Redirect to={"/pets"}/> : <Login/>} />
+          <Route path="/register" exact component={()=>isUserLoggedIn()?<Redirect to={"/pets"}/> : <Register/>} />
+          <Route path="/about" exact component={()=>isUserLoggedIn()?<About/> : <Redirect to={"/"}/>} />
+          <Route path="/pets" exact component={()=>isUserLoggedIn()?<Pets/> : <Redirect to={"/"}/>} />
+          <Route path="/pets/profile/:PetId" exact component={(props)=>isUserLoggedIn()?<PetProfile {...props} /> : <Redirect to={"/"}/>} />
+          <Route path="/pets/health/:PetId" exact component={(props)=>isUserLoggedIn()?<PetHealth {...props} /> : <Redirect to={"/"}/>} />
+          <Route path="/pets/events/:PetId" exact component={(props)=>isUserLoggedIn()?<PetEvents {...props} /> : <Redirect to={"/"}/>} />
+          <Route path="/pets/records/:PetId" exact component={(props)=>isUserLoggedIn()?<PetRecords {...props} /> : <Redirect to={"/"}/>} />
+          <Route path="/logout" exact component={()=>isUserLoggedIn()?<Logout/> : <Redirect to={"/"}/>} />
+          <Route path="/pets/testpage/:PetId" exact component={(props)=> < PetTestPage {...props } />} />
+          <Route path="/pets/testpage/:PetId/TestProfile" component={(props)=> < PetTestProfile {...props  } /> } />
+          <Route path="/pets/testpage/:PetId/TestRecords" component={(props)=> < PetTestRecords {...props  } /> } />
+
+          <Route exact component={NotFound} /> {/*Keep this component at the end*/}
+        </Switch>
       </Router>
     </div>
     

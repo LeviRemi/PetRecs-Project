@@ -7,5 +7,4 @@ router.get("/", sessions.isAuthenticated);
 
 router.get("/destroy", sessions.destroySession);
 
-
 module.exports = router;
