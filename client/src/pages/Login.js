@@ -20,7 +20,7 @@ function Login() {
             Password: data.password
         }, { withCredentials: true })
             .then((res) => {
-                history.push('/pets');
+                history.push('/Pets');
             }, (err) => {
                 console.log(err);
                 Swal.fire('Oops...', err.response.data.message, 'error');

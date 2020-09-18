@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 
 import Header from '../../components/Header.js';
 import Footer from '../../components/Footer.js';
+import PetNavBar from '../../components/PetNavBar.js';
 
 import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
@@ -32,36 +33,11 @@ function PetRecords() {
               Pet Profile Card Placeholder
           </Jumbotron>
       </div>
-      <div className="petProfileNavBar">
-          <Row>
-          <Col sm="1">
-          </Col>
-          <Col>
-              <Link to="/pets/records">
-                <button className="btn-petprofile-nav">
-                  Records
-                </button>
-              </Link>
-              <Link to="/pets/health">
-                <button className="btn-petprofile-nav">
-                  Health
-                </button>
-              </Link>
-              <Link to="/pets/events">
-                <button className="btn-petprofile-nav">
-                  Events
-                </button>
-              </Link>
-              <Link to="/pets/reminders">
-                <button className="btn-petprofile-nav">
-                  Reminders
-                </button>
-              </Link>
-          </Col>
-          <Col sm="1">
-          </Col>
-          </Row>
+
+      <div>
+        <PetNavBar value="{urlpetid}" onChange="{handleChange}" />
       </div>
+
       <div className="petProfileBody nopadding">
           <h4> Pet Record details here - Pet Record details here - Pet Record details here <br />
           Pet Record details here - Pet Record details here - Pet Record details here <br />

@@ -1,4 +1,4 @@
-// PetTestPage.js
+// PetEvents.js
 
 import React, { Component } from 'react';
 import { useState } from 'react';
@@ -16,7 +16,7 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 
 
-function PetTestPage() {
+function PetEvents() {
 
   const [urlpetid, setUrlpetid] = useState(useParams());
 
@@ -32,28 +32,24 @@ function PetTestPage() {
 
         <Container fluid className="petProfileWindow">
           <div>
-            <PetCard />
+            <PetCard value={urlpetid} onChange={handleChange}/>
           </div>
+
           <div>
             <PetNavBar value={urlpetid} onChange={handleChange} />
           </div>
-        <div className="petProfileBody">
-            <h4> Pet Profile </h4>
-              name: pet.PetName <br />
-              gender: pet.PetGender <br />
-              birthday: pet.PetAgeMonth/pet.PetAgeDay/pet.PetAgeYear<br />
-              allergies: pet.AllergyNote<br />
-              care notes: pet.CareNotes<br />
-              food notes: pet.FoodNotes<br />
-              pet ID: pet.PetId<br />
-              species ID:pet.SpeciesId<br />
-        </div>
+
+          <div className="petProfileBody">
+              <h4> events </h4>
+          </div>
         </Container>
+
         <div className="mainPageFooter">
           <Footer />
         </div> 
+
       </div>
     )
 }
 
-export default PetTestPage
+export default PetEvents
