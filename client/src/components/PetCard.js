@@ -1,6 +1,6 @@
 // PetCard.js
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { useParams } from 'react-router';
@@ -10,19 +10,24 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Container from 'react-bootstrap/Container';
 
-
-
 function PetCard(props) {
     const [urlpetid, setUrlpetid] = useState(useParams());
-    const [petprofile, setPetprofile] = useState(0);
+    const [petprofile, setPetprofile] = useState('');
 
-  axios.get(`http://localhost:5000/api/pets/${urlpetid.PetId}`, {withCredentials: true} )
-      .then(response=>{
-          console.log(response.data);
-          //const pet = response.data;
-          //this.setState({ pet: response.data });
+    //console.log("calling PetCard");
+
+    function fetchPetInfo() {
+        axios.get(`http://localhost:5000/api/pets/${urlpetid.PetId}`, {withCredentials: true} )
+        .then(response=>{
+          //console.log(response.data);
           setPetprofile(response.data);
       })
+    }
+
+    useEffect(() => {
+        fetchPetInfo();
+    }, [])
+    
 
     return (
         <div className="petProfileCard">

@@ -8,7 +8,7 @@ import Row from 'react-bootstrap/Row';
 
 function PetNavBar(props) {
   
-  console.log(props.value.PetId);
+    console.log("Navbar PetId for links: " + props.value.PetId);
     return (
       
         <div className="petProfileNavBar">
