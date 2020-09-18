@@ -1,4 +1,62 @@
+#NameText {
+    text-align: center;
+    font-weight: 700px;
+    font-size: 23;
+}
+
+#PetLink {
+    text-decoration: none;
+    color: gray;
+    display: inline-block;
+}
+
 #PetContainer {
+    width: 135px;
+    height: 170px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    margin-left: 12.5px;
+    margin-right: 12.5px;
+
+}
+
+#PetCircle {
+    width: 135px;
+    height: 135px;
+    border-radius: 135px;
+    border-style: solid;
+    border-color: gray;
+    position: relative;
+    transition: opacity .4s;
+    
+}
+
+#PetCircle:hover {
+    opacity: 50%;
+    transition: opacity .4s;
+} 
+
+.PetImage {
+
+    width: 129px;
+    height: 129px;
+    border-radius: 129px;
+    object-fit: cover;
+    position: relative;
+    
+    left: 0;
+}
+
+#PetText {
+    text-align: center;
+    font-weight: 700px;
+    font-size: 23;
+    padding-top: 45px;
+    color: gray;
+    
+}
+
+#AddPetContainer {
     width: 135px;
     height: 170px;
     margin-top: 25px;
@@ -8,39 +66,56 @@
     display: inline-block;
 }
 
-#CircleShape {
+#AddPetCircle {
     width: 135px;
     height: 135px;
     border-radius: 135px;
     border-style: solid;
     border-color: gray;
+    position: relative;
+
+    transition: border-color .4s;
+    transition: background-color .4s;
+    
 }
 
-.ImageCircle {
+#AddPetCircle:hover {
+    background-color: lightgray;
+    border-color: lightgray;
+
+    transition: border-color .4s;
+    transition: background-color .4s;
+} 
+
+.AddPetImage {
 
     width: 129px;
     height: 129px;
     border-radius: 129px;
     object-fit: cover;
     position: relative;
-    left: 0px;
 }
 
-#NameText {
+#AddPetText {
+    margin: 0;
+    position: relative;
+    top: -61%;
+    left: 50%;
+    font-weight: bold;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+#AddPetText {
     text-align: center;
-    font-weight: 700px;
-    font-size: 23;
-}
+}    
 
-#PetText {
-    text-align: center;
-    font-weight: 700px;
-    font-size: 23;
-    padding-top: 45px;
-    color: gray;
-}
-
-#PetLink {
+#AddPetLink {
     text-decoration: none;
     color: gray;
+}
+
+#PlusIcon {
+    position: absolute;
+    left: 50px;
 }

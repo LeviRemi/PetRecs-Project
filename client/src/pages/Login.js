@@ -19,7 +19,7 @@ function Login() {
             Password: data.password
         }, { withCredentials: true })
             .then((res) => {
-                history.push('/pets');
+                history.push('/Pets');
             }, (err) => {
                 console.log(err);
                 alert("These credentials do not match anything in our database")

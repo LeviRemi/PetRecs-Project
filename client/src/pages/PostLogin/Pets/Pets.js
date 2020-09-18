@@ -4,6 +4,8 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { storage } from "../../../firebase";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
 
 import './Pets.css'
 
@@ -66,8 +68,8 @@ export default class Pets extends Component {
                   { this.state.pets.map(pet => 
                   <Link id="PetLink" to={"/Pets/Profile/" + pet.PetId}>
                     <div id="PetContainer">
-                      <div id="CircleShape">
-                        <img  id={"ImageId" + pet.PetId} class="ImageCircle"></img>
+                      <div id="PetCircle">
+                        <img  id={"ImageId" + pet.PetId} class="PetImage"></img>
                         {<HasProfilePic AccountId={account.AccountId} PetId={pet.PetId}/>}
                       </div>
                       <div>
@@ -76,6 +78,14 @@ export default class Pets extends Component {
                     </div>
                   </Link>
                   )}
+                  <Link id="PetLink">
+                    <div id="AddPetContainer">
+                      <div id="AddPetCircle">
+                        <img  class="AddPetImage"></img>
+                        <p id="AddPetText">Add Pet<br />< FontAwesomeIcon id="PlusIcon" icon="plus" size="2x" /></p>
+                      </div>
+                    </div>
+                  </Link>
                 </div>
             </div>
           </Container>
