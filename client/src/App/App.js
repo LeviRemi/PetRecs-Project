@@ -1,6 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
 
 import HomePage from '../pages/HomePage'
 import Login from '../pages/Login'
@@ -13,6 +15,8 @@ import PetHealth from '../pages/PostLogin/PetHealth'
 import PetTestPage from '../pages/PostLogin/PetTestPage'
 import isUserLoggedIn from "../utils/AuthApi"
 import Logout from '../utils/Logout'
+
+library.add(faPlus)
 
 function App(){
   return (
