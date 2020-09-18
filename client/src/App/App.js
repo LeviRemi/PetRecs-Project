@@ -21,7 +21,6 @@ library.add(faPlus)
 
 function App(){
   return (
-    /*
     <Router>
       <Route path="/" exact component={()=>isUserLoggedIn()?<Pets/> : <HomePage/>} />
       <Route path="/login" exact component={()=>isUserLoggedIn()?<Pets/> : <Login/>} />
@@ -30,12 +29,13 @@ function App(){
       <Route path="/pets" exact component={()=>isUserLoggedIn()?<Pets/> : <HomePage/>} />
       <Route path="/pets/profile/:PetId" exact component={(props)=>isUserLoggedIn()?<PetProfile {...props} /> : <HomePage/>} />
       <Route path="/pets/health/:PetId" exact component={(props)=>isUserLoggedIn()?<PetHealth {...props} /> : <HomePage/>} />
-      <Route path="/pets/records" exact component={()=>isUserLoggedIn()?<PetRecords/> : <HomePage/>} />
+      <Route path="/pets/events/:PetId" exact component={(props)=>isUserLoggedIn()?<PetEvents {...props} /> : <HomePage/>} />
+      <Route path="/pets/records/:PetId" exact component={(props)=>isUserLoggedIn()?<PetRecords {...props} /> : <HomePage/>} />
       <Route path="/logout" exact component={()=>isUserLoggedIn()?<Logout/> : <HomePage/>} />
 
-      <Route path="/pets/testpage/:PetId" exact component={()=> < PetTestPage />} />
+      <Route path="/pets/testpage/:PetId" exact component={(props)=> < PetTestPage {...props} />} />
     </Router>
-    */
+    /*
     //un auth test router
     <Router>
       <Route path="/" exact component={()=><Pets/>} />
@@ -51,7 +51,7 @@ function App(){
 
       <Route path="/pets/testpage/:PetId" exact component={()=> < PetTestPage />} />
     </Router>
-
+    */
 
   );
 }

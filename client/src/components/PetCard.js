@@ -2,17 +2,27 @@
 
 import React from 'react'
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { useParams } from 'react-router';
 import { NavLink } from 'react-router-dom';
+import axios from 'axios';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Container from 'react-bootstrap/Container';
 
-function PetCard(props) {
-  function handleChange(event) {
-    props.onChange(event.target.value);
-  }
 
-  console.log(props.value.PetId);
+
+function PetCard(props) {
+    const [urlpetid, setUrlpetid] = useState(useParams());
+    const [petprofile, setPetprofile] = useState(0);
+
+  axios.get(`http://localhost:5000/api/pets/${urlpetid.PetId}`, {withCredentials: true} )
+      .then(response=>{
+          console.log(response.data);
+          //const pet = response.data;
+          //this.setState({ pet: response.data });
+          setPetprofile(response.data);
+      })
 
     return (
         <div className="petProfileCard">
@@ -26,8 +36,8 @@ function PetCard(props) {
                 </Col>
 
                 <Col>
-                    name: pet.PetName <br />
-                    gender: pet.PetGender <br />
+                    name: {petprofile.PetName} <br />
+                    gender: {petprofile.PetGender} <br />
                 </Col>
                 <Col>
                 </Col>

@@ -7,9 +7,7 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 
 function PetNavBar(props) {
-  function handleChange(event) {
-    props.onChange(event.target.value);
-  }
+  
   console.log(props.value.PetId);
     return (
       

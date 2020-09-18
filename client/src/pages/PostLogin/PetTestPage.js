@@ -18,11 +18,23 @@ import Row from 'react-bootstrap/Row';
 
 function PetTestPage() {
 
+  
   const [urlpetid, setUrlpetid] = useState(useParams());
+  /*
+  const [petprofile, setPetprofile] = useState(0);
 
-  function handleChange(newPetid) {
-    setUrlpetid(newPetid);
-  }
+  axios.get(`http://localhost:5000/api/pets/${urlpetid.PetId}`, {withCredentials: true} )
+      .then(response=>{
+          console.log(response.data);
+          //const pet = response.data;
+          //this.setState({ pet: response.data });
+          //setPetprofile(response.data);
+      })
+      .catch((error) => {
+          console.log(error);
+      })
+
+      */
 
     return (
       <div className="fullPageContainer">
@@ -35,11 +47,11 @@ function PetTestPage() {
             <PetCard />
           </div>
           <div>
-            <PetNavBar value={urlpetid} onChange={handleChange} />
+            <PetNavBar value={urlpetid} />
           </div>
         <div className="petProfileBody">
             <h4> Pet Profile </h4>
-              name: pet.PetName <br />
+              name: petProfile.PetName} <br />
               gender: pet.PetGender <br />
               birthday: pet.PetAgeMonth/pet.PetAgeDay/pet.PetAgeYear<br />
               allergies: pet.AllergyNote<br />
