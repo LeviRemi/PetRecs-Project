@@ -176,7 +176,9 @@ these styles are post-login */
   font-size: 14px;
   font-weight: bold;
   vertical-align: middle;
-  border:none;
+  border: none !important;
+  outline: none !important;
+  color: black;
 }
 
 .btn-petprofile-nav:hover {

@@ -6,6 +6,8 @@ import axios from 'axios';
 
 import Header from '../../components/Header.js';
 import Footer from '../../components/Footer.js';
+import PetNavBar from '../../components/PetNavBar.js';
+import PetCard from '../../components/PetCard.js';
 
 import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
@@ -56,54 +58,15 @@ export default class PetHealth extends Component {
         </div>
 
         <Container fluid className="petProfileWindow">
-          <div className="petProfileCard">
-            <Row>
-              <Col>
-                <Link to="/pets">
-                <button className="btn-petprofile-nav">
-                    &lt;&lt;Back
-                </button>
-                </Link>
-              </Col>
-                  name:  pet.PetName  <br />
-                  gender: pet.PetGender  <br />
-              <Col>
-              </Col>
-              <Col>
-              </Col>
-            </Row>
+        <div>
+            <PetCard/>
           </div>
 
-          <div className="petProfileNavBar">
-              <Row>
-              <Col sm="1">
-              </Col>
-              <Col>
-                  <Link to="/petrecords">
-                    <button className="btn-petprofile-nav">
-                      Records
-                    </button>
-                  </Link>
-                  <Link to="/pethealth">
-                    <button className="btn-petprofile-nav">
-                      Health
-                    </button>
-                  </Link>
-                  <Link to="/petevents">
-                    <button className="btn-petprofile-nav">
-                      Events
-                    </button>
-                  </Link>
-                  <Link to="/petreminders">
-                    <button className="btn-petprofile-nav">
-                      Reminders
-                    </button>
-                  </Link>
-              </Col>
-              <Col sm="1">
-              </Col>
-              </Row>
+          <div>
+            <PetNavBar/>
           </div>
+
+
         <div className="petProfileBody">
           <form onSubmit={this.handleSubmit}>
             <label>
