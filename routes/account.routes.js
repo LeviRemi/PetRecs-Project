@@ -4,7 +4,7 @@ const router = require("express").Router();
 
 // Root: "/api/accounts"
 
-// Create a new Account
+// Create a new Account (if email does not already exist in database)
 router.post("/", accounts.create);
 
 // Login to an existing Account

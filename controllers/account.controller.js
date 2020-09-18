@@ -36,20 +36,37 @@ exports.create = (req, res) => {
             });
     });
 
-    // Save Account to database
-    Account.create(account)
+    // Check if account already exists, if it doesn't then create it
+    Account.findAll( {
+        where: {Email: account.Email}
+    })
         .then(data => {
-            res.send(data);
+            if (data.toString() === "") {
+                Account.create(account)
+                    .then(data => {
+                        res.send(data);
+                    })
+                    .catch(err => {
+                        res.status(500).send({
+                            message:
+                                err.message || "Some error occurred while creating the account"
+                        });
+                    })
+            } else {
+                res.status(409).send({
+                    message: "Email already exists."
+                });
+            }
         })
         .catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while creating the account"
+                    err.message || "Some error occurred while checking if email already exists"
             });
-        })
+        });
 };
 
-// Validate that account exists then grants user a session
+// Validate that account exists then grant user a session
 exports.login = (req, res) => {
     // Validate request
     if (!req.body.Email || !req.body.Password) {

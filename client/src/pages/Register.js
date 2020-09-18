@@ -5,6 +5,7 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import axios from 'axios'
 import {useForm} from "react-hook-form"
+import Swal from 'sweetalert2'
 
 import { Link } from 'react-router-dom'
 import {useHistory} from "react-router";
@@ -23,9 +24,13 @@ function Register() {
         }, { withCredentials: true })
             .then((res) => {
                 console.log(res);
-                alert("Account created");
+                Swal.fire('Congratulations!', "Your PetRecs account has been created", 'success');
                 history.push('/login');
             }, (err) => {
+                console.log(err.response.status)
+                if (err.response.status === 409) {
+                    Swal.fire('Oops...', err.response.data.message, 'error');
+                }
                 console.log(err);
             })
     }

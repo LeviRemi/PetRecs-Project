@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import {useForm} from "react-hook-form"
 import {useHistory} from "react-router";
+import Swal from "sweetalert2";
 
 
 function Login() {
@@ -22,7 +23,7 @@ function Login() {
                 history.push('/pets');
             }, (err) => {
                 console.log(err);
-                alert("These credentials do not match anything in our database")
+                Swal.fire('Oops...', err.response.data.message, 'error');
             })
     }
 
