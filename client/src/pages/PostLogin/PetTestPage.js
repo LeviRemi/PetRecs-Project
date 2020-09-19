@@ -4,6 +4,7 @@ import React, { Component, useState } from 'react';
 import { useParams } from 'react-router';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Route } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { Routes } from 'react-router-dom';
 
 import axios from 'axios';
@@ -24,12 +25,32 @@ function PetTestPage() {
 
     return (
       <Router basename="/">
+
+      <div className="fullPageContainer">
         <div>
-            <Route exact path='/' component={ < PetTestProfile />} />
-            test1 
-            <Route path='/TestRecords/' component={ < PetTestRecords />} />
-            test2
+          <Header />
         </div>
+        <div>
+            <PetCard value={urlpetid} />
+          </div>
+          <div>
+            <PetNavBar value={urlpetid} />
+          </div>
+          <div className="testLinks">
+            <NavLink to="/pets/testrecords/"> testrecords </NavLink>
+            <NavLink to={{pathname: `/pets/testprofile/${urlpetid.PetId}`}}> testprofile </NavLink>
+          </div>
+
+        <div className="mainContent">
+            <Route exact path='/pets/testprofile/:PetId' component={PetTestProfile} />
+            <Route exact path='/pets/testrecords/' component={PetTestRecords} />
+        </div>
+
+        <div className="mainPageFooter">
+          <Footer />
+        </div> 
+
+      </div>
       </Router>
 
 /*
@@ -37,6 +58,8 @@ function PetTestPage() {
         <div>
           <Header />
         </div>
+
+
 
         <Container fluid className="petProfileWindow">
           <div>
