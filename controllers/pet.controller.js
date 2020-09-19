@@ -65,7 +65,6 @@ exports.findAll = (req, res) => {
         where: { AccountId: req.session.user.AccountId}
     })
         .then(data => {
-            console.log(data);
             for(let i = 0; i < data.length; i++) {
                 contactArr.push(data[i].PetId);
             }
