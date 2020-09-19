@@ -38,6 +38,9 @@ module.exports = (sequelize) => {
         },
         CareNotes: {
             type: DataTypes.STRING(300)
+        },
+        ProfileUrl: {
+            type: DataTypes.STRING(100)
         }
     }, {
         // creates a model named Pet, pointing to a table named Pet

@@ -23,7 +23,8 @@ exports.create = (req, res) => {
         PetAgeDay: req.body.PetAgeDay,
         AllergyNotes: req.body.AllergyNotes,
         FoodNotes: req.body.FoodNotes,
-        CareNotes: req.body.CareNotes
+        CareNotes: req.body.CareNotes,
+        ProfileUrl: req.body.ProfileUrl
     };
 
     // Save Pet to database

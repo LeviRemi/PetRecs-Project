@@ -6,32 +6,16 @@ import axios from 'axios';
 import { storage } from "../../../firebase";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-
+// Style
 import './Pets.css'
-
-import Header from '../../../components/Header.js';
-import Footer from '../../../components/Footer.js';
-import FileUpload from '../../../utils/FileUpload.js';
-
 import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 
-function HasProfilePic(props) {
-
-  var imageRef = storage.child(`PetImages/`+String(props.AccountId) + String(props.PetId)+`.png`);
-  console.log(props.PetId);
-  imageRef.getDownloadURL().then((url) => {
-    var img = document.getElementById('ImageId' + props.PetId);
-    img.src = url;
-    console.log(url);
-  }).catch((error) => {
-    var img = document.getElementById('ImageCircle');
-    var url = "https://firebasestorage.googleapis.com/v0/b/petrecs-file-system.appspot.com/o/PetImages%2FPetRecsDefault.png?alt=media&token=eaa9f503-8783-4a18-ae32-c53bd67a5fc4";
-    img.src = url;
-  })
-  return null;
-}
+// Components
+import Header from '../../../components/Header.js';
+import Footer from '../../../components/Footer.js';
+import FileUpload from '../../../utils/FileUpload.js';
 
 export default class Pets extends Component {
 
@@ -46,7 +30,6 @@ export default class Pets extends Component {
       ]).then(([petResponse, accountResponse]) => {
           const pets = petResponse.data;
           const account = accountResponse.data;
-
           this.setState({  pets, account });
         })
         .catch((error) => {
@@ -64,20 +47,20 @@ export default class Pets extends Component {
           <Container fluid>
             <div className="mainPageBody nopadding">
                 <div className="mainPageContents">
-                  
+                {console.log("loading")}
                   { this.state.pets.map(pet => 
                   <Link id="PetLink" to={"/Pets/Profile/" + pet.PetId}>
                     <div id="PetContainer">
                       <div id="PetCircle">
-                        <img  id={"ImageId" + pet.PetId} class="PetImage"></img>
-                        {<HasProfilePic AccountId={account.AccountId} PetId={pet.PetId}/>}
+                        <img  id={"ImageId" + pet.PetId} src={pet.ProfileUrl} class="PetImage"></img>
                       </div>
                       <div>
-                          <p id="NameText">{pet.PetName}</p> 
+                          <p class="NameText">{pet.PetName}</p> 
                       </div>
                     </div>
                   </Link>
                   )}
+                  {console.log("loaded")}
                   <Link id="PetLink">
                     <div id="AddPetContainer">
                       <div id="AddPetCircle">
