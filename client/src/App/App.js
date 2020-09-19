@@ -38,10 +38,9 @@ function App(){
           <Route path="/pets/events/:PetId" exact component={(props)=>isUserLoggedIn()?<PetEvents {...props} /> : <Redirect to={"/"}/>} />
           <Route path="/pets/records/:PetId" exact component={(props)=>isUserLoggedIn()?<PetRecords {...props} /> : <Redirect to={"/"}/>} />
           <Route path="/logout" exact component={()=>isUserLoggedIn()?<Logout/> : <Redirect to={"/"}/>} />
-          <Route path="/pets/testpage/:PetId" exact component={(props)=> < PetTestPage {...props } />} />
-          <Route path="/pets/testpage/:PetId/TestProfile" component={(props)=> < PetTestProfile {...props  } /> } />
-          <Route path="/pets/testpage/:PetId/TestRecords" component={(props)=> < PetTestRecords {...props  } /> } />
 
+          <Route path="/pets/testprofile/:PetId" exact component={(props)=> < PetTestPage {...props } />} />
+          
           <Route exact component={NotFound} /> {/*Keep this component at the end*/}
         </Switch>
       </Router>
@@ -49,7 +48,9 @@ function App(){
     
       /*
 
-      
+      <Route path="/pets/testpage/:PetId/TestProfile" component={(props)=> < PetTestProfile {...props  } /> } />
+      <Route path="/pets/testpage/:PetId/TestRecords" component={(props)=> < PetTestRecords {...props  } /> } />
+          
 
 
     //un auth test router
