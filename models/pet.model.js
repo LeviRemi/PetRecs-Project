@@ -7,10 +7,6 @@ module.exports = (sequelize) => {
             autoIncrement: true,
             primaryKey: true
         },
-        AccountId: {
-            type: DataTypes.INTEGER,
-            allowNull: false
-        },
         SpeciesId: {
             type: DataTypes.INTEGER,
             allowNull: false

@@ -1,5 +1,6 @@
 const db = require("../models");
 const Pet = db.pet;
+const Contact = db.petContact;
 
 // Create and Save a new Pet
 exports.create = (req, res) => {
@@ -14,7 +15,6 @@ exports.create = (req, res) => {
     // Create Pet
     const pet = {
         SpeciesId: req.body.SpeciesId,
-        AccountId: req.session.user.AccountId,
         BreedId: req.body.BreedId,
         PetName: req.body.PetName,
         PetGender: req.body.PetGender,
@@ -29,6 +29,18 @@ exports.create = (req, res) => {
     // Save Pet to database
     Pet.create(pet)
         .then(data => {
+            // Save corresponding Pet Contact
+            Contact.create({
+                AccountId: req.session.user.AccountId,
+                PetId: data.PetId
+            }).then(data => {
+                console.log(data)
+            }).catch(err => {
+                res.status(500).send({
+                    message:
+                        err.message || "Some error occurred while creating the pet contact"
+                });
+            })
             res.send(data);
         })
         .catch(err => {
@@ -45,16 +57,34 @@ exports.findAll = (req, res) => {
         res.status(401).send("You are not logged in.");
         return;
     }
-    Pet.findAll( {
-        where: { AccountId: req.session.user.AccountId }
+
+    let contactArr = [];
+
+    Contact.findAll({
+        where: { AccountId: req.session.user.AccountId}
     })
         .then(data => {
-            res.send(data);
+            console.log(data);
+            for(let i = 0; i < data.length; i++) {
+                contactArr.push(data[i].PetId);
+            }
+            Pet.findAll( {
+                where: { PetId: contactArr }
+            })
+                .then(data => {
+                    res.send(data);
+                })
+                .catch(err => {
+                    res.status(500).send({
+                        message:
+                            err.message || "Some error occurred while retrieving Pets."
+                    });
+                });
         })
         .catch(err => {
             res.status(500).send({
                 message:
-                err.message || "Some error occurred while retrieving Pets."
+                    err.message || "Some error occurred while retrieving Pet Contacts."
             });
         });
 };
