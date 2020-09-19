@@ -11,15 +11,14 @@ import Row from 'react-bootstrap/Row';
 import Container from 'react-bootstrap/Container';
 
 function PetCard(props) {
-    const [urlpetid, setUrlpetid] = useState(useParams());
+
+    console.log("Component: 'PetCard' loaded");
+    
     const [petprofile, setPetprofile] = useState('');
 
-    //console.log("calling PetCard");
-
     function fetchPetInfo() {
-        axios.get(`http://localhost:5000/api/pets/${urlpetid.PetId}`, {withCredentials: true} )
+        axios.get(`http://localhost:5000/api/pets/${props.value.PetId}`, {withCredentials: true} )
         .then(response=>{
-          //console.log(response.data);
           setPetprofile(response.data);
       })
     }
@@ -33,10 +32,10 @@ function PetCard(props) {
         <div className="petProfileCard">
             <Row>
                 <Col>
-                <Link to="/pets">
-                <button className="btn-petprofile-nav">
-                    &lt;&lt;Back
-                </button>
+                <Link to="/Pets">
+                    <button className="btn-petprofile-nav">
+                        &lt;&lt;Back
+                    </button>
                 </Link>
                 </Col>
 

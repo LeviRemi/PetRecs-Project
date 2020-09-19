@@ -49,7 +49,7 @@ export default class Pets extends Component {
                 <div className="mainPageContents">
                 {console.log("loading")}
                   { this.state.pets.map(pet => 
-                  <Link id="PetLink" to={"/Pets/Profile/" + pet.PetId}>
+                  <Link id="PetLink" to={"/Pets/" + pet.PetId}>
                     <div id="PetContainer">
                       <div id="PetCircle">
                         <img  id={"ImageId" + pet.PetId} src={pet.ProfileUrl} class="PetImage"></img>

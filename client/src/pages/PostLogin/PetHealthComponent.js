@@ -1,21 +1,9 @@
-// PetHealth.js
+// PetHealthComponent.js
 
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom';
 import axios from 'axios';
-
-import Header from '../../components/Header.js';
-import Footer from '../../components/Footer.js';
-import PetNavBar from '../../components/PetNavBar.js';
-import PetCard from '../../components/PetCard.js';
-
-import Container from 'react-bootstrap/Container';
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
-
-//function PetProfile() {
   
-export default class PetHealth extends Component {
+export default class PetHealthComponent extends Component {
   
   state = { PetId: "1", Weight: "5", Date: "2012-01-12"}
 
@@ -25,8 +13,6 @@ export default class PetHealth extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
-
-    //const { match: { params } } = this.props;
 
     const data = {
       PetId: this.state.PetId,
@@ -50,24 +36,13 @@ export default class PetHealth extends Component {
   }
 
   render() {
+    
+    console.log("Component: 'PetHealthComponent' loaded");
+
     const { pet } = this.state;
+    
     return (
-      <div className="fullPageContainer">
-        <div>
-          <Header />
-        </div>
 
-        <Container fluid className="petProfileWindow">
-        <div>
-            <PetCard/>
-          </div>
-
-          <div>
-            <PetNavBar/>
-          </div>
-
-
-        <div className="petProfileBody">
           <form onSubmit={this.handleSubmit}>
             <label>
               pet id:
@@ -83,14 +58,7 @@ export default class PetHealth extends Component {
             </label>
             <button type="submit"> add weight </button>
           </form>
-        </div>
-        </Container>
-
-        <div className="mainPageFooter">
-          <Footer />
-        </div> 
-
-      </div>
+      
     )
 }
 }
