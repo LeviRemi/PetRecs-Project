@@ -23,7 +23,7 @@ function Login() {
                 history.push('/Pets');
             }, (err) => {
                 console.log(err);
-                Swal.fire('Oops...', err.response.data.message, 'error');
+                Swal.fire('Oops...', "Wrong email or password", 'error');
             })
     }
 
