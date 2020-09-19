@@ -26,7 +26,7 @@ function HasProfilePic(props) {
     img.src = url;
     console.log(url);
   }).catch((error) => {
-    var img = document.getElementById('ImageCircle');
+    var img = document.getElementById("ImageId" + props.PetId);
     var url = "https://firebasestorage.googleapis.com/v0/b/petrecs-file-system.appspot.com/o/PetImages%2FPetRecsDefault.png?alt=media&token=eaa9f503-8783-4a18-ae32-c53bd67a5fc4";
     img.src = url;
   })
