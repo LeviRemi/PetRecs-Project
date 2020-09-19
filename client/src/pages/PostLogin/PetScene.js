@@ -2,7 +2,6 @@
 
 import React, { Component, useState } from 'react';
 import { useParams } from 'react-router';
-import { BrowserRouter as Router } from 'react-router-dom';
 import { Route } from 'react-router-dom';
 
 import Header from '../../components/Header.js';
@@ -21,7 +20,6 @@ function PetScene() {
   const [urlpetid, setUrlpetid] = useState(useParams());
 
     return (
-      <Router basename="/">
 
       <div className="fullPageContainer">
         <div>
@@ -46,7 +44,6 @@ function PetScene() {
         </div> 
 
       </div>
-      </Router>
     )
 
     

@@ -29,7 +29,7 @@ function App(){
           <Route path="/register" exact component={()=>isUserLoggedIn()?<Redirect to={"/pets"}/> : <Register/>} />
           <Route path="/about" exact component={()=>isUserLoggedIn()?<About/> : <Redirect to={"/"}/>} />
           <Route path="/pets" exact component={()=>isUserLoggedIn()?<Pets/> : <Redirect to={"/"}/>} />
-          <Route path="/pets/:PetId/" exact component={(props)=>isUserLoggedIn()?<PetScene {...props} /> : <Redirect to={"/"}/>} />
+          <Route path="/pets/:PetId/"  component={(props)=>isUserLoggedIn()?<PetScene {...props} /> : <Redirect to={"/"}/>} />
           <Route path="/logout" exact component={()=>isUserLoggedIn()?<Logout/> : <Redirect to={"/"}/>} />
           <Route exact component={NotFound} /> {/*Keep this component at the end*/}
         </Switch>
