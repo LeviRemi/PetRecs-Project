@@ -18,9 +18,16 @@ function PetCard(props) {
 
     function fetchPetInfo() {
         axios.get(`http://localhost:5000/api/pets/${props.value.PetId}`, {withCredentials: true} )
-        .then(response=>{
-          setPetprofile(response.data);
-      })
+            .then(response=>{
+                setPetprofile(response.data);
+            })
+            .catch(err=> {
+                setPetprofile({
+                    PetName: "N/A - Invalid Pet Id",
+                    PetGender: "N/A - Invalid Pet Id"
+                });
+            })
+
     }
 
     useEffect(() => {

@@ -94,7 +94,11 @@ exports.findOne = (req, res) => {
     const id = req.params.id;
     Pet.findByPk(id)
         .then(data => {
-            res.send(data);
+            if (data === null) {
+                res.status(400).send("Pet not found");
+            } else {
+                res.send(data);
+            }
         })
         .catch(err => {
             res.status(500).send({
