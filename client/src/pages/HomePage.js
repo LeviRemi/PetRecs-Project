@@ -6,6 +6,7 @@ import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import { Link, withRouter } from 'react-router-dom';
+import Footer from '../components/Footer.js';
 
 function HomePage() {
 
@@ -92,9 +93,9 @@ function HomePage() {
                     </Container>
             </div>
             
-            <div className="homePageFooter">
-                footer text placeholder - need to come up with proper content - footer text placeholder
-            </div>            
+            <div>
+                <Footer />
+            </div>
             
         </div>
     )

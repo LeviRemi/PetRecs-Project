@@ -41,7 +41,7 @@ function Login() {
                 </div>
                 <Form onSubmit={handleSubmit(onSubmit)} className="loginRegForm">
                     <Form.Group controlId="formBasicEmail">
-                        <Form.Label>E-Mail Address</Form.Label>
+                        <Form.Label>Email Address</Form.Label>
                         <Form.Control name="email" type="email" placeholder="example@mail.com" autoComplete="email"
                                       ref={register(
                                           { required: true,
@@ -50,17 +50,19 @@ function Login() {
                                                   message: "invalid email address"
                                               }
                                           })}/>
-                        {errors.email && (errors.email.message || "Email is required")}
+                        <div className="text-danger">{errors.email && (errors.email.message || "Email is required")}</div>
                     </Form.Group>
 
                     <Form.Group controlId="formBasicPassword">
                         <Form.Label>Password</Form.Label>
                         <Form.Control name="password" type="password" placeholder="Password" autoComplete="current-password"
                                       ref={register({ required: true})} />
-                        {errors.password && "Password is required"}
+                        <div className="text-danger">{errors.password && "Password is required"}</div>
                     </Form.Group>
                     <br />
-                    <Button variant="secondary" size="sm" className="btn-form" type="submit">Log in</Button>
+                    <div className="text-center">
+                        <Button variant="secondary" size="sm" className="btn-form" type="submit">Log in</Button>
+                    </div>
                 </Form>
             </div>
 

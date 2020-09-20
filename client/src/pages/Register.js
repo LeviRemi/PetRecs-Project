@@ -55,7 +55,7 @@ function Register() {
                 </div>
                 <Form onSubmit={handleSubmit(onSubmit)} className="loginRegForm">
                     <Form.Group controlId="formBasicEmail">
-                        <Form.Label>E-Mail Address</Form.Label>
+                        <Form.Label>Email Address</Form.Label>
                         <Form.Control name="email" type="email" placeholder="example@mail.com"
                                       ref={register(
                                           { required: true,
@@ -64,7 +64,7 @@ function Register() {
                                                   message: "invalid email address"
                                               }
                                           })}/>
-                        {errors.email && (errors.email.message || "Email is required")}
+                        <div className="text-danger">{errors.email && (errors.email.message || "Email is required")}</div>
                     </Form.Group>
 
                     <Form.Group controlId="formBasicPassword">
@@ -74,14 +74,14 @@ function Register() {
                                           minLength: {value: 6, message: "Password must be at least 6 characters in length"},
                                           maxLength: {value: 20, message: "Password must be at or under 20 characters in length"}
                                       })} />
-                        {errors.password && (errors.password.message || "Password is required")}
+                        <div className="text-danger">{errors.password && (errors.password.message || "Password is required")}</div>
                     </Form.Group>
 
                     <Form.Group controlId="formBasicRepeatPassword">
                         <Form.Label>Repeat Password</Form.Label>
                         <Form.Control name="password_confirm" type="password" placeholder="Password"
                                       ref={register({ required: true, validate: value => value === watch('password') })} />
-                        {errors.password_confirm && "Both passwords must match"}
+                        <div className="text-danger">{errors.password_confirm && "Both passwords must match"}</div>
                     </Form.Group>
 
                     <Form.Group controlId="formBasicAccountType">
@@ -93,11 +93,13 @@ function Register() {
                                 })
                             }
                         </Form.Control>
-                        {errors.accountType && "Account Type is required"}
+                        <div className="text-danger">{errors.accountType && "Account Type is required"}</div>
                     </Form.Group>
 
                     <br />
-                    <Button variant="secondary" size="sm" className="btn-form" type="submit">Register</Button>
+                    <div className="text-center">
+                        <Button variant="secondary" size="sm" className="btn-form" type="submit">Register</Button>
+                    </div>
                 </Form>
             </div>
         </div>
