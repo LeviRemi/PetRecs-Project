@@ -9,8 +9,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 // Style
 import './Pets.css'
 import Container from 'react-bootstrap/Container';
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
 
 // Components
 import Header from '../../../components/Header.js';
@@ -52,7 +50,7 @@ export default class Pets extends Component {
                   <Link id="PetLink" to={"/Pets/" + pet.PetId}>
                     <div id="PetContainer">
                       <div id="PetCircle">
-                        <img  id={"ImageId" + pet.PetId} src={pet.ProfileUrl} class="PetImage"></img>
+                        <img id={"ImageId" + pet.PetId} src={pet.ProfileUrl} class="PetImage"></img>
                       </div>
                       <div>
                           <p class="NameText">{pet.PetName}</p> 
@@ -64,7 +62,7 @@ export default class Pets extends Component {
                   <Link id="PetLink" to={"/Pets/New"}>
                     <div id="AddPetContainer">
                       <div id="AddPetCircle">
-                        <img  class="AddPetImage"></img>
+                        <img class="AddPetImage"></img>
                         <p id="AddPetText">Add Pet<br />< FontAwesomeIcon id="PlusIcon" icon="plus" size="2x" /></p>
                       </div>
                     </div>

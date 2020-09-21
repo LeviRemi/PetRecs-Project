@@ -3,12 +3,9 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
-import { useParams } from 'react-router';
-import { NavLink } from 'react-router-dom';
 import axios from 'axios';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import Container from 'react-bootstrap/Container';
 
 function PetCard(props) {
 

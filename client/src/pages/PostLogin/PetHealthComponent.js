@@ -4,7 +4,6 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
-import { appendErrors } from 'react-hook-form';
   
 export default class PetHealthComponent extends Component {
   constructor(props) {
