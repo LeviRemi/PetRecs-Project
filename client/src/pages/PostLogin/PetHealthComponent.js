@@ -1,15 +1,45 @@
 // PetHealthComponent.js
 
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import axios from 'axios';
+import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
+import { appendErrors } from 'react-hook-form';
   
 export default class PetHealthComponent extends Component {
-
   constructor(props) {
-    super(props);
+    super();
+    this.state = { PetId: props.match.params.PetId};
     console.log("PetHealthComponent - Using PetId: " + props.match.params.PetId);
-    this.state = { PetId: props.match.params.PetId, Weight: "", Date: ""}
   }
+
+  render() {
+    
+    console.log("Component: 'PetHealthComponent' loaded");
+    
+    return (
+
+      <div>
+        <h3>Add Weight</h3>
+        <AddWeightComponent petid={this.state.PetId}/>
+      </div>
+        
+    )
+  }
+}
+
+class ViewWeightTable extends Component {
+  constructor(props) {
+    super();
+  }
+}
+
+class AddWeightComponent extends Component {
+  constructor(props) {
+    super();
+    this.state = { PetId: props.petid, Weight: '', Date: ''};
+    console.log("Component: 'AddWeightComponent' loaded");
+  };
 
   handleWeightChange = event => {
     this.setState({Weight: event.target.value});
@@ -30,38 +60,34 @@ export default class PetHealthComponent extends Component {
     axios.post(`http://localhost:5000/api/pet-weights/`, data, {withCredentials: true} )
         .then(response=>{
             console.log(response);
-            console.log(response.data);
         })
         .catch((error) => {
             console.log(data);
-            console.log(this.state.Weight);
-            console.log(this.state.Date);
             console.log(error);
         })
-
   }
 
   render() {
-    
-    console.log("Component: 'PetHealthComponent' loaded");
-    
     return (
+      <div className="formBox">
+          <Form onSubmit={this.handleSubmit}>
+            <Form.Group controlId="formWeight">
+              <Form.Label>Pet weight</Form.Label>
+              <Form.Control name="weight" type="number" placeholder="Weight"
+                            onChange={this.handleWeightChange}
+                            required/>
+            </Form.Group>
 
-          <form onSubmit={this.handleSubmit}>
-            <label>
-              pet id: {this.handlePetIdChange}
-            </label>
-            <label>
-              pet weight:
-              <input type="text" name="Weight" value={this.state.value} onChange={this.handleWeightChange} />
-            </label>
-            <label>
-              date:
-              <input type="date" name="Date" value={this.state.value} onChange={this.handleDateChange} />
-            </label>
-            <button type="submit"> add weight </button>
-          </form>
-      
+            <Form.Group controlId="formDate">
+              <Form.Label>Date</Form.Label>
+              <Form.Control name="date" type="date"
+                            onChange={this.handleDateChange}
+                            required/>
+            </Form.Group>
+
+            <Button type="submit"> Add Weight </Button>
+          </Form>
+      </div>
     )
-}
+  }
 }
