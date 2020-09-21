@@ -5,7 +5,7 @@ const Contact = db.petContact;
 // Create and Save a new Pet
 exports.create = (req, res) => {
     // Validate request
-    if (!req.body.SpeciesId || !req.body.BreedId || !req.body.PetName || !req.body.PetGender) {
+    if (!req.body.SpeciesId || !req.body.PetName || !req.body.PetGender) {
         res.status(400).send({
             message: "Error. Essential fields are empty."
         });

@@ -60,6 +60,9 @@ app.use('/api/pet-events', apiPetEvent);
 const apiSession = require('./routes/session.routes');
 app.use('/api/sessions', apiSession);
 
+const apiSpecies = require('./routes/species.routes');
+app.use('/api/species', apiSpecies);
+
 const PORT = process.env.PORT || 5000;
 
 // Create the tables if they do not exist (and do nothing if they already exist)

@@ -61,7 +61,7 @@ export default class Pets extends Component {
                   </Link>
                   )}
                   {console.log("loaded")}
-                  <Link id="PetLink">
+                  <Link id="PetLink" to={"/Pets/New"}>
                     <div id="AddPetContainer">
                       <div id="AddPetCircle">
                         <img  class="AddPetImage"></img>

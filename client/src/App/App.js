@@ -16,6 +16,7 @@ import isUserLoggedIn from "../utils/AuthApi"
 import Logout from '../utils/Logout'
 import {Redirect, Switch} from "react-router-dom";
 import NotFound from "../pages/NotFound";
+import PetCreation from "../pages/PostLogin/PetCreation";
 
 library.add(faPlus)
 
@@ -27,10 +28,11 @@ function App(){
           <Route path="/" exact component={()=>isUserLoggedIn()?<Redirect to={"/pets"}/> : <HomePage/> } />
           <Route path="/login" exact component={()=>isUserLoggedIn()?<Redirect to={"/pets"}/> : <Login/>} />
           <Route path="/register" exact component={()=>isUserLoggedIn()?<Redirect to={"/pets"}/> : <Register/>} />
+          <Route path="/logout" exact component={()=>isUserLoggedIn()?<Logout/> : <Redirect to={"/"}/>} />
           <Route path="/about" exact component={()=>isUserLoggedIn()?<About/> : <Redirect to={"/"}/>} />
           <Route path="/pets" exact component={()=>isUserLoggedIn()?<Pets/> : <Redirect to={"/"}/>} />
+          <Route path="/pets/new" exact component={()=>isUserLoggedIn()?<PetCreation/> : <Redirect to={"/"}/>} />{/*Keep this component above "pets/:PetId"*/}
           <Route path="/pets/:PetId/"  component={(props)=>isUserLoggedIn()?<PetScene {...props} /> : <Redirect to={"/"}/>} />
-          <Route path="/logout" exact component={()=>isUserLoggedIn()?<Logout/> : <Redirect to={"/"}/>} />
           <Route exact component={NotFound} /> {/*Keep this component at the end*/}
         </Switch>
       </Router>
