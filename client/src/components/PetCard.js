@@ -1,6 +1,6 @@
 // PetCard.js
 
-import React, { useEffect } from 'react'
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { useParams } from 'react-router';
@@ -16,7 +16,7 @@ function PetCard(props) {
     
     const [petprofile, setPetprofile] = useState('');
 
-    function fetchPetInfo() {
+    function fetchPetProfile() {
         axios.get(`http://localhost:5000/api/pets/${props.value.PetId}`, {withCredentials: true} )
             .then(response=>{
                 setPetprofile(response.data);
@@ -27,11 +27,10 @@ function PetCard(props) {
                     PetGender: "N/A - Invalid Pet Id"
                 });
             })
-
     }
 
     useEffect(() => {
-        fetchPetInfo();
+        fetchPetProfile();
     }, [])
     
 

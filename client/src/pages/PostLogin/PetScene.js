@@ -14,10 +14,14 @@ import PetHealthComponent from './PetHealthComponent.js';
 import PetEventsComponent from './PetEventsComponent.js';
 import PetRemindersComponent from './PetRemindersComponent.js';
 
+import isUserLoggedIn from '../../utils/AuthApi';
+import {Redirect} from 'react-router-dom';
+
 function PetScene() {
   console.log("'PetScene' loaded");
 
   const [urlpetid, setUrlpetid] = useState(useParams());
+  //console.log(urlpetid.PetId);
 
     return (
 
@@ -26,15 +30,15 @@ function PetScene() {
           <Header />
         </div>
         <div>
-            <PetCard value={urlpetid} />
-          </div>
-          <div>
-            <PetNavBar value={urlpetid} />
-          </div>
+          <PetCard value={urlpetid} />
+        </div>
+        <div>
+          <PetNavBar value={urlpetid} />
+        </div>
 
         <div className="mainContent">
             <Route exact path='/Pets/:PetId/Records' component={PetRecordsComponent} />
-            <Route exact path='/Pets/:PetId/Health' component={PetHealthComponent} />
+            <Route exact path="/pets/:PetId/Health" component={(props)=>isUserLoggedIn()?<PetHealthComponent {...props} /> : <Redirect to={"/"}/>} />
             <Route exact path='/Pets/:PetId/Events' component={PetEventsComponent} />
             <Route exact path='/Pets/:PetId/Reminders' component={PetRemindersComponent} />
         </div>

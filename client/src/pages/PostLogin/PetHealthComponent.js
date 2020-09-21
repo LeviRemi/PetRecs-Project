@@ -4,11 +4,18 @@ import React, { Component } from 'react'
 import axios from 'axios';
   
 export default class PetHealthComponent extends Component {
-  
-  state = { PetId: "1", Weight: "5", Date: "2012-01-12"}
 
-  handleChange = event => {
-    //this.setState({ PetId: event.target.value, Weight: event.target.value, Date: event.target.value });
+  constructor(props) {
+    super(props);
+    console.log("PetHealthComponent - Using PetId: " + props.match.params.PetId);
+    this.state = { PetId: props.match.params.PetId, Weight: "", Date: ""}
+  }
+
+  handleWeightChange = event => {
+    this.setState({Weight: event.target.value});
+  }
+  handleDateChange = event => {
+    this.setState({Date: event.target.value});
   }
 
   handleSubmit = event => {
@@ -27,7 +34,6 @@ export default class PetHealthComponent extends Component {
         })
         .catch((error) => {
             console.log(data);
-            console.log(this.state.PetId);
             console.log(this.state.Weight);
             console.log(this.state.Date);
             console.log(error);
@@ -38,23 +44,20 @@ export default class PetHealthComponent extends Component {
   render() {
     
     console.log("Component: 'PetHealthComponent' loaded");
-
-    const { pet } = this.state;
     
     return (
 
           <form onSubmit={this.handleSubmit}>
             <label>
-              pet id:
-              <input type="text" name="PetId" onChange={this.handleChange} />
+              pet id: {this.handlePetIdChange}
             </label>
             <label>
               pet weight:
-              <input type="text" name="Weight" onChange={this.handleChange} />
+              <input type="text" name="Weight" value={this.state.value} onChange={this.handleWeightChange} />
             </label>
             <label>
               date:
-              <input type="date" name="Date" onChange={this.handleChange} />
+              <input type="date" name="Date" value={this.state.value} onChange={this.handleDateChange} />
             </label>
             <button type="submit"> add weight </button>
           </form>
