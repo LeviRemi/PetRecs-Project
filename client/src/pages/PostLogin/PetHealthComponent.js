@@ -19,6 +19,8 @@ export default class PetHealthComponent extends Component {
     return (
 
       <div>
+        <h3>View Weight</h3>
+        <ViewWeightComponent petid={this.state.PetId}/>
         <h3>Add Weight</h3>
         <AddWeightComponent petid={this.state.PetId}/>
       </div>
@@ -27,9 +29,18 @@ export default class PetHealthComponent extends Component {
   }
 }
 
-class ViewWeightTable extends Component {
+class ViewWeightComponent extends Component {
   constructor(props) {
     super();
+  }
+
+  render(){
+
+    return (
+      <div>
+          content goes here
+      </div>
+    )
   }
 }
 
