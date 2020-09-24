@@ -2,6 +2,8 @@ const db = require("../models");
 const Pet = db.pet;
 const Contact = db.petContact;
 const Account = db.account;
+const Event = db.petEvent;
+const Weight = db.petWeight;
 
 // Create and Save a new Pet
 exports.create = (req, res) => {
@@ -148,7 +150,8 @@ exports.update = (req, res) => {
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error updating Pet with id=" + id
+                message:
+                err.message || "Error updating Pet with id=" + id
             });
         });
 };
@@ -157,23 +160,77 @@ exports.update = (req, res) => {
 exports.delete = (req, res) => {
     const id = req.params.id;
 
-    Pet.destroy({
-        where: {PetId: id}
+    // Verify that user is owner of pet they are trying to destroy
+    Contact.findOne({
+        where: {PetId: req.params.id, AccountId: req.session.user.AccountId}
     })
-        .then(num => {
-            if (num === 1) {
-                res.send({
-                    message: "Pet was deleted successfully!"
-                });
+        .then(data => {
+            if (data === null || !data.Owner) {
+                res.status(401).send("This user does not own this pet, or pet does not exist");
             } else {
-                res.send({
-                    message: `Cannot delete Pet with id=${id}. Maybe Pet was not found.`
-                });
+                // Destroy associated Pet Contacts
+                return Contact.destroy({
+                    where: {PetId: req.params.id}
+                })
+                    .then(data => {
+                        // Destroy associated Pet Events
+                        return Event.destroy({
+                            where: {PetId: req.params.id}
+                        })
+                            .then(data => {
+                                // Destroy associated Pet Weights
+                                return Weight.destroy({
+                                    where: {PetId: req.params.id}
+                                })
+                                    .then(data => {
+                                        // Destroy pet
+                                        return Pet.destroy({
+                                            where: {PetId: id}
+                                        })
+                                            .then(num => {
+                                                if (num === 1) {
+                                                    res.status(200).send({
+                                                        message: "Pet was deleted successfully!"
+                                                    });
+                                                } else {
+                                                    res.status(500).send({
+                                                        message: `Cannot delete Pet with id=${id}. Maybe Pet was not found.`
+                                                    });
+                                                }
+                                            })
+                                            .catch(err => {
+                                                res.status(500).send({
+                                                    message:
+                                                        err.message || "Could not delete Pet with id=" + id
+                                                });
+                                            });
+                                    })
+                                    .catch(err => {
+                                        res.status(500).send( {
+                                            message:
+                                                err.message || "Some error occurred while destroying associated weights"
+                                        });
+                                    })
+                            })
+                            .catch(err => {
+                                res.status(500).send( {
+                                    message:
+                                        err.message || "Some error occurred while destroying associated events"
+                                });
+                            })
+                    })
+                    .catch(err => {
+                        res.status(500).send( {
+                            message:
+                                err.message || "Some error occurred while destroying associated contacts"
+                        });
+                    })
             }
         })
         .catch(err => {
-            res.status(500).send({
-                message: "Could not delete Pet with id=" + id
+            res.status(500).send( {
+                message:
+                    err.message || "Some error occurred while validating if user is owner of pet"
             });
         });
 };
@@ -208,18 +265,18 @@ exports.share = (req, res) => {
                                     res.status(200).send(`Pet ${id} has been shared with account ${acct}!`);
                                 })
                                 .catch(err => {
-                                    res.status(500).send(`Could not share Pet ${id} with account ${acct}`);
+                                    res.status(500).send(err.message || `Could not share Pet ${id} with account ${acct}`);
                                 })
                         }
                     })
                     .catch(err => {
-                        res.status(500).send(`Error when checking if pet ${id} is already shared with account ${acct}`)
+                        res.status(500).send(err.message || `Error when checking if pet ${id} is already shared with account ${acct}`)
                     })
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error when checking account existence with email=" + email
+                message: err.message || "Error when checking account existence with email=" + email
             });
         });
 

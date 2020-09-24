@@ -13,7 +13,6 @@ exports.create = (req, res) => {
 
     // Create Event
     const petEvent = {
-        EventId: req.body.EventId,
         EventTypeId: req.body.EventTypeId,
         PetId: req.body.PetId,
         EventDescription: req.body.EventDescription,

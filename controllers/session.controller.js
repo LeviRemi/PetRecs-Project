@@ -12,4 +12,5 @@ exports.isAuthenticated = (req, res) => {
 
 exports.destroySession = (req, res) => {
     req.session.destroy();
+    res.send("Session destroyed");
 }
