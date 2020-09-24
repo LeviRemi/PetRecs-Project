@@ -10,6 +10,7 @@ import Register from '../pages/Register'
 import About from '../pages/About'
 import Pets from '../pages/PostLogin/Pets/Pets'
 
+import TestHealth from '../pages/PostLogin/TestHealth'
 import PetScene from '../pages/PostLogin/PetScene'
 
 import isUserLoggedIn from "../utils/AuthApi"
@@ -31,6 +32,7 @@ function App(){
           <Route path="/logout" exact component={()=>isUserLoggedIn()?<Logout/> : <Redirect to={"/"}/>} />
           <Route path="/about" exact component={()=>isUserLoggedIn()?<About/> : <Redirect to={"/"}/>} />
           <Route path="/pets" exact component={()=>isUserLoggedIn()?<Pets/> : <Redirect to={"/"}/>} />
+          <Route path="/pets/test/health" exact component={()=><TestHealth/>} />    {/* Erik's test route while unable to connect to DB */}
           <Route path="/pets/new" exact component={()=>isUserLoggedIn()?<PetCreation/> : <Redirect to={"/"}/>} />{/*Keep this component above "pets/:PetId"*/}
           <Route path="/pets/:PetId/"  component={(props)=>isUserLoggedIn()?<PetScene {...props} /> : <Redirect to={"/"}/>} />
           <Route exact component={NotFound} /> {/*Keep this component at the end*/}
