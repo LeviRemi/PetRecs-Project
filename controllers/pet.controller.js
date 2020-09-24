@@ -105,7 +105,19 @@ exports.findOne = (req, res) => {
             if (data === null) {
                 res.status(401).send("This user does not have access to this pet, or pet does not exist");
             } else {
-                console.log("access granted for user to view pet");
+                return Pet.findByPk(id)
+                    .then(data => {
+                        if (data === null) {
+                            res.status(400).send("Pet not found");
+                        } else {
+                            res.send(data);
+                        }
+                    })
+                    .catch(err => {
+                        res.status(500).send({
+                            message: "Error when retrieving Pet with id=" + id
+                        });
+                    });
             }
         })
         .catch(err => {
@@ -115,19 +127,7 @@ exports.findOne = (req, res) => {
             });
         });
 
-    Pet.findByPk(id)
-        .then(data => {
-            if (data === null) {
-                res.status(400).send("Pet not found");
-            } else {
-                res.send(data);
-            }
-        })
-        .catch(err => {
-            res.status(500).send({
-                message: "Error when retrieving Pet with id=" + id
-            });
-        });
+
 };
 
 // Update a single Pet identified by the request id
@@ -217,7 +217,7 @@ exports.delete = (req, res) => {
                                     message:
                                         err.message || "Some error occurred while destroying associated events"
                                 });
-                            })
+                            });
                     })
                     .catch(err => {
                         res.status(500).send( {
@@ -236,50 +236,65 @@ exports.delete = (req, res) => {
 };
 
 // Share a single Pet with the specified id to a specified account with email
-exports.share = (req, res) => {
+exports.share = (req, res, next) => {
     const id = req.params.id;
     const email = req.body.Email;
 
-    // Check if account exists
-    Account.findOne({
-        where: {Email: email}
+    // Validate that user is owner of pet
+    Contact.findOne({
+        where: {PetId: req.params.id, AccountId: req.session.user.AccountId, Owner: 1}
     })
         .then(data => {
             if (data === null) {
-                res.status(400).send("Account does not exist with that email")
+                res.status(401).send("This user is not owner of this pet, or pet does not exist");
             } else {
-                let acct = data.AccountId;
-                // Check if pet is already being shared with this account
-                return Contact.findOne({
-                    where: {AccountId: acct, PetId: id}
+                // Check if account exists
+                return Account.findOne({
+                    where: {Email: email}
                 })
                     .then(data => {
-                        if (data !== null) {
-                            res.status(400).send("Account already has access to this pet")
+                        if (data === null) {
+                            res.status(400).send("Account does not exist with that email");
                         } else {
-                            // Grant account access to pet
-                            return Contact.create({
-                                AccountId: acct, PetId: id
+                            let acct = data.AccountId;
+                            // Check if pet is already being shared with this account
+                            return Contact.findOne({
+                                where: {AccountId: acct, PetId: id}
                             })
                                 .then(data => {
-                                    res.status(200).send(`Pet ${id} has been shared with account ${acct}!`);
+                                    if (data !== null) {
+                                        res.status(400).send("Account already has access to this pet")
+                                    } else {
+                                        // Share pet with account
+                                        return Contact.create({
+                                            AccountId: acct, PetId: id
+                                        })
+                                            .then(data => {
+                                                res.status(200).send(`Pet ${id} has been shared with account ${acct}!`);
+                                            })
+                                            .catch(err => {
+                                                res.status(500).send(err.message || `Could not share Pet ${id} with account ${acct}`);
+                                            })
+                                    }
                                 })
                                 .catch(err => {
-                                    res.status(500).send(err.message || `Could not share Pet ${id} with account ${acct}`);
+                                    res.status(500).send(err.message || `Error when checking if pet ${id} is already shared with account ${acct}`);
                                 })
                         }
                     })
                     .catch(err => {
-                        res.status(500).send(err.message || `Error when checking if pet ${id} is already shared with account ${acct}`)
-                    })
+                        res.status(500).send({
+                            message: err.message || "Error when checking account existence with email=" + email
+                        });
+                    });
             }
         })
         .catch(err => {
-            res.status(500).send({
-                message: err.message || "Error when checking account existence with email=" + email
+            res.status(500).send( {
+                message:
+                    err.message || "Some error occurred while validating if user is owner of pet"
             });
         });
-
 
 }
 
