@@ -19,4 +19,7 @@ router.put("/:id", pets.update);
 // Delete a pet with id
 router.delete("/:id", pets.delete);
 
+// Share a pet with id (put email in JSON body)
+router.post("/:id/share", pets.share);
+
 module.exports = router;

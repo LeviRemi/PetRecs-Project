@@ -1,6 +1,7 @@
 const db = require("../models");
 const Pet = db.pet;
 const Contact = db.petContact;
+const Account = db.account;
 
 // Create and Save a new Pet
 exports.create = (req, res) => {
@@ -175,4 +176,52 @@ exports.delete = (req, res) => {
             });
         });
 };
+
+// Share a single Pet with the specified id to a specified account with email
+exports.share = (req, res) => {
+    const id = req.params.id;
+    const email = req.body.Email;
+
+    // Check if account exists
+    Account.findOne({
+        where: {Email: email}
+    })
+        .then(data => {
+            if (data === null) {
+                res.status(400).send("Account does not exist with that email")
+            } else {
+                let acct = data.AccountId;
+                // Check if pet is already being shared with this account
+                return Contact.findOne({
+                    where: {AccountId: acct, PetId: id}
+                })
+                    .then(data => {
+                        if (data !== null) {
+                            res.status(400).send("Account already has access to this pet")
+                        } else {
+                            // Grant account access to pet
+                            return Contact.create({
+                                AccountId: acct, PetId: id
+                            })
+                                .then(data => {
+                                    res.status(200).send(`Pet ${id} has been shared with account ${acct}!`);
+                                })
+                                .catch(err => {
+                                    res.status(500).send(`Could not share Pet ${id} with account ${acct}`);
+                                })
+                        }
+                    })
+                    .catch(err => {
+                        res.status(500).send(`Error when checking if pet ${id} is already shared with account ${acct}`)
+                    })
+            }
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: "Error when checking account existence with email=" + email
+            });
+        });
+
+
+}
 
