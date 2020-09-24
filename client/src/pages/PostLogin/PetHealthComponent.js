@@ -2,13 +2,17 @@
 
 import React, { Component } from 'react';
 import axios from 'axios';
+
+import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import moment from 'moment';
+
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
   
 export default class PetHealthComponent extends Component {
   constructor(props) {
     super();
-    this.state = { PetId: props.match.params.PetId};
+    this.state = { PetId: props.match.params.PetId };
     console.log("PetHealthComponent - Using PetId: " + props.match.params.PetId);
   }
 
@@ -32,14 +36,48 @@ export default class PetHealthComponent extends Component {
 class ViewWeightComponent extends Component {
   constructor(props) {
     super();
+    this.state = { data: [{Weight: '', Date: ''}] };
+  }
+
+  componentDidMount() {
+    axios.get(`http://localhost:5000/api/pet-weights/pet/` + this.props.petid, {withCredentials: true} )
+      .then(response=>{
+        this.setState({data: response.data});
+      })
+      .catch((error) => {
+          console.log(error);
+      })
   }
 
   render(){
+    let petData = this.state.data;
+
+    let sortedData = petData.sort(function (a, b) {
+      let formattedA = moment(a.Date);
+      let formattedB = moment(b.Date);
+      return ( formattedA - formattedB );
+    });
+    
+    const fixedData = [];
+    
+    sortedData.forEach(function (weightEntry) {
+      fixedData.push({Date: moment(weightEntry.Date).format("MMM DD, YYYY"), Weight: weightEntry.Weight});
+    });
+
+    const dateFormatter = tickItem => moment(tickItem).format("MMM YY");
 
     return (
-      <div>
-          content goes here
-      </div>
+      <LineChart
+        width={500} height={300}
+        data={fixedData}
+        margin={{top: 5, right: 20, left: 20, bottom: 10,}}
+      >
+        <XAxis tickFormatter={dateFormatter} dataKey="Date" />
+        <YAxis />
+        <CartesianGrid strokeDasharray="3 3" />
+        <Tooltip />
+        <Line type="monotone" dataKey="Weight" stroke="#8884d8" activeDot={{r: 4}} />
+      </LineChart>
     )
   }
 }
@@ -72,7 +110,6 @@ class AddWeightComponent extends Component {
             console.log(response);
         })
         .catch((error) => {
-            console.log(data);
             console.log(error);
         })
   }
