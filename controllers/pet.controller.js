@@ -34,7 +34,8 @@ exports.create = (req, res) => {
             // Save corresponding Pet Contact
             Contact.create({
                 AccountId: req.session.user.AccountId,
-                PetId: data.PetId
+                PetId: data.PetId,
+                Owner: 1
             }).then(data => {
                 console.log(data)
             }).catch(err => {

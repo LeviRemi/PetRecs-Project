@@ -12,6 +12,10 @@ module.exports = (sequelize) => {
         },
         PetId: {
             type: DataTypes.INTEGER
+        },
+        Owner: {
+            type: DataTypes.BOOLEAN,
+            default: 0
         }
     }, {
         // creates a model named PetContact, pointing to a table named PetContact
