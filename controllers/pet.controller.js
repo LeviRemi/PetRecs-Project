@@ -92,6 +92,25 @@ exports.findAll = (req, res) => {
 // Find a single Pet with an id
 exports.findOne = (req, res) => {
     const id = req.params.id;
+
+    // Validate that user has access to pet
+    Contact.findOne({
+        where: {PetId: req.params.id, AccountId: req.session.user.AccountId}
+    })
+        .then(data => {
+            if (data === null) {
+                res.status(401).send("This user does not have access to this pet, or pet does not exist");
+            } else {
+                console.log("access granted for user to view pet");
+            }
+        })
+        .catch(err => {
+            res.status(500).send( {
+                message:
+                    err.message || "Some error occurred while validating if user has access to pet"
+            });
+        });
+
     Pet.findByPk(id)
         .then(data => {
             if (data === null) {
@@ -114,11 +133,12 @@ exports.update = (req, res) => {
         where: {PetId: id}
     })
         .then(num => {
-            if (num === 1) {
+            if (num == 1) {
                 res.send({
                     message: "Pet was updated successfully."
                 });
             } else {
+                console.log(req.body)
                 res.send({
                     message: `Cannot update Pet with id=${id}. Maybe Pet was not found or request body was empty.`
                 });
