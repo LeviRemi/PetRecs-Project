@@ -34,19 +34,19 @@ function PetCard(props) {
     return (
         <div className="petProfileCard">
             <Row>
-                <Col>
+                <Col sm="auto" fluid="true">
                 <Link to="/Pets">
                     <button className="btn-petprofile-nav">
                         &lt;&lt;Back
                     </button>
                 </Link>
                 </Col>
-
-                <Col>
+                <Col sm="auto">
+                    prof. img
+                </Col>
+                <Col md="auto">
                     name: {petprofile.PetName} <br />
                     gender: {petprofile.PetGender} <br />
-                </Col>
-                <Col>
                 </Col>
             </Row>
         </div>

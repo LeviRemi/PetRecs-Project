@@ -1,9 +1,9 @@
-@import url('https://fonts.googleapis.com/css?family=Red+Hat+Text&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap');
 
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', 'Sora',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -14,11 +14,14 @@ code {
     monospace;
 }
 
+.fontWrap {
+  font-family: 'Sora', sans-serif;
+}
+
 .fullPageContainer {
   height: 100%;
   margin: auto;
   width: 1024px;
-  font-family: 'Red Hat Text';
 }
 
 .nopadding {
@@ -140,75 +143,138 @@ these styles are pre-login */
 /* pet and main site styling.
 these styles are post-login */
 
+.mainPageHeaderBar {
+  background: black;
+  padding: 0px;
+  border-color: rgb(19, 62, 172);
+  border-bottom-style: solid;
+  border-width: 2px;
+}
+
 .mainPageHeader {
-  text-align: right;
-  background: rgb(255,255,255);
-  background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(252,252,252,1) 100%);
-  display: flex;
-  align-content: flex-start;
-  justify-content: top;
+  text-align: center;
+  background-color: rgba(200, 45, 40, 0);
+  height: 38px;
+  width: 1024px;
+  margin: 0 auto;
+  position: relative;
+  text-align: center;
+  padding: 2px 0px 2px 0px;
 }
 
 .mainPageHeaderItem {
-  padding: 10px;
-  font-size: 32px;
-  font-weight: bold;
-}
-
-.mainPageContents {
-  padding-top: 20px;
-  padding-left: 10px;
-  padding-bottom: 10px;
-  padding-right: 10px;
-  background-color: white;
-  height: 480px;
-}
-
-.petProfileNavBar {
-  text-align: center;
-  background: white;
-  justify-content: center;
-}
-
-.btn-petprofile-nav {
-  background-color: rgba(0, 0, 255, 0);
-  padding: 6px 24px;
-  font-size: 14px;
-  font-weight: bold;
+  padding: 0% 0%;
+  margin: auto auto;
+  font-size: 20px;
+  color: white;
+  text-align: right;
+  justify-content: right;
   vertical-align: middle;
-  border: none !important;
-  outline: none !important;
-  color: black;
+  background-color: rgba(0, 150, 40, 0);
 }
 
-.btn-petprofile-nav:hover {
-  color: grey;
-  transition: 0.1s;
+.mainPageHeaderTitle {
+  text-align: left;
+  justify-content: left;
+  padding: 2px 0px;
+  font-size: 22px;
+  color: white;
+  background-color: rgba(0, 150, 40, 0);
 }
 
-.btn-petprofile-nav:active {
-  background-color: lightgrey;
-  margin: 0;
-  transition: 0.1s;
+.recsColor {
+  color: #3d72db;
+  font-weight: 600;
 }
 
 .btn-mainpage-header {
-  color: black;
+  color: white;
   background-color: rgba(0, 0, 0, 0);
-  padding: 0px 28px;
-  font-size: 15px;
-  font-weight: bold;
+  padding: 0px 16px;
+  font-size: 16px;
   vertical-align: middle;
   border: none !important;
   outline: none !important;
 }
 
 .btn-mainpage-header:hover {
-  color: grey;
+  color:  #3d72db;;
   transition: 0.1s;
 }
 
 .btn-mainpage-header:active {
+  margin: 0;
+  transition: 0.23s;
+}
+
+.navProfBar {
+  background: #3d72db;
+  vertical-align: middle;
+  height: 56px;
+}
+
+.navProf {
+  width: 1024px;
+  margin: 0 auto;
+  position: relative;
+  text-align: center;
+  padding: 2px 0px 2px 0px;
+  vertical-align: middle;
+}
+
+.petProfileCard {
+  background-color: rgba(0, 0, 200, 0);
+  text-align: left;
+  color: white;
+  font-size: 14px;
+  margin-top: 4px;
+  border-color: #003da8;
+  border-width: 0px;
+  border-style: outset;
+  border-radius: 0px;
+}
+
+.petProfileNavBar {
+  background-color: rgba(200, 100, 200, 0);
+  text-align: right;
+  padding: 2px 0 2px 0;
+  margin-top: 6px;
+}
+
+.mainPageHeaderBar {
+  background: black;
+  padding: 0px;
+}
+
+.mainPageHeader {
+  text-align: center;
+  background-color: rgba(200, 45, 40, 0);
+  height: 38px;
+  width: 1024px;
+  margin: 0 auto;
+  position: relative;
+  text-align: center;
+  padding: 2px 0px 2px 0px;
+}
+
+.btn-petprofile-nav {
+  background-color: rgba(0, 0, 0, 0);
+  padding: 6px 12px;
+  font-size: 15px;
+  font-weight: 400;
+  vertical-align: middle;
+  border: none !important;
+  outline: none !important;
+  color: white;
+}
+
+.btn-petprofile-nav:hover {
+  color: black;
+  transition: 0.23s;
+}
+
+.btn-petprofile-nav:active {
+  background-color: lightgrey;
   margin: 0;
   transition: 0.1s;
 }
@@ -222,14 +288,16 @@ these styles are post-login */
   padding: 10px;
 }
 
-.petProfileCard {
-  border-style: solid;
-  border-color: black;
-  border-width: 2px 1px 2px 1px;
-}
-
 .petProfileWindow {
   border-style: solid;
   border-color: white;
   border-width: 2px 1px 2px 1px;
+}
+
+.mainContent {
+  margin: auto;
+  position: relative;
+  width: 1024px;
+  padding: 14px 20px 10px 20px;
+  background-color: rgb(255, 255, 255);
 }
