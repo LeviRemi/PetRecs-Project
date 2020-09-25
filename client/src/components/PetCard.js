@@ -7,6 +7,9 @@ import axios from 'axios';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 
+import FileUpload from '../utils/FileUpload/FileUpload.js';
+import PetImage from './PetImage.js'
+
 function PetCard(props) {
 
     console.log("Component: 'PetCard' loaded");

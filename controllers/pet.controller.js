@@ -6,13 +6,54 @@ const Event = db.petEvent;
 const Weight = db.petWeight;
 
 // Create and Save a new Pet
-exports.create = (req, res) => {
+exports.create = (req, res, next) => {
     // Validate request
     if (!req.body.SpeciesId || !req.body.PetName || !req.body.PetGender) {
         res.status(400).send({
             message: "Error. Essential fields are empty."
         });
         return;
+    }
+    
+    const defaultDog = "https://firebasestorage.googleapis.com/v0/b/petrecs-file-system.appspot.com/o/dog_default.svg?alt=media&token=893cb1b6-cf61-4094-96a1-0faccbfa1d15";
+    const defaultCat = "https://firebasestorage.googleapis.com/v0/b/petrecs-file-system.appspot.com/o/cat_default.svg?alt=media&token=e59ff474-79c9-49fd-92a5-a51586a9bb90";
+    const defaultRabbit = "https://firebasestorage.googleapis.com/v0/b/petrecs-file-system.appspot.com/o/rabbit_default.svg?alt=media&token=c142a260-d73e-4992-b887-4fdc5c1f83ee";
+    const defaultFerret = "https://firebasestorage.googleapis.com/v0/b/petrecs-file-system.appspot.com/o/ferret_default.svg?alt=media&token=d3b00118-fb76-4c97-b6a9-1bf34ddac933";
+    const defaultHamster = "https://firebasestorage.googleapis.com/v0/b/petrecs-file-system.appspot.com/o/hamster_default.svg?alt=media&token=854870ec-f9d5-49b1-9bef-63d4b08526a8";
+    const defaultMouse = "https://firebasestorage.googleapis.com/v0/b/petrecs-file-system.appspot.com/o/mouse_default.svg?alt=media&token=a664877e-8cf1-4a95-bd56-03bdc944c047";
+    const defaultTurtle = "https://firebasestorage.googleapis.com/v0/b/petrecs-file-system.appspot.com/o/turtle_default.svg?alt=media&token=f0badb0d-c458-4155-ae06-ea35520d5fad";
+    const defaultSnake = "https://firebasestorage.googleapis.com/v0/b/petrecs-file-system.appspot.com/o/snake_default.svg?alt=media&token=69cec39a-96bb-47cb-8333-bef97f5e0697";
+    const defaultHorse = "https://firebasestorage.googleapis.com/v0/b/petrecs-file-system.appspot.com/o/horse_default.svg?alt=media&token=93b55711-d124-41ab-b38e-b304e6b2a821";
+    const defaultPaws = "https://firebasestorage.googleapis.com/v0/b/petrecs-file-system.appspot.com/o/pawprints_default.svg?alt=media&token=25dc5add-37f0-462d-b357-c92fb131acaa";
+    var defaultProfile = "";
+    
+    switch (req.body.SpeciesId)
+    {
+        case '1': defaultProfile = defaultDog;
+                break;
+        case '2': defaultProfile = defaultCat;
+                break;
+        case '3': defaultProfile = defaultRabbit;
+                break;
+        case '4': defaultProfile = defaultFerret;
+                break;
+        case '5': 
+        case '6':
+        case '7': 
+        case '10': defaultProfile = defaultHamster;
+                break;
+        case '8': 
+        case '9': defaultProfile = defaultMouse;
+                break;
+        case '15':
+        case '16': defaultProfile = defaultTurtle;
+                break;
+        case '18':defaultProfile = defaultSnake;
+                break;
+        case '40':
+        case '41': defaultProfile = defaultHorse;
+                break; 
+        default: defaultProfile = defaultPaws;
     }
 
     // Create Pet
@@ -27,7 +68,7 @@ exports.create = (req, res) => {
         AllergyNotes: req.body.AllergyNotes,
         FoodNotes: req.body.FoodNotes,
         CareNotes: req.body.CareNotes,
-        ProfileUrl: req.body.ProfileUrl
+        ProfileUrl: defaultProfile
     };
 
     // Save Pet to database
@@ -133,7 +174,9 @@ exports.findOne = (req, res) => {
 // Update a single Pet identified by the request id
 exports.update = (req, res) => {
     const id = req.params.id;
-    Pet.update(req.body, {
+    const body = req.body;
+
+    Pet.update(body, {
         where: {PetId: id}
     })
         .then(num => {

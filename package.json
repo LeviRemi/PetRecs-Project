@@ -20,13 +20,18 @@
   },
   "homepage": "https://github.com/jcfleischli/PetRecs#readme",
   "dependencies": {
+    "@google-cloud/storage": "^5.3.0",
+    "axios": "^0.20.0",
     "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
     "connect-session-sequelize": "^7.0.1",
     "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "express-session-sequelize": "^2.3.0",
+    "firebase": "^7.20.0",
+    "multer": "^1.4.2",
     "mysql2": "^2.1.0",
     "sequelize": "^6.3.5"
   },

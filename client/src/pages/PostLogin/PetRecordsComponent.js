@@ -1,25 +1,22 @@
 // PetRecordsComponent.js
 
-import React from 'react'
+import React, { Component } from 'react';
+import RecordUpload from '../../utils/FileUpload/RecordUpload.js';
 
-function PetRecordsComponent() {
-
-  console.log("Component: 'PetRecordsComponent' loaded");
-
+class PetRecordsComponent extends Component {
+  constructor(props) {
+    super();
+    this.state = { PetId: props.match.params.PetId };
+    console.log("PetRecordsComponent - Using PetId: " + this.state.PetId);
+  }
+  render() {
   return (
       <div className="petProfileBody nopadding">
-          <h4> Pet Record details here - Pet Record details here - Pet Record details here <br />
-          Pet Record details here - Pet Record details here - Pet Record details here <br />
-          Pet Record details here - Pet Record details here - Pet Record details here <br />
-          Pet Record details here - Pet Record details here - Pet Record details here <br />
-          Pet Record details here - Pet Record details here - Pet Record details here <br />
-          Pet Record details here - Pet Record details here - Pet Record details here <br />
-          Pet Record details here - Pet Record details here - Pet Record details here <br />
-          Pet Record details here - Pet Record details here - Pet Record details here <br />
-          </h4>
+          <RecordUpload value={this.state.PetId}/>
       </div>
       
     )
+  }
 }
 
 export default PetRecordsComponent
