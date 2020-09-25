@@ -15,4 +15,14 @@ function PetImage(props) {
     )
 }
 
+export function PetCardImage(props) {
+    return (
+        <div id="PetCardProfileContainer">
+            <div id="PetCardCircle">
+                <img id={"ImageId" + props.PetId} src={props.ProfileUrl} className="PetCardImage"></img>
+            </div>
+        </div>
+    )
+}
+
 export default PetImage;

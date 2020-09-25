@@ -4,11 +4,14 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import axios from 'axios';
+
+import moment from 'moment';
+
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 
 import FileUpload from '../utils/FileUpload/FileUpload.js';
-import PetImage from './PetImage.js'
+import PetImage, { PetCardImage } from './PetImage.js'
 
 function PetCard(props) {
 
@@ -29,6 +32,9 @@ function PetCard(props) {
             })
     }
 
+    let date = (petprofile.PetAgeYear + '-' + petprofile.PetAgeMonth + ' ' +petprofile.PetAgeDay);
+    let ageYears = moment().diff(date, 'years');
+
     useEffect(() => {
         fetchPetProfile();
     }, [])
@@ -37,19 +43,30 @@ function PetCard(props) {
     return (
         <div className="petProfileCard">
             <Row>
-                <Col sm="auto" fluid="true">
-                <Link to="/Pets">
-                    <button className="btn-petprofile-nav">
-                        &lt;&lt;Back
-                    </button>
-                </Link>
+                <Col md={1}>
+                    <Link to="/Pets">
+                        <button className="back-btn-petprofile-nav">
+                            &lt;Back
+                        </button>
+                    </Link>
                 </Col>
-                <Col sm="auto">
-                    prof. img
+                <Col md="3">
+                    <FileUpload value={petprofile.PetId}/>
                 </Col>
                 <Col md="auto">
-                    name: {petprofile.PetName} <br />
-                    gender: {petprofile.PetGender} <br />
+                    <PetCardImage {...{PetId: petprofile.PetId, ProfileUrl: petprofile.ProfileUrl}}/>
+                </Col>
+                <Col md="auto">
+                    <div className="petCardInfo">
+                        <Row>
+                            <Col md="auto">
+                                &#128062; {petprofile.PetName} <br />
+                                &#9892; {petprofile.PetGender} &nbsp;&nbsp;&nbsp;
+                                &#128197; {ageYears} y/o       &nbsp;&nbsp;&nbsp;
+                            </Col>
+                        </Row>
+                        
+                    </div>
                 </Col>
             </Row>
         </div>

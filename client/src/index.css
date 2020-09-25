@@ -148,7 +148,7 @@ these styles are post-login */
   padding: 0px;
   border-color: rgb(19, 62, 172);
   border-bottom-style: solid;
-  border-width: 2px;
+  border-width: 0px;
 }
 
 .mainPageHeader {
@@ -218,16 +218,16 @@ these styles are post-login */
   margin: 0 auto;
   position: relative;
   text-align: center;
-  padding: 2px 0px 2px 0px;
+  padding: 0px 0px 2px 0px;
   vertical-align: middle;
 }
 
 .petProfileCard {
-  background-color: rgba(0, 0, 200, 0);
+  background-color: rgba(0, 255, 200, 0);
   text-align: left;
   color: white;
   font-size: 14px;
-  margin-top: 4px;
+  margin-top: 0px;
   border-color: #003da8;
   border-width: 0px;
   border-style: outset;
@@ -237,7 +237,15 @@ these styles are post-login */
 .petProfileNavBar {
   background-color: rgba(200, 100, 200, 0);
   text-align: right;
-  padding: 2px 0 2px 0;
+  padding: 0px 0 2px 0;
+  margin-top: 11px;
+}
+
+.petCardInfo {
+  background-color: rgba(200, 100, 200, 0);
+  text-align: left;
+  font-size: 14px;
+  font-weight: 400;
   margin-top: 6px;
 }
 
@@ -268,15 +276,26 @@ these styles are post-login */
   color: white;
 }
 
+
 .btn-petprofile-nav:hover {
   color: black;
   transition: 0.23s;
 }
 
 .btn-petprofile-nav:active {
-  background-color: lightgrey;
   margin: 0;
   transition: 0.1s;
+}
+
+.back-btn-petprofile-nav {
+  background-color: rgba(57, 97, 207, 0);
+  font-size: 12px;
+  font-weight: 400;
+  height: 56px;
+  border: none !important;
+  outline: none !important;
+  color: white;
+  text-align: left;
 }
 
 .petProfileBody {
