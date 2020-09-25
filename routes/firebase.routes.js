@@ -13,5 +13,6 @@ const uploader = multer({
 
 // Upload File
 router.post("/", uploader.single('image'), firebase.upload);
+router.post("/record", uploader.single('file'), firebase.upload);
 
 module.exports = router;

@@ -40,7 +40,7 @@ function PetScene() {
       </div>
       
       <div className="mainContent">
-          <Route exact path='/Pets/:PetId/Records' component={PetRecordsComponent} />
+          <Route exact path='/Pets/:PetId/Records' component={(props)=>isUserLoggedIn()?<PetRecordsComponent {...props} /> : <Redirect to={"/"}/>} />
           <Route exact path="/Pets/:PetId/Health" component={(props)=>isUserLoggedIn()?<PetHealthComponent {...props} /> : <Redirect to={"/"}/>} />
           <Route exact path='/Pets/:PetId/Events' component={PetEventsComponent} />
           <Route exact path='/Pets/:PetId/Reminders' component={PetRemindersComponent} />

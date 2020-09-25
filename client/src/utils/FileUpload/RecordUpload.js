@@ -1,4 +1,4 @@
-// FileUpload.js
+// RecordUpload.js
 
 import React, { useState, useEffect } from 'react'
 import { render } from "react-dom"
@@ -9,7 +9,7 @@ import axios from 'axios';
 import './FileUpload.css'
 import Button from 'react-bootstrap/Button';
 
-function FileUpload() {
+function RecordUpload() {
 
     const [selectedFile, setSelectedFile] = useState(null);
     const [urlpetid, setUrlpetid] = useState(useParams());
@@ -28,7 +28,7 @@ function FileUpload() {
     const onFileSelected = async (e) => {
         console.log("File Selected");
       if (e.target.files[0]) {
-        setSelectedFile(e.target.files[0], handleFileUpload);
+        setSelectedFile(e.target.files[0]);
       }
     };
   
@@ -45,14 +45,27 @@ function FileUpload() {
           // Adding the 'image' field and the selected file as value to our FormData object
           // Changing file name to make it unique and avoid potential later overrides
           fileData.set(
-            'image',
+            'file',
             selectedFile,
             `${Date.now()}-${selectedFile.name}`,
           );
+
+          const enteredFileName = prompt('Please enter file name');
+
           console.log(fileData);
-          axios.post("http://localhost:5000/api/upload", fileData, {withCredentials: true})
+          axios.post("http://localhost:5000/api/upload/record", fileData, {withCredentials: true})
           .then((response) => {
-            axios.put('http://localhost:5000/api/pets/' + urlpetid.PetId, {"ProfileUrl": response.data.fileLocation}, {Params: {id: urlpetid.PetId}, withCredentials: true })
+            console.log("upload success");
+
+            
+            const data = {
+                PetId: urlpetid.PetId,
+                RecordName: enteredFileName,
+                RecordUrl: response.data.fileLocation,
+              };
+
+            console.log(data);
+            axios.post('http://localhost:5000/api/pet-records/', data, {withCredentials: true })
               .then((res) => {
                   console.log(res);
             })
@@ -64,19 +77,19 @@ function FileUpload() {
         console.log(error);
       }
     };
-//<button onClick={handleFileUpload}>Save</button> 
+
     return (
-      <div id="UploadButtons"> 
-        <div>        
-          <Button onClick={handleClick} variant="secondary">Upload Image</Button>
-          <input type="file" ref={hiddenFileInput} className="custom-file-input" onChange={onFileSelected} />      
+      <div id="RecordButtons"> 
+        <div id="RecordSelect">      
+          <Button onClick={handleClick} variant="secondary">Select File</Button> 
+          <input type="file" ref={hiddenFileInput} className="custom-file-input" onChange={onFileSelected} />     
         </div>
-        <div id="FileUploadSave">
-          <Button  variant="secondary" onClick={handleFileUpload}>Save</Button> 
+        <div id="RecordSave">
+          <Button  variant="secondary" onClick={handleFileUpload}>Save</Button>
           
         </div>
       </div>
     )
 }
 
-export default FileUpload
+export default RecordUpload

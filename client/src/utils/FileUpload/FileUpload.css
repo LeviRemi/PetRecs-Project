@@ -6,7 +6,7 @@
     width: 130px;
 }
 .custom-file-input {
-    height: 5px;
+    max-height: 0;
     display: 'none';
 }
 
@@ -15,9 +15,6 @@
     border: none;
     left: 4px;
 
-}
-
-.custom-file-label:hover {
 }
 
 .custom-file-label::after {
@@ -30,4 +27,17 @@
 
 #UploadButtons {
     text-align: center;
+}
+
+#RecordSelect {
+    padding: 5px;
+}
+
+#RecordSave {
+    padding: 5px;
+}
+
+#RecordButtons {
+    text-align: left;
+    
 }

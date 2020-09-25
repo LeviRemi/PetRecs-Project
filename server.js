@@ -66,6 +66,8 @@ app.use('/api/species', apiSpecies);
 const apiFileUpload = require('./routes/firebase.routes');
 app.use('/api/upload', apiFileUpload);
 
+const apiPetRecord = require('./routes/pet-record.routes');
+app.use('/api/pet-records', apiPetRecord);
 
 const PORT = process.env.PORT || 5000;
 
