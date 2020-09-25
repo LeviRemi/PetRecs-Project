@@ -6,7 +6,7 @@ const Event = db.petEvent;
 const Weight = db.petWeight;
 
 // Create and Save a new Pet
-exports.create = (req, res) => {
+exports.create = (req, res, next) => {
     // Validate request
     if (!req.body.SpeciesId || !req.body.PetName || !req.body.PetGender) {
         res.status(400).send({
@@ -14,6 +14,8 @@ exports.create = (req, res) => {
         });
         return;
     }
+
+    const defaultDog = "https://firebasestorage.googleapis.com/v0/b/petrecs-file-system.appspot.com/o/dog_default.svg?alt=media&token=893cb1b6-cf61-4094-96a1-0faccbfa1d15";
 
     // Create Pet
     const pet = {
@@ -27,7 +29,7 @@ exports.create = (req, res) => {
         AllergyNotes: req.body.AllergyNotes,
         FoodNotes: req.body.FoodNotes,
         CareNotes: req.body.CareNotes,
-        ProfileUrl: req.body.ProfileUrl
+        ProfileUrl: defaultDog
     };
 
     // Save Pet to database
@@ -133,7 +135,9 @@ exports.findOne = (req, res) => {
 // Update a single Pet identified by the request id
 exports.update = (req, res) => {
     const id = req.params.id;
-    Pet.update(req.body, {
+    const body = req.body;
+
+    Pet.update(body, {
         where: {PetId: id}
     })
         .then(num => {

@@ -63,6 +63,10 @@ app.use('/api/sessions', apiSession);
 const apiSpecies = require('./routes/species.routes');
 app.use('/api/species', apiSpecies);
 
+const apiFileUpload = require('./routes/firebase.routes');
+app.use('/api/upload', apiFileUpload);
+
+
 const PORT = process.env.PORT || 5000;
 
 // Create the tables if they do not exist (and do nothing if they already exist)

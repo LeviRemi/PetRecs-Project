@@ -17,6 +17,8 @@ import PetRemindersComponent from './PetRemindersComponent.js';
 import isUserLoggedIn from '../../utils/AuthApi';
 import {Redirect} from 'react-router-dom';
 
+import FileUpload from '../../utils/FileUpload/FileUpload.js';
+
 function PetScene() {
   console.log("'PetScene' loaded");
 
@@ -28,13 +30,15 @@ function PetScene() {
       <div>
         <Header />
       </div>
+      
       <div>
         <PetCard value={urlpetid} />
       </div>
+      
       <div>
         <PetNavBar value={urlpetid} />
       </div>
-
+      
       <div className="mainContent">
           <Route exact path='/Pets/:PetId/Records' component={PetRecordsComponent} />
           <Route exact path="/Pets/:PetId/Health" component={(props)=>isUserLoggedIn()?<PetHealthComponent {...props} /> : <Redirect to={"/"}/>} />

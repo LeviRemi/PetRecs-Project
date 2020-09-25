@@ -3,7 +3,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { storage } from "../../../firebase";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 // Style
@@ -13,7 +12,7 @@ import Container from 'react-bootstrap/Container';
 // Components
 import Header from '../../../components/Header.js';
 import Footer from '../../../components/Footer.js';
-import FileUpload from '../../../utils/FileUpload.js';
+import PetImage from '../../../components/PetImage.js'
 
 export default class Pets extends Component {
 
@@ -47,22 +46,18 @@ export default class Pets extends Component {
                 <div className="mainPageContents">
                 {console.log("loading")}
                   { this.state.pets.map(pet => 
-                  <Link id="PetLink" to={"/Pets/" + pet.PetId}>
-                    <div id="PetContainer">
-                      <div id="PetCircle">
-                        <img id={"ImageId" + pet.PetId} src={pet.ProfileUrl} class="PetImage"></img>
-                      </div>
+                  <Link id="PetLink" to={"/Pets/" + pet.PetId} key={pet.PetId}>
+                    <PetImage {...{PetId: pet.PetId, ProfileUrl: pet.ProfileUrl}}/>
                       <div>
-                          <p class="NameText">{pet.PetName}</p> 
+                          <p className="NameText">{pet.PetName}</p> 
                       </div>
-                    </div>
                   </Link>
                   )}
                   {console.log("loaded")}
                   <Link id="PetLink" to={"/Pets/New"}>
                     <div id="AddPetContainer">
                       <div id="AddPetCircle">
-                        <img class="AddPetImage"></img>
+                        <img className="AddPetImage"></img>
                         <p id="AddPetText">Add Pet<br />< FontAwesomeIcon id="PlusIcon" icon="plus" size="2x" /></p>
                       </div>
                     </div>

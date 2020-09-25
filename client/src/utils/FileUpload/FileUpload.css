@@ -1,0 +1,33 @@
+.custom-file-input ~ .custom-file-label::after {
+    content: "Upload Image";
+    
+}
+.custom-file {
+    width: 130px;
+}
+.custom-file-input {
+    height: 5px;
+    display: 'none';
+}
+
+.custom-file-label {
+    width: 130px;
+    border: none;
+    left: 4px;
+
+}
+
+.custom-file-label:hover {
+}
+
+.custom-file-label::after {
+    width: 130px;
+}
+
+#FileUploadSave {
+    margin-bottom: 10px;
+}
+
+#UploadButtons {
+    text-align: center;
+}

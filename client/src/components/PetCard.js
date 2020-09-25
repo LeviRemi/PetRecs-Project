@@ -7,6 +7,9 @@ import axios from 'axios';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 
+import FileUpload from '../utils/FileUpload/FileUpload.js';
+import PetImage from './PetImage.js'
+
 function PetCard(props) {
 
     console.log("Component: 'PetCard' loaded");
@@ -40,9 +43,16 @@ function PetCard(props) {
                         &lt;&lt;Back
                     </button>
                 </Link>
-                </Col>
 
+                </Col>
                 <Col>
+                    <PetImage {...{PetId: petprofile.PetId, ProfileUrl: petprofile.ProfileUrl}}/>
+                    <FileUpload value={petprofile.PetId}/>
+                </Col>
+                <Col></Col>
+                <Col></Col>
+                <Col>
+                  <br />
                     name: {petprofile.PetName} <br />
                     gender: {petprofile.PetGender} <br />
                 </Col>
