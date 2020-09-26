@@ -6,8 +6,10 @@ import axios from 'axios';
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import moment from 'moment';
 
-import Form from 'react-bootstrap/Form'
-import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
   
 export default class PetHealthComponent extends Component {
   constructor(props) {
@@ -23,10 +25,21 @@ export default class PetHealthComponent extends Component {
     return (
 
       <div>
-        <h3>View Weight</h3>
-        <ViewWeightComponent petid={this.state.PetId}/>
-        <h3>Add Weight</h3>
-        <AddWeightComponent petid={this.state.PetId}/>
+        <Row>
+          <Col>
+          <h5>Meds</h5>
+          <MedsComponent />
+          </Col>
+
+          <Col>
+          <h5>View Weight</h5>
+          <ViewWeightComponent petid={this.state.PetId}/>
+          <h5>Add Weight</h5>
+          <AddWeightComponent petid={this.state.PetId}/>
+          </Col>
+        </Row>
+
+        
       </div>
         
     )
@@ -73,7 +86,7 @@ class ViewWeightComponent extends Component {
         margin={{top: 5, right: 20, left: 20, bottom: 10,}}
       >
         <XAxis tickFormatter={dateFormatter} dataKey="Date" />
-        <YAxis />
+        <YAxis unit="lb"/>
         <CartesianGrid strokeDasharray="3 3" />
         <Tooltip />
         <Line type="monotone" dataKey="Weight" stroke="#8884d8" activeDot={{r: 4}} />
@@ -116,25 +129,48 @@ class AddWeightComponent extends Component {
 
   render() {
     return (
-      <div className="formBox">
+      <div className="formBoxAddWeight">
           <Form onSubmit={this.handleSubmit}>
-            <Form.Group controlId="formWeight">
-              <Form.Label>Pet weight</Form.Label>
-              <Form.Control name="weight" type="number" placeholder="Weight"
-                            onChange={this.handleWeightChange}
-                            required/>
-            </Form.Group>
-
-            <Form.Group controlId="formDate">
-              <Form.Label>Date</Form.Label>
-              <Form.Control name="date" type="date"
-                            onChange={this.handleDateChange}
-                            required/>
-            </Form.Group>
-
+            <Row>
+              <Col>
+                <Form.Group controlId="formWeight">
+                <Form.Label>Pet weight</Form.Label>
+                <Form.Control name="weight" type="number" min={1}
+                              placeholder="Weight"
+                              onChange={this.handleWeightChange}
+                              required/>
+                </Form.Group>
+              </Col>
+              <Col>
+                <Form.Group controlId="formDate">
+                <Form.Label>Date</Form.Label>
+                <Form.Control name="date" type="date" max={moment().format("YYYY-MM-DD")}
+                              onChange={this.handleDateChange}
+                              required/>
+                </Form.Group>
+              </Col>
+            </Row>
             <Button type="submit"> Add Weight </Button>
           </Form>
       </div>
+    )
+  }
+}
+
+class MedsComponent extends Component {
+  constructor(props) {
+    super();
+    this.state = { data: [{Weight: '', Date: ''}] };
+  }
+
+
+  render(){
+    
+    return (
+      <div>
+        content here...
+      </div>
+
     )
   }
 }
