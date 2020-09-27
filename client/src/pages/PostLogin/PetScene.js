@@ -2,7 +2,7 @@
 
 import React, {useState } from 'react';
 import { useParams } from 'react-router';
-import { Route } from 'react-router-dom';
+import {Route, Switch} from 'react-router-dom';
 
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
@@ -16,12 +16,13 @@ import PetRecordsComponent from './PetRecordsComponent.js';
 import PetHealthComponent from './PetHealthComponent.js';
 import PetEventsComponent from './PetEventsComponent.js';
 import PetRemindersComponent from './PetRemindersComponent.js';
-
+import PetAboutComponent from "./PetAboutComponent";
 
 import isUserLoggedIn from '../../utils/AuthApi';
 import {Redirect} from 'react-router-dom';
 
 import FileUpload from '../../utils/FileUpload/FileUpload.js';
+import NotFound from "../NotFound";
 
 function PetScene() {
   console.log("'PetScene' loaded");
@@ -52,7 +53,7 @@ function PetScene() {
         <Route exact path="/Pets/:PetId/Health" component={(props)=>isUserLoggedIn()?<PetHealthComponent {...props} /> : <Redirect to={"/"}/>} />
         <Route exact path='/Pets/:PetId/Events' component={PetEventsComponent} />
         <Route exact path='/Pets/:PetId/Reminders' component={PetRemindersComponent} />
-
+        <Route exact path='/Pets/:PetId/' component={(props)=>isUserLoggedIn()?<PetAboutComponent {...props} /> : <Redirect to={"/"}/>} />
         <div className="mainPageFooter">
           <Footer />
         </div>

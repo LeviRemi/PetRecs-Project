@@ -7,4 +7,7 @@ const router = require("express").Router();
 // Retrieve all species
 router.get("/", species.findAll);
 
+// Get name of species via id
+router.get("/:id", species.findOne);
+
 module.exports = router;

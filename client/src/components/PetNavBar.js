@@ -11,6 +11,11 @@ function PetNavBar(props) {
     return (
       <div className="petProfileNavBarBar">
         <div className="petProfileNavBar">
+          <NavLink to={{pathname: `/Pets/${props.value.PetId}/`}}>
+            <button className="btn-petprofile-nav">
+              About
+            </button>
+          </NavLink>
           <NavLink to={{pathname: `/Pets/${props.value.PetId}/Records`}}>
             <button className="btn-petprofile-nav">
               Records
