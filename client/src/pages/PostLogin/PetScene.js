@@ -22,6 +22,7 @@ import isUserLoggedIn from '../../utils/AuthApi';
 import {Redirect} from 'react-router-dom';
 
 import FileUpload from '../../utils/FileUpload/FileUpload.js';
+import NotFound from "../NotFound";
 
 function PetScene() {
   console.log("'PetScene' loaded");
@@ -52,7 +53,7 @@ function PetScene() {
         <Route exact path="/Pets/:PetId/Health" component={(props)=>isUserLoggedIn()?<PetHealthComponent {...props} /> : <Redirect to={"/"}/>} />
         <Route exact path='/Pets/:PetId/Events' component={PetEventsComponent} />
         <Route exact path='/Pets/:PetId/Reminders' component={PetRemindersComponent} />
-        <Route exact path='/Pets/:PetId/About' component={(props)=>isUserLoggedIn()?<PetAboutComponent {...props} /> : <Redirect to={"/"}/>} />
+        <Route exact path='/Pets/:PetId/' component={(props)=>isUserLoggedIn()?<PetAboutComponent {...props} /> : <Redirect to={"/"}/>} />
         <div className="mainPageFooter">
           <Footer />
         </div>

@@ -12,23 +12,24 @@ import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import {useForm} from "react-hook-form";
 import Swal from "sweetalert2";
+import Spinner from "react-bootstrap/Spinner";
+import {useHistory} from "react-router";
+import Alert from "react-bootstrap/Alert";
 
 function PetAboutComponent(props) {
-
-    console.log("Component: 'PetAboutComponent' loaded");
-
+    const history = useHistory();
     const [petprofile, setPetprofile] = useState('');
     const [petSpecies, setPetSpecies] = useState('');
-
     const [show, setShow] = useState(false);
-
-    const { register, handleSubmit, errors, watch } = useForm();
+    const [showShare, setShowShare] = useState(false);
+    const [speciesList, setSpeciesList] = useState([]);
+    const { register, handleSubmit, errors } = useForm();
+    const [isLoading, setLoading] = useState({display: "none"});
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-
-    const [speciesList, setSpeciesList] = useState([]);
-
+    const handleCloseShare = () => setShowShare(false);
+    const handleShowShare = () => setShowShare(true);
 
     function fetchPetProfile() {
         axios.get(`http://localhost:5000/api/pets/${props.match.params.PetId}`, {withCredentials: true} )
@@ -40,10 +41,8 @@ function PetAboutComponent(props) {
                     });
             })
             .catch(err=> {
-                setPetprofile({
-                    PetName: "N/A - Invalid Pet Id",
-                    PetGender: "N/A - Invalid Pet Id"
-                });
+                Swal.fire('Oops...', "A pet with this ID does not exist", 'error');
+                history.push('/pets');
             })
     }
 
@@ -63,6 +62,7 @@ function PetAboutComponent(props) {
     }, [])
 
     const onSubmit = (data) => {
+        setLoading({display: "initial"});
         console.log(data);
 
         let bod = data.petBirthdate;
@@ -79,15 +79,44 @@ function PetAboutComponent(props) {
             CareNotes: data.petCare
         }, {withCredentials: true})
             .then((res) => {
+                setLoading({display: "none"});
                 console.log(res);
-                Swal.fire('Congratulations!', "Your pet's profile has been edited", 'success');
+                Swal.fire('Congratulations!', "Your pet's profile has been updated", 'success');
                 handleClose();
                 fetchPetProfile()
             }, (err) => {
+                setLoading({display: "none"});
                 console.log(err.response.status)
                 Swal.fire('Oops...', err.response.data.message, 'error');
             })
 
+
+    }
+
+    const onShare = (data) => {
+        console.log(data);
+        setLoading({display: "initial"});
+
+        axios.post(`http://localhost:5000/api/pets/${petprofile.PetId}/share`, {
+            Email: data.email
+        }, {withCredentials: true})
+            .then((res) => {
+                setLoading({display: "none"});
+                console.log(res);
+                Swal.fire('Congratulations!', "Your pet's profile has been shared", 'success');
+                handleCloseShare();
+            }, (err) => {
+                setLoading({display: "none"});
+                console.log(err.response)
+                if (err.response.status === 401) {
+                    Swal.fire('Oops...', "You do not have permission to share this pet", 'error');
+                } else if (err.response.status === 400) {
+                    Swal.fire('Oops...', "That user does not exist or already has access to this pet profile", 'error');
+                } else {
+                    Swal.fire('Oops...', "You are unable to share the pet at this time", 'error');
+                }
+
+            })
 
     }
 
@@ -173,6 +202,13 @@ function PetAboutComponent(props) {
                             <div className="text-danger">{errors.petCare && errors.petCare.message}</div>
                         </Form.Group>
 
+                        <div style={{textAlign: "center"}}>
+                            <div style={isLoading}>
+                                <Spinner animation="border" role="status">
+                                    <span className="sr-only">Loading...</span>
+                                </Spinner>
+                            </div>
+                        </div>
                     </Form>
 
                 </Modal.Body>
@@ -184,13 +220,66 @@ function PetAboutComponent(props) {
 
             </Modal>
 
-            {/*<h4> Hello {props.match.params.PetId}</h4>*/}
+            <Modal
+                show={showShare}
+                onHide={handleCloseShare}
+                backdrop="static"
+                keyboard={false}
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Share Pet Profile</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Alert key="ShareAlert" variant="warning">
+                        Share {petprofile.PetName} with another PetRecs user?
+                    </Alert>
+                    <Form id="SharePetForm" onSubmit={handleSubmit(onShare)} className="loginRegForm">
+
+                        <Form.Group controlId="formBasicEmail">
+                            <Form.Label>Email Address</Form.Label>
+                            <Form.Control name="email" type="email" placeholder="example@mail.com"
+                                          ref={register(
+                                              { required: true,
+                                                  pattern: {
+                                                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                                      message: "invalid email address"
+                                                  }
+                                              })}/>
+                            <div className="text-danger">{errors.email && (errors.email.message || "Email is required")}</div>
+                        </Form.Group>
+
+
+                        <div style={{textAlign: "center"}}>
+                            <div style={isLoading}>
+                                <Spinner animation="border" role="status">
+                                    <span className="sr-only">Loading...</span>
+                                </Spinner>
+                            </div>
+                        </div>
+                    </Form>
+
+                </Modal.Body>
+
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCloseShare}>Close</Button>
+                    <Button variant="primary" type="submit" form="SharePetForm">Share Pet Profile</Button>
+                </Modal.Footer>
+
+            </Modal>
+
             <Row>
                 <Col></Col>
                 <Col>
                     <PetProfileImage {...{PetId: petprofile.PetId, ProfileUrl: petprofile.ProfileUrl}}/>
                 </Col>
-                <Col style={{textAlign: "right"}}><Button onClick={handleShow} variant="outline-dark">Edit Profile</Button></Col>
+                <Col style={{textAlign: "right"}}>
+                    <Button onClick={handleShowShare} variant="none" style={{top: "0%"}} >
+                        <svg fill="none" viewBox="0 0 24 24" height="24" width="24" xmlns="http://www.w3.org/2000/svg">
+                            <path xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" d="M11.2929 2.29289C11.6834 1.90237 12.3166 1.90237 12.7071 2.29289L15.7071 5.29289C16.0976 5.68342 16.0976 6.31658 15.7071 6.70711C15.3166 7.09763 14.6834 7.09763 14.2929 6.70711L13 5.41421V15C13 15.5523 12.5523 16 12 16C11.4477 16 11 15.5523 11 15V5.41421L9.70711 6.70711C9.31658 7.09763 8.68342 7.09763 8.29289 6.70711C7.90237 6.31658 7.90237 5.68342 8.29289 5.29289L11.2929 2.29289ZM4 11C4 9.89543 4.89543 9 6 9H8C8.55228 9 9 9.44772 9 10C9 10.5523 8.55228 11 8 11H6V20H18V11H16C15.4477 11 15 10.5523 15 10C15 9.44772 15.4477 9 16 9H18C19.1046 9 20 9.89543 20 11V20C20 21.1046 19.1046 22 18 22H6C4.89543 22 4 21.1046 4 20V11Z" fill="#282828"></path>
+                        </svg>
+                    </Button>
+                    <Button onClick={handleShow} variant="outline-dark">Edit Profile</Button>
+                </Col>
             </Row>
             <Row>
                 <Col></Col>

@@ -12,11 +12,14 @@ import Row from 'react-bootstrap/Row';
 
 import FileUpload from '../utils/FileUpload/FileUpload.js';
 import PetImage, { PetCardImage } from './PetImage.js'
+import {useHistory} from "react-router";
+import Swal from "sweetalert2";
 
 function PetCard(props) {
 
     console.log("Component: 'PetCard' loaded");
-    
+
+    const history = useHistory();
     const [petprofile, setPetprofile] = useState('');
 
     function fetchPetProfile() {
@@ -25,10 +28,8 @@ function PetCard(props) {
                 setPetprofile(response.data);
             })
             .catch(err=> {
-                setPetprofile({
-                    PetName: "N/A - Invalid Pet Id",
-                    PetGender: "N/A - Invalid Pet Id"
-                });
+                Swal.fire('Oops...', "A pet with this ID does not exist", 'error');
+                history.push('/pets');
             })
     }
 
