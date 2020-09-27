@@ -50,28 +50,32 @@ function RecordUpload() {
             `${Date.now()}-${selectedFile.name}`,
           );
 
-          const enteredFileName = prompt('Please enter file name');
+          const enteredFileName = prompt('Please enter file name', `${selectedFile.name}`);
 
-          console.log(fileData);
-          axios.post("http://localhost:5000/api/upload/record", fileData, {withCredentials: true})
-          .then((response) => {
-            console.log("upload success");
+          if (enteredFileName != null) {
 
-            
-            const data = {
-                PetId: urlpetid.PetId,
-                RecordName: enteredFileName,
-                RecordUrl: response.data.fileLocation,
-              };
-
-            console.log(data);
-            axios.post('http://localhost:5000/api/pet-records/', data, {withCredentials: true })
-              .then((res) => {
-                  console.log(res);
-            })
-          }, (error) => {
-            console.log(error);
-          });
+            axios.post("http://localhost:5000/api/upload/record", fileData, {withCredentials: true})
+            .then((response) => {
+              console.log("upload success");
+  
+              
+              const data = {
+                  PetId: urlpetid.PetId,
+                  RecordName: enteredFileName,
+                  RecordUrl: response.data.fileLocation,
+                  FileName: selectedFile.name,
+                  UploadDate: Date.now()
+                };
+  
+              console.log(data);
+              axios.post('http://localhost:5000/api/pet-records/', data, {withCredentials: true })
+                .then((res) => {
+                    console.log(res);
+              })
+            }, (error) => {
+              console.log(error);
+            });
+          } else {console.log("Cancelled");}
         }
       } catch (error) {
         console.log(error);
@@ -82,12 +86,12 @@ function RecordUpload() {
       <div id="RecordButtons"> 
         <div id="RecordSelect">      
           <Button onClick={handleClick} variant="secondary">Select File</Button> 
-          <input type="file" ref={hiddenFileInput} className="custom-file-input" onChange={onFileSelected} />     
+          <input type="file" ref={hiddenFileInput} className="custom-file-input" onChange={onFileSelected} />  
+          <div id="RecordSave">
+            <Button  variant="secondary" onClick={handleFileUpload}>Save</Button>   
+          </div>   
         </div>
-        <div id="RecordSave">
-          <Button  variant="secondary" onClick={handleFileUpload}>Save</Button>
-          
-        </div>
+
       </div>
     )
 }

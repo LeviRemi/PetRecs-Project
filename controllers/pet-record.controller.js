@@ -5,7 +5,7 @@ const PetRecord = db.petRecord;
 exports.create = (req, res) => {
     
     // Validate request
-    if (!req.body.PetId || !req.body.RecordUrl || !req.body.RecordName) {
+    if (!req.body.PetId || !req.body.RecordUrl || !req.body.RecordName || !req.body.UploadDate || !req.body.FileName) {
         res.status(400).send({
             message: "Error. Essential fields are empty."
         });
@@ -17,7 +17,9 @@ exports.create = (req, res) => {
         //PetRecordId: req.body.PetRecordId,
         PetId: req.body.PetId,
         RecordName: req.body.RecordName,
-        RecordUrl: req.body.RecordUrl
+        RecordUrl: req.body.RecordUrl,
+        FileName: req.body.FileName,
+        UploadDate: req.body.UploadDate
     };
     console.log(petrecord);
     // Save Pet Weight to database
@@ -35,10 +37,10 @@ exports.create = (req, res) => {
         })
 };
 
-// Retrieve all Pet Weights for a specific pet id
+// Retrieve all Pet Records for a specific pet id
 exports.findAll = (req, res) => {
     const id = req.params.id;
-    PetWeight.findAll( {
+    PetRecord.findAll( {
         where: {PetId: id}
     })
         .then(data => {
@@ -47,7 +49,7 @@ exports.findAll = (req, res) => {
         .catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while retrieving Pet Weights for PetId=" + id
+                    err.message || "Some error occurred while retrieving Pet Records for PetId=" + id
             });
         });
 };
@@ -94,23 +96,23 @@ exports.update = (req, res) => {
 exports.delete = (req, res) => {
     const id = req.params.id;
 
-    PetWeight.destroy({
-        where: {PetWeightId: id}
+    PetRecord.destroy({
+        where: {PetRecordId: id}
     })
         .then(num => {
             if (num === 1) {
                 res.send({
-                    message: "Pet Weight was deleted successfully!"
+                    message: "Record was deleted successfully!"
                 });
             } else {
                 res.send({
-                    message: `Cannot delete Pet Weight with id=${id}. Maybe Pet was not found.`
+                    message: `Cannot delete record with id=${id}. Maybe Pet was not found.`
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Could not delete Pet Weight with id=" + id
+                message: "Could not delete record with id=" + id
             });
         });
 };

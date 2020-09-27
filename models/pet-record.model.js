@@ -18,6 +18,14 @@ module.exports = (sequelize) => {
         RecordUrl: {
             type: DataTypes.STRING,
             allowNull: false
+        },
+        FileName: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        UploadDate: {
+            type: DataTypes.DATE,
+            allowNull: false
         }
     }, {
         // creates a model named PetRecord, pointing to a table named PetRecord
