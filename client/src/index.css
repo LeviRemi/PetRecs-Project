@@ -123,6 +123,14 @@ these styles are pre-login */
   padding: 20px 0px 32px 0px;
 }
 
+.formBoxAddWeight {
+  background-color: white;
+  width: 380px;
+  text-align: left;
+  margin: 0px auto 0px auto;
+  padding: 4px 0 4px 0;
+}
+
 .formTitle {
   text-align: center;
   font-size: 28px;
