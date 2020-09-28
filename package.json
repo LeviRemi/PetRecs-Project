@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
     "start:dev": "nodemon server.js",
-    "heroku-postbuild": "cd client && npm install --only=dev && npm install && npm run build"
+    "heroku-postbuild": "cd client && npm run build"
   },
   "repository": {
     "type": "git",
@@ -18,7 +18,7 @@
   "bugs": {
     "url": "https://github.com/jcfleischli/PetRecs/issues"
   },
-  "homepage": "https://github.com/jcfleischli/PetRecs#readme",
+  "homepage": "https://petrecs.herokuapp.com/",
   "dependencies": {
     "@google-cloud/storage": "^5.3.0",
     "axios": "^0.20.0",

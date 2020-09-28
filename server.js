@@ -29,7 +29,7 @@ app.use(express.urlencoded({ extended: true }));
 const db = require("./models");
 
 // if you run behind a proxy
-app.set('trust proxy', 1);
+//app.set('trust proxy', 1);
 
 // Configure Session
 //app.use(session);
@@ -37,15 +37,15 @@ app.set('trust proxy', 1);
 // Check if user is authenticated or not
 //app.use(authenticate);
 
+// Serve the static files from the React app
+app.use(express.static(path.join(__dirname,'client', 'build')));
+
 // This is just a test. Should be changed to serve up the homepage.
-app.get("/", (req, res) => {
-    res.sendFile(path.join("build", "index.html"));
+app.get("/*", (req, res) => {
+    res.sendFile(path.join(__dirname,'client', 'build', 'index.html'));
     //res.json({message: "Welcome to PetRecs"});
 })
 
-// Serve the static files from the React app
-// TODO: Might need to change to build
-app.use(express.static(path.join('/client/build/')));
 
 //app.use(routes);
 
