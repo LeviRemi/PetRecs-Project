@@ -38,10 +38,10 @@ app.set('trust proxy', 1);
 //app.use(authenticate);
 
 // This is just a test. Should be changed to serve up the homepage.
-app.get("/", (req, res) => {
+//app.get("/", (req, res) => {
     //res.sendFile(path.join("build", "index.html"));
-    res.json({message: "Welcome to PetRecs"});
-})
+    //res.json({message: "Welcome to PetRecs"});
+//})
 
 // Serve the static files from the React app
 // TODO: Might need to change to build
