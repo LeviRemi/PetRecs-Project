@@ -3,7 +3,7 @@ const cors = require("cors");
 const path = require('path');
 const authenticate = require('./middleware/authenticate');
 const session = require("./middleware/session");
-const routes = require('./routes');
+//const routes = require('./routes');
 
 const app = express();
 
@@ -22,7 +22,7 @@ app.disable('x-powered-by');
 
 // Express middleware that allows POSTing data
 // -parse requests of content-type - application/json
-//app.use(express.json());
+app.use(express.json());
 // -parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
 
@@ -32,10 +32,10 @@ const db = require("./models");
 app.set('trust proxy', 1);
 
 // Configure Session
-app.use(session);
+//app.use(session);
 
 // Check if user is authenticated or not
-app.use(authenticate);
+//app.use(authenticate);
 
 // This is just a test. Should be changed to serve up the homepage.
 app.get("/", (req, res) => {
