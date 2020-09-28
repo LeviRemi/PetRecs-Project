@@ -1,6 +1,6 @@
 // PetEventsComponent.js
 
-import React, { Component } from 'react';
+import React, { Component, useEffect } from 'react';
 import axios from 'axios';
 
 
@@ -31,7 +31,20 @@ export default class PetEventsComponent extends Component {
 
 	handleShow() {
 		this.setState({ show: true });
-	}
+  }
+  
+  deleteEvent = async (EventId) => {
+    if (window.confirm("Are you sure you want to delete this event?")) {
+      axios.delete(`http://localhost:5000/api/pet-events/` + EventId, {withCredentials: true} )
+        .then(response=>{
+          //this.setState({events: response.data});
+          console.log("EventId " + EventId + " deleted sucessfully.");
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+      }
+  };
 
   componentDidMount() {
     axios.get(`http://localhost:5000/api/pet-events/pet/` + this.state.PetId, {withCredentials: true} )
@@ -42,17 +55,19 @@ export default class PetEventsComponent extends Component {
       .catch((error) => {
         console.log(error);
       })
-  }
+  };
+
+  
 
   eventTypeIdToString(TypeId) {
     let stringType = "";
-    if (TypeId == 1) { stringType = "Medical"; } 
-    else if (TypeId == 2) { stringType = "Grooming"; } 
-    else if (TypeId == 3) { stringType = "Fitness"; } 
-    else if (TypeId == 4) { stringType = "Food"; } 
-    else if (TypeId == 5) { stringType = "Potty"; } 
-    else if (TypeId == 6) { stringType = "Behavior"; } 
-    else if (TypeId == 7) { stringType = "Other"; } 
+    if (TypeId === 1) { stringType = "Medical"; } 
+    else if (TypeId === 2) { stringType = "Grooming"; } 
+    else if (TypeId === 3) { stringType = "Fitness"; } 
+    else if (TypeId === 4) { stringType = "Food"; } 
+    else if (TypeId === 5) { stringType = "Potty"; } 
+    else if (TypeId === 6) { stringType = "Behavior"; } 
+    else if (TypeId === 7) { stringType = "Other"; } 
 
     return stringType;
   }
@@ -65,6 +80,8 @@ export default class PetEventsComponent extends Component {
           <td>{this.eventTypeIdToString(EventTypeId)}</td>
           <td>{moment(Date).format("MM/DD/YYYY")}</td>
           <td>{EventDescription}</td>
+          <td><Button size="sm" variant="info">&#x270E;</Button></td>
+          <td><Button size="sm" variant="danger" onClick={ () => { this.deleteEvent(EventId)}}>&#x2716;</Button></td>
         </tr>
       )
     })
@@ -73,12 +90,17 @@ export default class PetEventsComponent extends Component {
   render() {
   return (
       <div className="petProfileBody nopadding">
+        <h2> Events </h2>
         <div>
           <Table size="sm">
             <thead>
-              <th>Type</th>
-              <th>Date</th>
-              <th>Description</th>
+              <tr>
+                <th>Type</th>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Update</th>
+                <th>Delete</th>
+              </tr>
             </thead>
             <tbody>
               {this.renderTableData()}

@@ -110,7 +110,7 @@ exports.delete = (req, res) => {
     const id = req.params.id;
 
     PetEvent.destroy({
-        where: {PetEventId: id}
+        where: {EventId: id}
     })
         .then(num => {
             if (num === 1) {
