@@ -3,6 +3,7 @@ const cors = require("cors");
 const path = require('path');
 const authenticate = require('./middleware/authenticate');
 const session = require("./middleware/session");
+//const routes = require('./routes');
 
 const app = express();
 
@@ -28,7 +29,7 @@ app.use(express.urlencoded({ extended: true }));
 const db = require("./models");
 
 // if you run behind a proxy
-// app.set('trust proxy', 1);
+//app.set('trust proxy', 1);
 
 // Configure Session
 app.use(session);
@@ -38,12 +39,15 @@ app.use(authenticate);
 
 // This is just a test. Should be changed to serve up the homepage.
 app.get("/", (req, res) => {
+    //res.sendFile(path.join("build", "index.html"));
     res.json({message: "Welcome to PetRecs"});
 })
 
 // Serve the static files from the React app
 // TODO: Might need to change to build
-app.use(express.static(path.join(__dirname, '/client/public/')));
+app.use(express.static(path.join('/client/build/')));
+
+//app.use(routes);
 
 const apiPet = require('./routes/pet.routes');
 app.use('/api/pets', apiPet);

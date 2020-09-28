@@ -73,25 +73,23 @@ class PetRecordsComponent extends Component {
               })
             ]}
             options={{
-              actionsColumnIndex: -1
+              actionsColumnIndex: -1,
+              pageSize: 10
             }}
             onRowClick={(event, rowData) => this.openInNewTab(rowData.RecordUrl)}
-            // In Progress - Customizing table toolbar to include file upload buttons.
-            //------------------------------------------------------------------------
-            // components={{
-            //   Toolbar: props => (
-            //     <div>
-            //       <h2 >Pet Records</h2>
-            //       <div style={{padding: '0px 10px'}}>
-            //         <RecordUpload value={this.state.PetId}/>
-            //       </div>
-                  
-            //     </div>
-            //   ),
-            // }}
+            components={{
+              Toolbar: props => (
+                <div>
+                  <MTableToolbar {...props}></MTableToolbar>
+                  <div style={{padding: '0px 10px'}}>
+                    <RecordUpload value={this.state.PetId}/>
+
+                  </div>
+                </div>
+              ),
+            }}
           />
         </div>
-          <RecordUpload value={this.state.PetId}/>
       </div>
       
     )

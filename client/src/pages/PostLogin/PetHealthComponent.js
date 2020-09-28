@@ -15,7 +15,7 @@ export default class PetHealthComponent extends Component {
   constructor(props) {
     super();
     this.state = { PetId: props.match.params.PetId };
-    console.log("PetHealthComponent - Using PetId: " + props.match.params.PetId);
+    console.log("PetHealthComponent - Using PetId: " + this.state.PetId);
   }
 
   render() {
