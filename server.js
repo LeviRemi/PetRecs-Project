@@ -15,21 +15,21 @@ const corsOptions = { // was var
     origin: "https://petrecs.herokuapp.com/",
     credentials: true
 };
-app.use(cors(corsOptions));
+//app.use(cors(corsOptions));
 
 // Makes it more difficult for users to see we are running express. Helps against targeted attacks.
 app.disable('x-powered-by');
 
 // Express middleware that allows POSTing data
 // -parse requests of content-type - application/json
-app.use(express.json());
+//app.use(express.json());
 // -parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
 
 const db = require("./models");
 
 // if you run behind a proxy
-// app.set('trust proxy', 1);
+app.set('trust proxy', 1);
 
 // Configure Session
 app.use(session);
