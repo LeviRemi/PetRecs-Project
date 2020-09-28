@@ -38,7 +38,7 @@ const db = require("./models");
 //app.use(authenticate);
 
 // Serve the static files from the React app
-app.use(express.static(path.join(__dirname, 'build')));
+app.use(express.static(path.join(__dirname,'client', 'build')));
 
 // This is just a test. Should be changed to serve up the homepage.
 app.get("/*", (req, res) => {
