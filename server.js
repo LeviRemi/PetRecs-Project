@@ -38,11 +38,11 @@ const db = require("./models");
 //app.use(authenticate);
 
 // Serve the static files from the React app
-app.use(express.static(path.join(__dirname,'client', 'build')));
+app.use(express.static(path.join(__dirname, 'build')));
 
 // This is just a test. Should be changed to serve up the homepage.
 app.get("/*", (req, res) => {
-    res.sendFile(path.join(__dirname,'client', 'build', 'index.html'));
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
     //res.json({message: "Welcome to PetRecs"});
 })
 
