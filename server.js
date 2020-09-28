@@ -32,10 +32,10 @@ const db = require("./models");
 //app.set('trust proxy', 1);
 
 // Configure Session
-//app.use(session);
+app.use(session);
 
 // Check if user is authenticated or not
-//app.use(authenticate);
+app.use(authenticate);
 
 // Serve the static files from the React app
 app.use(express.static(path.join(__dirname,'client', 'build')));

@@ -26,6 +26,7 @@ export default class Pets extends Component {
         axios.get("/api/accounts/1/", { withCredentials: true })
       ]).then(([petResponse, accountResponse]) => {
           const pets = petResponse.data;
+          console.log(pets);
           const account = accountResponse.data;
           this.setState({  pets, account });
         })
