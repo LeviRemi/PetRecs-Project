@@ -12,10 +12,10 @@ const app = express();
 // requested from another domain outside the domain from which the first resource was served.
 // This basically means our APIs are on a secret domain that clients cannot access, but the application itself can.
 const corsOptions = { // was var
-    origin: "https://petrecs.herokuapp.com/",
+    origin: "http://localhost:3000",
     credentials: true
 };
-//app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 
 // Makes it more difficult for users to see we are running express. Helps against targeted attacks.
 app.disable('x-powered-by');
@@ -29,19 +29,19 @@ app.use(express.urlencoded({ extended: true }));
 const db = require("./models");
 
 // if you run behind a proxy
-app.set('trust proxy', 1);
+//app.set('trust proxy', 1);
 
 // Configure Session
-//app.use(session);
+app.use(session);
 
 // Check if user is authenticated or not
-//app.use(authenticate);
+app.use(authenticate);
 
 // This is just a test. Should be changed to serve up the homepage.
-//app.get("/", (req, res) => {
-//    res.sendFile(path.join("build", "index.html"));
-//    //res.json({message: "Welcome to PetRecs"});
-//})
+app.get("/", (req, res) => {
+    //res.sendFile(path.join("build", "index.html"));
+    res.json({message: "Welcome to PetRecs"});
+})
 
 // Serve the static files from the React app
 // TODO: Might need to change to build
