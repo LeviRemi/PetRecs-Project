@@ -69,6 +69,9 @@ app.use('/api/upload', apiFileUpload);
 const apiPetRecord = require('./routes/pet-record.routes');
 app.use('/api/pet-records', apiPetRecord);
 
+const apiMedication = require('./routes/medication.routes');
+app.use('/api/medications', apiMedication);
+
 const PORT = process.env.PORT || 5000;
 
 // Create the tables if they do not exist (and do nothing if they already exist)

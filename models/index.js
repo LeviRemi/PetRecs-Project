@@ -28,5 +28,6 @@ db.petContact = require("./pet-contact.model")(sequelize, Sequelize);
 db.eventType = require("./event-type.model")(sequelize, Sequelize);
 db.accountType = require("./account-type.model")(sequelize, Sequelize);
 db.session = require("./session.model")(sequelize, Sequelize);
+db.medication = require("./medication.model")(sequelize, Sequelize);
 
 module.exports = db;
