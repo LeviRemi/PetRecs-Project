@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import axios from 'axios';
-import ReactModal from 'react-modal';
+
 
 import moment from 'moment';
 
@@ -10,68 +10,100 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
+import Table from 'react-bootstrap/Table';
+import Modal from 'react-bootstrap/Modal';
 
 export default class PetEventsComponent extends Component {
   constructor(props) {
     super();
     this.state = { PetId: props.match.params.PetId,
                    events: [],
-                   showModal: false };
-    this.handleOpenModal = this.handleOpenModal.bind(this);
-    this.handleCloseModal = this.handleCloseModal.bind(this);
+                   show: false };
+    this.handleShow = this.handleShow.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+
     console.log("PetEventsComponent - Using PetId: " + this.state.PetId);
   }
 
-  handleOpenModal () {
-    this.setState({ showModal: true });
-  }
-  
-  handleCloseModal () {
-    this.setState({ showModal: false });
-  }
+	handleClose() {
+		this.setState({ show: false });
+	}
 
-  DeleteEvent = async (EventName, PetEventId) => {
-    if (window.confirm("You want to delete " + EventName)) {
-      axios.delete(`http://localhost:5000/api/pet-events/` + PetEventId, {withCredentials: true} )
-      .then(response=>{
-        this.setState({events: response.data});
-        console.log(response.data);
-      })
-      .catch((error) => {
-          console.log(error);
-      })
-    }
-  };
-
-  openInNewTab = async (url) => {
-    var win = window.open(url, '_blank');
-    win.focus();
-  }
+	handleShow() {
+		this.setState({ show: true });
+	}
 
   componentDidMount() {
     axios.get(`http://localhost:5000/api/pet-events/pet/` + this.state.PetId, {withCredentials: true} )
       .then(response=>{
         this.setState({events: response.data});
-        console.log(response.data);
+        //console.log(response.data);
       })
       .catch((error) => {
-          console.log(error);
+        console.log(error);
       })
   }
-  
+
+  eventTypeIdToString(TypeId) {
+    let stringType = "";
+    if (TypeId == 1) { stringType = "Medical"; } 
+    else if (TypeId == 2) { stringType = "Grooming"; } 
+    else if (TypeId == 3) { stringType = "Fitness"; } 
+    else if (TypeId == 4) { stringType = "Food"; } 
+    else if (TypeId == 5) { stringType = "Potty"; } 
+    else if (TypeId == 6) { stringType = "Behavior"; } 
+    else if (TypeId == 7) { stringType = "Other"; } 
+
+    return stringType;
+  }
+
+  renderTableData() {
+    return this.state.events.map((event, index) => {
+      const { EventId, EventTypeId, EventDescription, Date } = event
+      return (
+        <tr key={EventId}>
+          <td>{this.eventTypeIdToString(EventTypeId)}</td>
+          <td>{moment(Date).format("MM/DD/YYYY")}</td>
+          <td>{EventDescription}</td>
+        </tr>
+      )
+    })
+  }
+
   render() {
   return (
       <div className="petProfileBody nopadding">
         <div>
-
-        <button onClick={this.handleOpenModal}>Trigger Modal</button>
-          <ReactModal 
-            isOpen={this.state.showModal}
-            contentLabel="Minimal Modal Example"
-          >
-            <AddEventComponent petid={this.state.PetId}/>
-            <button onClick={this.handleCloseModal}>Close Modal</button>
-          </ReactModal>
+          <Table size="sm">
+            <thead>
+              <th>Type</th>
+              <th>Date</th>
+              <th>Description</th>
+            </thead>
+            <tbody>
+              {this.renderTableData()}
+            </tbody>
+          </Table>
+        </div>
+        <div>
+          <Button onClick={this.handleShow} variant="outline-dark">Add Event</Button>
+          <Modal
+                show={this.state.show}
+                onHide={this.handleClose}
+                backdrop="static"
+                keyboard={false}
+            >
+            <Modal.Header closeButton>
+            <Modal.Title>Add Event</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <AddEventComponent petid={this.state.PetId}/>
+            </Modal.Body>
+            <Modal.Footer>
+                    <Button variant="secondary" onClick={this.handleClose}>Close</Button>
+                    <Button variant="primary" type="submit" form="AddEventForm">Add Event</Button>
+            </Modal.Footer>
+          </Modal>
         </div>
         
       </div>
@@ -116,7 +148,6 @@ class AddEventComponent extends Component {
             console.log(response);
         })
         .catch((error) => {
-            console.log(data);
             console.log(error);
         })
   }
@@ -124,16 +155,21 @@ class AddEventComponent extends Component {
   render() {
     return (
       <div className="formBoxAddEvent">
-          <Form onSubmit={this.handleSubmit}>
+          <Form id="AddEventForm" onSubmit={this.handleSubmit}>
             <Form.Row>
               <Col>
                 <Form.Group controlId="formEventType">
                 <Form.Label>Event Type</Form.Label>
-                <Form.Control name="eventTypeId" type="number" min={1} max={7}
-                              placeholder="1"
-                              size="sm"
-                              onChange={this.handleEventTypeIdChange}
-                              required/>
+                <Form.Control name="eventTypeId" as="select"
+                              onChange={this.handleEventTypeIdChange}>
+                  <option value="1">Medical</option>
+                  <option value="2">Grooming</option>
+                  <option value="3">Fitness</option>
+                  <option value="4">Food</option>
+                  <option value="5">Potty</option>
+                  <option value="6">Behavior</option>
+                  <option value="7">Other</option>
+                </Form.Control>
                 </Form.Group>
               </Col>
 
@@ -141,7 +177,6 @@ class AddEventComponent extends Component {
                 <Form.Group controlId="formDate">
                 <Form.Label>Date</Form.Label>
                 <Form.Control name="date" type="date" max={moment().format("YYYY-MM-DD")}
-                              size="sm"
                               onChange={this.handleDateChange}
                               required/>
                 </Form.Group>
@@ -149,16 +184,16 @@ class AddEventComponent extends Component {
             </Form.Row>
                 
             <Form.Row>
-              <Form.Group controlId="formEventDescription">
-                  <Form.Label>Description</Form.Label>
-                  <Form.Control name="eventDescription" type="textarea" as="textarea" rows="5"
-                                placeholder="Enter a description of the event here..."
-                                size="lg"
-                                onChange={this.handleEventDescriptionChange}
-                                required/>
-              </Form.Group>
+              <Col>
+                <Form.Group controlId="formEventDescription">
+                    <Form.Label>Description</Form.Label>
+                    <Form.Control name="eventDescription" type="textarea" as="textarea" rows="5"
+                                  placeholder="Enter a description of the event here..."
+                                  onChange={this.handleEventDescriptionChange}
+                                  required/>
+                </Form.Group>
+              </Col>
             </Form.Row>
-            <Button type="submit"> Add Event </Button>
           </Form>
       </div>
     )

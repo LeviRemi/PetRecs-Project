@@ -125,12 +125,9 @@ these styles are pre-login */
 
 .formBoxAddEvent {
   background-color: white;
-  width: 640px;
   height: 400px;
   text-align: left;
-  margin: 0px auto 0px auto;
-  padding: 4px 0 4px 0;
-  border-color: red;
+  border-color: white;
   border-style: solid;
   border-width: 2px;
 }
