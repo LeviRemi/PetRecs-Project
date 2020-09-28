@@ -3,6 +3,7 @@ const cors = require("cors");
 const path = require('path');
 const authenticate = require('./middleware/authenticate');
 const session = require("./middleware/session");
+const routes = require('./routes');
 
 const app = express();
 
@@ -11,7 +12,7 @@ const app = express();
 // requested from another domain outside the domain from which the first resource was served.
 // This basically means our APIs are on a secret domain that clients cannot access, but the application itself can.
 const corsOptions = { // was var
-    origin: "http://localhost:3000",
+    origin: "https://petrecs.herokuapp.com/",
     credentials: true
 };
 app.use(cors(corsOptions));
@@ -38,12 +39,15 @@ app.use(authenticate);
 
 // This is just a test. Should be changed to serve up the homepage.
 app.get("/", (req, res) => {
-    res.json({message: "Welcome to PetRecs"});
+    res.sendFile(path.join(__dirname, "build", "index.html"));
+    //res.json({message: "Welcome to PetRecs"});
 })
 
 // Serve the static files from the React app
 // TODO: Might need to change to build
-app.use(express.static(path.join(__dirname, '/client/public/')));
+app.use(express.static(path.join(__dirname, '/client/build/')));
+
+//app.use(routes);
 
 const apiPet = require('./routes/pet.routes');
 app.use('/api/pets', apiPet);
