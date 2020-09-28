@@ -39,7 +39,7 @@ app.set('trust proxy', 1);
 
 // This is just a test. Should be changed to serve up the homepage.
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "build", "index.html"));
+    res.sendFile(path.join("build", "index.html"));
     //res.json({message: "Welcome to PetRecs"});
 })
 
