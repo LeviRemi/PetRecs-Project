@@ -35,7 +35,7 @@ const db = require("./models");
 app.use(session);
 
 // Check if user is authenticated or not
-//app.use(authenticate);
+app.use(authenticate);
 
 
 
