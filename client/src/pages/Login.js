@@ -14,7 +14,7 @@ function Login() {
     const history = useHistory();
     const { register, handleSubmit, errors } = useForm();
     const onSubmit = (data) => {
-        axios.post('http://localhost:5000/api/accounts/login/', {
+        axios.post('/api/accounts/login/', {
             Email: data.email,
             Password: data.password
         }, { withCredentials: true })

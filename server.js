@@ -12,7 +12,7 @@ const app = express();
 // requested from another domain outside the domain from which the first resource was served.
 // This basically means our APIs are on a secret domain that clients cannot access, but the application itself can.
 const corsOptions = { // was var
-    origin: "http://localhost:3000",
+    origin: (process.env.NODE_ENV === "production")? "https://petrecs.herokuapp.com/" : "http://localhost:3000",
     credentials: true
 };
 app.use(cors(corsOptions));
@@ -36,16 +36,6 @@ app.use(session);
 
 // Check if user is authenticated or not
 app.use(authenticate);
-
-// This is just a test. Should be changed to serve up the homepage.
-app.get("/", (req, res) => {
-    //res.sendFile(path.join("build", "index.html"));
-    res.json({message: "Welcome to PetRecs"});
-})
-
-// Serve the static files from the React app
-// TODO: Might need to change to build
-app.use(express.static(path.join('/client/build/')));
 
 //app.use(routes);
 
@@ -75,6 +65,15 @@ app.use('/api/pet-records', apiPetRecord);
 
 const apiMedication = require('./routes/medication.routes');
 app.use('/api/medications', apiMedication);
+
+if (process.env.NODE_ENV === "production") {
+    // Serve the static files from the React app
+    app.use(express.static(path.join(__dirname,'client', 'build')));
+    
+    app.get("/*", (req, res) => {
+        res.sendFile(path.join('client','build', 'index.html'), {root: __dirname});
+    })
+}
 
 const PORT = process.env.PORT || 5000;
 

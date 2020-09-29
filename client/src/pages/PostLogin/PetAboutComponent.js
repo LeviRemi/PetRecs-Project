@@ -32,10 +32,10 @@ function PetAboutComponent(props) {
     const handleShowShare = () => setShowShare(true);
 
     function fetchPetProfile() {
-        axios.get(`http://localhost:5000/api/pets/${props.match.params.PetId}`, {withCredentials: true} )
+        axios.get(`/api/pets/${props.match.params.PetId}`, {withCredentials: true} )
             .then(response=>{
                 setPetprofile(response.data);
-                axios.get(`http://localhost:5000/api/species/${response.data.SpeciesId}`, {withCredentials: true})
+                axios.get(`/api/species/${response.data.SpeciesId}`, {withCredentials: true})
                     .then(response=>{
                         setPetSpecies(response.data);
                     });
@@ -47,7 +47,7 @@ function PetAboutComponent(props) {
     }
 
     function fetchSpeciesList() {
-        axios.get(`http://localhost:5000/api/species`, {withCredentials: true} )
+        axios.get(`/api/species`, {withCredentials: true} )
             .then(response=>{
                 setSpeciesList(response.data);
             })
@@ -67,7 +67,7 @@ function PetAboutComponent(props) {
 
         let bod = data.petBirthdate;
 
-        axios.put(`http://localhost:5000/api/pets/${petprofile.PetId}`, {
+        axios.put(`/api/pets/${petprofile.PetId}`, {
             PetName: data.petName,
             SpeciesId: data.petSpecies,
             PetGender: data.petGender,
@@ -97,7 +97,7 @@ function PetAboutComponent(props) {
         console.log(data);
         setLoading({display: "initial"});
 
-        axios.post(`http://localhost:5000/api/pets/${petprofile.PetId}/share`, {
+        axios.post(`/api/pets/${petprofile.PetId}/share`, {
             Email: data.email
         }, {withCredentials: true})
             .then((res) => {
@@ -131,7 +131,7 @@ function PetAboutComponent(props) {
             // User selects "delete"
             if (result.isDenied) {
                 setLoading({display: "initial"});
-                axios.delete(`http://localhost:5000/api/pets/${petprofile.PetId}`, {withCredentials: true})
+                axios.delete(`/api/pets/${petprofile.PetId}`, {withCredentials: true})
                     .then((res) => {
                         setLoading({display: "none"});
                         console.log(res);

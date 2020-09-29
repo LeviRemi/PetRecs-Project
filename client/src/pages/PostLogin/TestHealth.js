@@ -115,7 +115,7 @@ class AddWeightComponent extends Component {
       Date: this.state.Date,
     };
 
-    axios.post(`http://localhost:5000/api/pet-weights/`, data, {withCredentials: true} )
+    axios.post(`/api/pet-weights/`, data, {withCredentials: true} )
         .then(response=>{
             console.log(response);
         })
