@@ -15,7 +15,7 @@ const corsOptions = { // was var
     origin: "https://petrecs.herokuapp.com/",
     credentials: true
 };
-//app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 
 // Makes it more difficult for users to see we are running express. Helps against targeted attacks.
 app.disable('x-powered-by');
