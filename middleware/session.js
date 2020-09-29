@@ -18,6 +18,7 @@ module.exports = session({
         //sameSite: true, // helps prevent CSRF attacks
         secure: false, // if true: only transmit cookie over https
         httpOnly: false, // if true: prevents client-side JS from reading the cookie.. set to false to access cookie in React
-        maxAge: 1000 * 60 * 30 // session max age in milliseconds: 30 minutes
+        maxAge: 1000 * 60 * 30, // session max age in milliseconds: 30 minutes
+        proxy: true
     }
 });

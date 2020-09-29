@@ -29,7 +29,7 @@ app.use(express.urlencoded({ extended: true }));
 const db = require("./models");
 
 // if you run behind a proxy
-//app.set('trust proxy', 1);
+app.set('trust proxy', 1);
 
 // Configure Session
 app.use(session);
