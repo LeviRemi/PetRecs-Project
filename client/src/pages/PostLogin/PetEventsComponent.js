@@ -262,7 +262,7 @@ class UpdateEventComponent extends Component {
   }
 
   componentDidMount() {
-    axios.get(`http://localhost:5000/api/pet-events/` + this.state.EventId, {withCredentials: true} )
+    axios.get(`/api/pet-events/` + this.state.EventId, {withCredentials: true} )
       .then(response=>{
         this.setState({EventTypeId: response.data.EventTypeId,
                         EventId: response.data.EventId,
@@ -296,7 +296,7 @@ class UpdateEventComponent extends Component {
       Date: this.state.Date,
     };
 
-  axios.put(`http://localhost:5000/api/pet-events/` + this.state.EventId, data, {withCredentials: true} )
+  axios.put(`/api/pet-events/` + this.state.EventId, data, {withCredentials: true} )
         .then(response=>{
             console.log(response);
         })

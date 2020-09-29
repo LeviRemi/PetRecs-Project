@@ -131,7 +131,7 @@ function PetAboutComponent(props) {
             // User selects "delete"
             if (result.isDenied) {
                 setLoading({display: "initial"});
-                axios.delete(`http://localhost:5000/api/pets/${petprofile.PetId}`, {withCredentials: true})
+                axios.delete(`/api/pets/${petprofile.PetId}`, {withCredentials: true})
                     .then((res) => {
                         setLoading({display: "none"});
                         console.log(res);

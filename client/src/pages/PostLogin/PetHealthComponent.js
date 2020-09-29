@@ -237,7 +237,7 @@ class MedsComponent extends Component {
 
   deleteMedication = async (MedicationId) => {
     if (window.confirm("Are you sure you want to delete this medication?")) {
-      axios.delete(`http://localhost:5000/api/medications/` + MedicationId, {withCredentials: true} )
+      axios.delete(`/api/medications/` + MedicationId, {withCredentials: true} )
         .then(response=>{
           //this.setState({events: response.data});
           console.log("Medication " + MedicationId + " deleted sucessfully.");
@@ -249,7 +249,7 @@ class MedsComponent extends Component {
   };
 
   componentDidMount() {
-    axios.get(`http://localhost:5000/api/medications/pet/` + this.state.PetId, {withCredentials: true} )
+    axios.get(`/api/medications/pet/` + this.state.PetId, {withCredentials: true} )
       .then(response=>{
         this.setState({medications: response.data});
         //console.log(response.data);
@@ -343,7 +343,7 @@ class AddMedicationComponent extends Component {
       Notes: this.state.Notes
     };
 
-    axios.post(`http://localhost:5000/api/medications/`, data, {withCredentials: true} )
+    axios.post(`/api/medications/`, data, {withCredentials: true} )
         .then(response=>{
             console.log(response);
         })
