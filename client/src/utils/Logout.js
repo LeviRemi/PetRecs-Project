@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 function Logout() {
 
     // Destroy session
-    axios.get("http://localhost:5000/api/sessions/destroy", { withCredentials: true })
+    axios.get("http://petrecs.herokuapp.com/api/sessions/destroy", { withCredentials: true })
         .then(response=>{
             console.log(response);
         })

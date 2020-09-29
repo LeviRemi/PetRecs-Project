@@ -50,9 +50,9 @@ function FileUpload() {
             `${Date.now()}-${selectedFile.name}`,
           );
           console.log(fileData);
-          axios.post("http://localhost:5000/api/upload", fileData, {withCredentials: true})
+          axios.post("http://petrecs.herokuapp.com/api/upload", fileData, {withCredentials: true})
           .then((response) => {
-            axios.put('http://localhost:5000/api/pets/' + urlpetid.PetId, {"ProfileUrl": response.data.fileLocation}, {Params: {id: urlpetid.PetId}, withCredentials: true })
+            axios.put('http://petrecs.herokuapp.com/api/pets/' + urlpetid.PetId, {"ProfileUrl": response.data.fileLocation}, {Params: {id: urlpetid.PetId}, withCredentials: true })
               .then((res) => {
                   console.log(res);
             })

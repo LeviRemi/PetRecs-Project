@@ -54,7 +54,7 @@ function RecordUpload() {
 
           if (enteredFileName != null) {
 
-            axios.post("http://localhost:5000/api/upload/record", fileData, {withCredentials: true})
+            axios.post("http://petrecs.herokuapp.com/api/upload/record", fileData, {withCredentials: true})
             .then((response) => {
               console.log("upload success");
   
@@ -68,7 +68,7 @@ function RecordUpload() {
                 };
   
               console.log(data);
-              axios.post('http://localhost:5000/api/pet-records/', data, {withCredentials: true })
+              axios.post('http://petrecs.herokuapp.com/api/pet-records/', data, {withCredentials: true })
                 .then((res) => {
                     console.log(res);
               })

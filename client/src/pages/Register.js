@@ -13,7 +13,7 @@ function Register() {
     const history = useHistory();
     const { register, handleSubmit, errors, watch } = useForm();
     const onSubmit = (data) => {
-        axios.post('http://localhost:5000/api/accounts/', {
+        axios.post('http://petrecs.herokuapp.com/api/accounts/', {
             FirstName: "",
             LastName: "",
             Email: data.email,
