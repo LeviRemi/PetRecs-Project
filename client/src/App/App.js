@@ -10,6 +10,7 @@ import Register from '../pages/Register'
 import About from '../pages/About'
 import Pets from '../pages/PostLogin/Pets/Pets'
 import PetScene from '../pages/PostLogin/PetScene'
+import Account from '../pages/PostLogin/Account'
 
 //Erik's temporary test components
 import TestHealth from '../pages/PostLogin/TestHealth'
@@ -38,6 +39,7 @@ function App(){
           <Route path="/pets/test/pets" exact component={()=><PetTestProfile/>} />    {/* Erik's test route while unable to connect to DB */}
           <Route path="/pets/new" exact component={()=>isUserLoggedIn()?<PetCreation/> : <Redirect to={"/"}/>} />{/*Keep this component above "pets/:PetId"*/}
           <Route path="/pets/:PetId/"  component={(props)=>isUserLoggedIn()?<PetScene {...props} /> : <Redirect to={"/"}/>} />
+          <Route path="/account" exact component={()=>isUserLoggedIn()?<Account/> : <Redirect to={"/"}/>} />
           <Route exact component={NotFound} /> {/*Keep this component at the end*/}
         </Switch>
       </Router>

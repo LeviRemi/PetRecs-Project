@@ -10,6 +10,9 @@ router.post("/", accounts.create);
 // Login to an existing Account
 router.post("/login", accounts.login);
 
+// Retrieve account that is currently logged in
+router.get("/current", accounts.findMine);
+
 // Retrieve all Accounts
 router.get("/", accounts.findAll);
 

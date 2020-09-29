@@ -24,7 +24,8 @@ function Register() {
                 console.log(res);
                 Swal.fire('Congratulations!', "Your PetRecs account has been created", 'success');
                 history.push('/login');
-            }, (err) => {
+            })
+            .catch((err) => {
                 console.log(err.response.status)
                 if (err.response.status === 409) {
                     Swal.fire('Oops...', err.response.data.message, 'error');

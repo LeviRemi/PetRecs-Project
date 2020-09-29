@@ -130,6 +130,20 @@ exports.findOne = (req, res) => {
         });
 };
 
+// Find currently logged in account
+exports.findMine = (req, res) => {
+    const id = req.session.user.AccountId;
+    Account.findByPk(id)
+        .then(data => {
+            res.send(data);
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: "Error when retrieving Account with id=" + id
+            });
+        });
+}
+
 // Find a single Account with an email
 exports.findOneByEmail = (req, res) => {
     const email = req.params.Email;
@@ -154,7 +168,7 @@ exports.update = (req, res) => {
         where: {AccountId: id}
     })
         .then(num => {
-            if (num === 1) {
+            if (num == 1) {
                 res.send({
                     message: "Account was updated successfully."
                 });
