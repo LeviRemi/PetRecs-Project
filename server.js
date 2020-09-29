@@ -66,14 +66,14 @@ app.use('/api/upload', apiFileUpload);
 const apiPetRecord = require('./routes/pet-record.routes');
 app.use('/api/pet-records', apiPetRecord);
 
-// Serve the static files from the React app
-app.use(express.static(path.join(__dirname,'client', 'build')));
-
-// This is just a test. Should be changed to serve up the homepage.
-app.get("/*", (req, res) => {
-    res.sendFile(path.join('client','build', 'index.html'), {root: __dirname});
-    //res.json({message: "Welcome to PetRecs"});
-})
+if (process.env.NODE_ENV === "production") {
+    // Serve the static files from the React app
+    app.use(express.static(path.join(__dirname,'client', 'build')));
+    
+    app.get("/*", (req, res) => {
+        res.sendFile(path.join('client','build', 'index.html'), {root: __dirname});
+    })
+}
 
 const PORT = process.env.PORT || 5000;
 
