@@ -3,7 +3,6 @@
 import React, { Component, useEffect } from 'react';
 import axios from 'axios';
 
-
 import moment from 'moment';
 
 import Form from 'react-bootstrap/Form';
@@ -29,25 +28,15 @@ export default class PetEventsComponent extends Component {
     console.log("PetEventsComponent - Using PetId: " + this.state.PetId);
   }
 
-	handleCloseAdd() {
-		this.setState({ showAdd: false });
-	}
+  handleCloseAdd() { this.setState({ showAdd: false }); }
 
-	handleShowAdd() {
-		this.setState({ showAdd: true });
-  }
+  handleShowAdd() { this.setState({ showAdd: true }); }
 
-  handleCloseUpdate() {
-		this.setState({ showUpdate: false });
-	}
+  handleCloseUpdate() { this.setState({ showUpdate: false }); }
 
-	handleShowUpdate() {
-    this.setState({ showUpdate: true });
-  }
+  handleShowUpdate() { this.setState({ showUpdate: true }); }
 
-  updateStateEventId(buttonEventId) {
-    this.setState({ EventId: buttonEventId });
-  }
+  updateStateEventId(buttonEventId) { this.setState({ EventId: buttonEventId }); }
   
   deleteEvent = async (EventId) => {
     if (window.confirm("Are you sure you want to delete this event?")) {
