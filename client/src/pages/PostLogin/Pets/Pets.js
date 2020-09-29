@@ -26,7 +26,6 @@ export default class Pets extends Component {
         axios.get("/api/accounts/1/", { withCredentials: true })
       ]).then(([petResponse, accountResponse]) => {
           const pets = petResponse.data;
-          console.log(pets);
           const account = accountResponse.data;
           this.setState({  pets, account });
         })
@@ -45,7 +44,6 @@ export default class Pets extends Component {
           <Container fluid>
             <div className="mainPageBody nopadding">
                 <div className="mainPageContents">
-                {console.log("loading")}
                   { this.state.pets.map(pet => 
                   <Link id="PetLink" to={"/Pets/" + pet.PetId} key={pet.PetId}>
                     <PetImage {...{PetId: pet.PetId, ProfileUrl: pet.ProfileUrl}}/>
@@ -54,7 +52,6 @@ export default class Pets extends Component {
                       </div>
                   </Link>
                   )}
-                  {console.log("loaded")}
                   <Link id="PetLink" to={"/Pets/New"}>
                     <div id="AddPetContainer">
                       <div id="AddPetCircle">
