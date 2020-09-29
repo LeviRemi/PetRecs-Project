@@ -12,7 +12,7 @@ const app = express();
 // requested from another domain outside the domain from which the first resource was served.
 // This basically means our APIs are on a secret domain that clients cannot access, but the application itself can.
 const corsOptions = { // was var
-    origin: "https://petrecs.herokuapp.com/",
+    origin: (process.env.NODE_ENV === "production")? "https://petrecs.herokuapp.com/" : "http://localhost:3000",
     credentials: true
 };
 app.use(cors(corsOptions));
