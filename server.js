@@ -41,7 +41,7 @@ app.use(session);
 app.use(express.static(path.join(__dirname,'client', 'build')));
 
 // This is just a test. Should be changed to serve up the homepage.
-app.get("/", (req, res) => {
+app.get("*", (req, res) => {
     res.sendFile(path.join('client','build', 'index.html'), {root: __dirname});
     //res.json({message: "Welcome to PetRecs"});
 })
