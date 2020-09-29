@@ -29,16 +29,13 @@ app.use(express.urlencoded({ extended: true }));
 const db = require("./models");
 
 // if you run behind a proxy
-app.set('trust proxy', 1);
+//app.set('trust proxy', 1);
 
 // Configure Session
 app.use(session);
 
 // Check if user is authenticated or not
 app.use(authenticate);
-
-
-
 
 //app.use(routes);
 
@@ -65,6 +62,9 @@ app.use('/api/upload', apiFileUpload);
 
 const apiPetRecord = require('./routes/pet-record.routes');
 app.use('/api/pet-records', apiPetRecord);
+
+const apiMedication = require('./routes/medication.routes');
+app.use('/api/medications', apiMedication);
 
 if (process.env.NODE_ENV === "production") {
     // Serve the static files from the React app

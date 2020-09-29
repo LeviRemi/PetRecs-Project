@@ -85,7 +85,7 @@ exports.findOne = (req, res) => {
 exports.update = (req, res) => {
     const id = req.params.id;
     PetEvent.update(req.body, {
-        where: {PetEventId: id}
+        where: {EventId: id}
     })
         .then(num => {
             if (num === 1) {

@@ -11,7 +11,7 @@ import Button from 'react-bootstrap/Button';
 
 function RecordUpload() {
 
-    const [selectedFile, setSelectedFile] = useState(null);
+    //const [selectedFile, setSelectedFile] = useState(null);
     const [urlpetid, setUrlpetid] = useState(useParams());
 
     // Create a reference to the hidden file input element
@@ -28,7 +28,9 @@ function RecordUpload() {
     const onFileSelected = async (e) => {
         console.log("File Selected");
       if (e.target.files[0]) {
-        setSelectedFile(e.target.files[0]);
+        //setSelectedFile(e.target.files[0]);
+        handleFileUpload(e);
+
       }
     };
   
@@ -36,21 +38,23 @@ function RecordUpload() {
     const handleFileUpload = async (e) => {
         console.log("File Uploaded");
       e.preventDefault();
+      const fileUploaded = e.target.files[0];
   
       try {
-        if (selectedFile !== '') {
+        if (fileUploaded !== '') {
           // Creating a FormData object
           let fileData = new FormData();
+          console.log(fileUploaded);
   
           // Adding the 'image' field and the selected file as value to our FormData object
           // Changing file name to make it unique and avoid potential later overrides
           fileData.set(
             'file',
-            selectedFile,
-            `${Date.now()}-${selectedFile.name}`,
+            fileUploaded,
+            `${Date.now()}-${fileUploaded.name}`,
           );
 
-          const enteredFileName = prompt('Please enter file name', `${selectedFile.name}`);
+          const enteredFileName = prompt('Please enter file name', `${fileUploaded.name}`);
 
           if (enteredFileName != null) {
 
@@ -63,7 +67,7 @@ function RecordUpload() {
                   PetId: urlpetid.PetId,
                   RecordName: enteredFileName,
                   RecordUrl: response.data.fileLocation,
-                  FileName: selectedFile.name,
+                  FileName: fileUploaded.name,
                   UploadDate: Date.now()
                 };
   
@@ -76,7 +80,7 @@ function RecordUpload() {
               console.log(error);
             });
           } else {console.log("Cancelled");}
-        }
+        } else {console.log(e.target.files[0]);}
       } catch (error) {
         console.log(error);
       }
@@ -85,11 +89,8 @@ function RecordUpload() {
     return (
       <div id="RecordButtons"> 
         <div id="RecordSelect">      
-          <Button onClick={handleClick} variant="secondary">Select File</Button> 
+          <Button onClick={handleClick} variant="secondary">Upload Record</Button> 
           <input type="file" ref={hiddenFileInput} className="custom-file-input" onChange={onFileSelected} />  
-          <div id="RecordSave">
-            <Button  variant="secondary" onClick={handleFileUpload}>Save</Button>   
-          </div>   
         </div>
 
       </div>

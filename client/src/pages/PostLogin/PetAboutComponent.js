@@ -81,13 +81,13 @@ function PetAboutComponent(props) {
             .then((res) => {
                 setLoading({display: "none"});
                 console.log(res);
-                Swal.fire('Congratulations!', "Your pet's profile has been updated", 'success');
+                Swal.fire('Congratulations!', "This pet profile has been updated", 'success');
                 handleClose();
                 fetchPetProfile()
             }, (err) => {
                 setLoading({display: "none"});
                 console.log(err.response.status)
-                Swal.fire('Oops...', err.response.data.message, 'error');
+                Swal.fire('Oops...', "You do not have permission to update this pet profile", 'error');
             })
 
 
@@ -103,7 +103,7 @@ function PetAboutComponent(props) {
             .then((res) => {
                 setLoading({display: "none"});
                 console.log(res);
-                Swal.fire('Congratulations!', "Your pet's profile has been shared", 'success');
+                Swal.fire('Congratulations!', "This pet profile has been shared with " + data.email, 'success');
                 handleCloseShare();
             }, (err) => {
                 setLoading({display: "none"});
@@ -111,13 +111,39 @@ function PetAboutComponent(props) {
                 if (err.response.status === 401) {
                     Swal.fire('Oops...', "You do not have permission to share this pet", 'error');
                 } else if (err.response.status === 400) {
-                    Swal.fire('Oops...', "That user does not exist or already has access to this pet profile", 'error');
+                    Swal.fire('Oops...', `User ${data.email} does not exist or they already have access to this pet profile`, 'error');
                 } else {
                     Swal.fire('Oops...', "You are unable to share the pet at this time", 'error');
                 }
 
             })
 
+    }
+
+    const handleDelete = (data) => {
+        Swal.fire({
+            title: 'Are you sure you want to delete this pet profile?',
+            showDenyButton: true,
+            showCancelButton: true,
+            showConfirmButton: false,
+            denyButtonText: `Delete`,
+        }).then((result) => {
+            // User selects "delete"
+            if (result.isDenied) {
+                setLoading({display: "initial"});
+                axios.delete(`http://localhost:5000/api/pets/${petprofile.PetId}`, {withCredentials: true})
+                    .then((res) => {
+                        setLoading({display: "none"});
+                        console.log(res);
+                        Swal.fire('Success!', 'This pet profile has been deleted', 'success');
+                        history.push("/pets");
+                    }, (err) => {
+                        setLoading({display: "none"});
+                        console.log(err.response.status)
+                        Swal.fire('Oops...', "You do not have permission to delete this pet profile", 'error');
+                    })
+            }
+        })
     }
 
     return (
@@ -214,6 +240,7 @@ function PetAboutComponent(props) {
                 </Modal.Body>
 
                 <Modal.Footer>
+                    <Button style={{position: "absolute", left: "12px"}} variant="danger" onClick={handleDelete}>Delete Pet</Button>
                     <Button variant="secondary" onClick={handleClose}>Close</Button>
                     <Button variant="primary" type="submit" form="EditPetForm">Save Changes</Button>
                 </Modal.Footer>

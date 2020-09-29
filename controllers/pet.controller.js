@@ -176,25 +176,42 @@ exports.update = (req, res) => {
     const id = req.params.id;
     const body = req.body;
 
-    Pet.update(body, {
-        where: {PetId: id}
+    // Verify that user is owner of pet they are trying to update
+    Contact.findOne({
+        where: {PetId: req.params.id, AccountId: req.session.user.AccountId}
     })
-        .then(num => {
-            if (num == 1) {
-                res.send({
-                    message: "Pet was updated successfully."
-                });
+        .then(data => {
+            if (data === null || !data.Owner) {
+                res.status(401).send("This user does not own this pet, or pet does not exist");
             } else {
-                console.log(req.body)
-                res.send({
-                    message: `Cannot update Pet with id=${id}. Maybe Pet was not found or request body was empty.`
-                });
+                // Update Pet
+                return Pet.update(body, {
+                    where: {PetId: id}
+                })
+                    .then(num => {
+                        if (num == 1) {
+                            res.send({
+                                message: "Pet was updated successfully."
+                            });
+                        } else {
+                            console.log(req.body)
+                            res.send({
+                                message: `Cannot update Pet with id=${id}. Maybe Pet was not found or request body was empty.`
+                            });
+                        }
+                    })
+                    .catch(err => {
+                        res.status(500).send({
+                            message:
+                                err.message || "Error updating Pet with id=" + id
+                        });
+                    });
             }
         })
         .catch(err => {
-            res.status(500).send({
+            res.status(500).send( {
                 message:
-                err.message || "Error updating Pet with id=" + id
+                    err.message || "Some error occurred while validating if user is owner of pet"
             });
         });
 };
