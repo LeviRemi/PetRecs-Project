@@ -23,7 +23,7 @@ function PetCard(props) {
     const [petprofile, setPetprofile] = useState('');
 
     function fetchPetProfile() {
-        axios.get(`http://localhost:5000/api/pets/${props.value.PetId}`, {withCredentials: true} )
+        axios.get(`/api/pets/${props.value.PetId}`, {withCredentials: true} )
             .then(response=>{
                 setPetprofile(response.data);
             })

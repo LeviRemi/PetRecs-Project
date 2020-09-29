@@ -40,7 +40,7 @@ export default class PetEventsComponent extends Component {
   
   deleteEvent = async (EventId) => {
     if (window.confirm("Are you sure you want to delete this event?")) {
-      axios.delete(`http://localhost:5000/api/pet-events/` + EventId, {withCredentials: true} )
+      axios.delete(`/api/pet-events/` + EventId, {withCredentials: true} )
         .then(response=>{
           //this.setState({events: response.data});
           console.log("EventId " + EventId + " deleted sucessfully.");
@@ -52,7 +52,7 @@ export default class PetEventsComponent extends Component {
   };
 
   componentDidMount() {
-    axios.get(`http://localhost:5000/api/pet-events/pet/` + this.state.PetId, {withCredentials: true} )
+    axios.get(`/api/pet-events/pet/` + this.state.PetId, {withCredentials: true} )
       .then(response=>{
         this.setState({events: response.data});
         //console.log(response.data);
@@ -193,7 +193,7 @@ class AddEventComponent extends Component {
       Date: this.state.Date,
     };
 
-    axios.post(`http://localhost:5000/api/pet-events/`, data, {withCredentials: true} )
+    axios.post(`/api/pet-events/`, data, {withCredentials: true} )
         .then(response=>{
             console.log(response);
         })

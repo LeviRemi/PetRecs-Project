@@ -1,10 +1,15 @@
 import axios from "axios";
 import Cookies from "js-cookie";
+import {useHistory} from "react-router";
+import React from "react";
+import HomePage from "../pages/HomePage";
 
 function Logout() {
+    
+    const history = useHistory();
 
     // Destroy session
-    axios.get("http://localhost:5000/api/sessions/destroy", { withCredentials: true })
+    axios.get("/api/sessions/destroy", { withCredentials: true })
         .then(response=>{
             console.log(response);
         })
@@ -15,10 +20,11 @@ function Logout() {
     // Destroy cookie
     Cookies.remove('sessionId');
 
-    // Refresh page
-    setTimeout(function() {
-        window.location.reload();
-    }, 100);
+    history.push("/");
+
+    return (
+        <div><HomePage /></div>
+    )
 
 }
 

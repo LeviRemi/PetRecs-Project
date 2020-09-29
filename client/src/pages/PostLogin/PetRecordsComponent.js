@@ -20,7 +20,7 @@ class PetRecordsComponent extends Component {
 
   DeleteRecord = async (RecordName, PetRecordId) => {
     if (window.confirm("You want to delete " + RecordName)) {
-      axios.delete(`http://localhost:5000/api/pet-records/` + PetRecordId, {withCredentials: true} )
+      axios.delete(`/api/pet-records/` + PetRecordId, {withCredentials: true} )
       .then(response=>{
         this.setState({records: response.data});
         console.log(response.data);
@@ -37,7 +37,7 @@ class PetRecordsComponent extends Component {
   }
 
   componentDidMount() {
-    axios.get(`http://localhost:5000/api/pet-records/pet/` + this.state.PetId, {withCredentials: true} )
+    axios.get(`/api/pet-records/pet/` + this.state.PetId, {withCredentials: true} )
       .then(response=>{
         this.setState({records: response.data});
         console.log(response.data);

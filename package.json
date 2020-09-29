@@ -22,7 +22,7 @@
   "bugs": {
     "url": "https://github.com/jcfleischli/PetRecs/issues"
   },
-  "homepage": "https://github.com/jcfleischli/PetRecs#readme",
+  "homepage": "https://petrecs.herokuapp.com/",
   "dependencies": {
     "@google-cloud/storage": "^5.3.0",
     "axios": "^0.20.0",

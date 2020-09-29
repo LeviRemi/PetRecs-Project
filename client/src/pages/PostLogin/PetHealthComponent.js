@@ -119,7 +119,7 @@ class ViewWeightComponent extends Component {
   }
 
   componentDidMount() {
-    axios.get(`http://localhost:5000/api/pet-weights/pet/` + this.props.petid, {withCredentials: true} )
+    axios.get(`/api/pet-weights/pet/` + this.props.petid, {withCredentials: true} )
       .then(response=>{
         this.setState({data: response.data});
       })
@@ -184,7 +184,7 @@ class AddWeightComponent extends Component {
       Date: this.state.Date,
     };
 
-    axios.post(`http://localhost:5000/api/pet-weights/`, data, {withCredentials: true} )
+    axios.post(`/api/pet-weights/`, data, {withCredentials: true} )
         .then(response=>{
             console.log(response);
         })
