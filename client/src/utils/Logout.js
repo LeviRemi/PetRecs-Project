@@ -1,5 +1,8 @@
 import axios from "axios";
 import Cookies from "js-cookie";
+import {useHistory} from "react-router";
+import React from "react";
+import HomePage from "../pages/HomePage";
 
 function Logout() {
 
@@ -15,10 +18,11 @@ function Logout() {
     // Destroy cookie
     Cookies.remove('sessionId');
 
-    // Refresh page
-    setTimeout(function() {
-        window.location.reload();
-    }, 100);
+    history.push("/");
+
+    return (
+        <div><HomePage /></div>
+    )
 
 }
 
