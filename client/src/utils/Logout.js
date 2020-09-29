@@ -5,6 +5,8 @@ import React from "react";
 import HomePage from "../pages/HomePage";
 
 function Logout() {
+    
+    const history = useHistory();
 
     // Destroy session
     axios.get("/api/sessions/destroy", { withCredentials: true })
