@@ -8,6 +8,9 @@ function authenticate(req, res, next) {
     }
     if (!req.session || !req.session.user) {
         const err = new Error("You shall not pass");
+        console.log("End Error--------------\n");
+        console.log("Session: "+req.session);
+        console.log("\nUser: "+req.session.user);
         err.statusCode = 401;
         next(err);
     }

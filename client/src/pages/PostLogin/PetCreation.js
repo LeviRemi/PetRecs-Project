@@ -16,7 +16,7 @@ function PetCreation() {
     const [speciesList, setSpeciesList] = useState([]);
 
     function fetchSpeciesList() {
-        axios.get(`http://petrecs.herokuapp.com/api/species`, {withCredentials: true} )
+        axios.get(`/api/species`, {withCredentials: true} )
             .then(response=>{
                 setSpeciesList(response.data);
             })
@@ -34,7 +34,7 @@ function PetCreation() {
         let bod = data.petBirthdate;
 
 
-        axios.post('http://petrecs.herokuapp.com/api/pets/', {
+        axios.post('/api/pets/', {
             SpeciesId: data.petSpecies,
             BreedId: "599", /*the null breed (id: 599) is default*/
             PetName: data.petName,
