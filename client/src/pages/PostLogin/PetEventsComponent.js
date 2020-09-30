@@ -1,6 +1,6 @@
 // PetEventsComponent.js
 
-import React, { Component, useEffect } from 'react';
+import React, { Component } from 'react';
 import axios from 'axios';
 
 import moment from 'moment';
@@ -9,8 +9,9 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import Table from 'react-bootstrap/Table';
 import Modal from 'react-bootstrap/Modal';
+import Swal from "sweetalert2";
+import {useHistory} from "react-router";
 
 import MaterialTable, {MTableToolbar} from "material-table";
 
@@ -47,16 +48,29 @@ export default class PetEventsComponent extends Component {
   updateStateEventId(buttonEventId) { this.setState({ EventId: buttonEventId }); }
   
   deleteEvent = async (EventId) => {
-    if (window.confirm("Are you sure you want to delete this event?")) {
-      axios.delete(`/api/pet-events/` + EventId, {withCredentials: true} )
-        .then(response=>{
-          //this.setState({events: response.data});
-          console.log("EventId " + EventId + " deleted sucessfully.");
-        })
-        .catch((error) => {
-          console.log(error);
-        })
-      }
+      Swal.fire({
+        title: 'Are you sure you want to delete this event?',
+        showDenyButton: true,
+        showCancelButton: true,
+        showConfirmButton: false,
+        denyButtonText: `Delete`,
+    }).then((result) => {
+        // User selects "delete"
+        if (result.isDenied) {
+            axios.delete(`/api/pet-events/` + EventId, {withCredentials: true} )
+            .then(response=>{
+              //this.setState({events: response.data});
+              console.log("EventId " + EventId + " deleted sucessfully.");
+              Swal.fire('Success!', 'This event has been deleted', 'success').then(function() {
+                PetEventsComponent.location.reload();
+              });
+            })
+            .catch((error) => {
+              console.log(error);
+              Swal.fire('Oops...', "You do not have permission to delete this event", 'error');
+            })
+        }
+    })
   };
 
   componentDidMount() {
@@ -81,28 +95,6 @@ export default class PetEventsComponent extends Component {
     else if (TypeId === 7) { stringType = "Other"; } 
 
     return stringType;
-  }
-
-  renderTableData() {
-    return this.state.events.map((event, index) => {
-      const { EventId, EventTypeId, EventDescription, Date } = event
-      return (
-        <tr key={EventId}>
-          <td>{this.eventTypeIdToString(EventTypeId)}</td>
-          <td>{moment(Date).format("MM/DD/YYYY")}</td>
-          <td>{EventDescription}</td>
-          <td>
-            <Button size="sm" variant="info" onClick={() => {
-                this.updateStateEventId(EventId);
-                this.handleShowUpdate();
-             }}>
-                &#x270E;
-            </Button>
-            </td>
-          <td><Button size="sm" variant="danger" onClick={ () => { this.deleteEvent(EventId)}}>&#x2716;</Button></td>
-        </tr>
-      )
-    })
   }
 
   render() {
@@ -194,7 +186,7 @@ export default class PetEventsComponent extends Component {
 class AddEventComponent extends Component {
   constructor(props) {
     super();
-    this.state = { EventTypeId: 0,
+    this.state = { EventTypeId: 1,
                    PetId: props.petid,
                    EventDescription: "",
                    Date: ''}
@@ -228,6 +220,7 @@ class AddEventComponent extends Component {
             console.log(response);
         })
         .catch((error) => {
+            console.log(data);
             console.log(error);
         })
   }
@@ -241,6 +234,7 @@ class AddEventComponent extends Component {
                 <Form.Group controlId="formEventType">
                 <Form.Label>Event Type</Form.Label>
                 <Form.Control name="eventTypeId" as="select"
+                              value="1"
                               onChange={this.handleEventTypeIdChange}>
                   <option value="1">Medical</option>
                   <option value="2">Grooming</option>
