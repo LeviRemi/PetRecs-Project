@@ -12,7 +12,7 @@ function Header() {
             <Row>
             <Col sm="auto">
             <span className="mainPageHeaderTitle">
-                &nbsp;&nbsp;&nbsp;&nbsp; Pet<span className="recsColor">Recs</span>
+                &nbsp;&nbsp;&nbsp;&nbsp; <span className="petTitle">Pet</span><span className="recsTitle">Recs</span>
             </span>
             </Col>
             <Col>

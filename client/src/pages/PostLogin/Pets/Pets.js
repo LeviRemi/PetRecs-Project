@@ -42,7 +42,9 @@ export default class Pets extends Component {
         <div>
           <Header />
         </div>
-      
+
+        <div className="petsAccentBar"></div>
+    
         <div className="fullPageContainer">
           <div className="mainContent">
             <Container fluid>

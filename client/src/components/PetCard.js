@@ -51,16 +51,15 @@ function PetCard(props) {
     return (
         <div className="petProfileCard">
             <Row>
-                <Col md={1}>
-                    <Link to="/Pets">
+                <Col md="1">
+                <Link to="/Pets">
                         <button className="back-btn-petprofile-nav">
-                            &lt;Back
+                        &#x2b9c;
                         </button>
                     </Link>
                 </Col>
-                <Col md="1">
-                </Col>
                 <Col md="auto">
+                    
                     <PetCardImage {...{PetId: petprofile.PetId, ProfileUrl: petprofile.ProfileUrl}}/>
                 </Col>
                 <Col md="auto">

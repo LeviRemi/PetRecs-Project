@@ -154,7 +154,6 @@ these styles are pre-login */
   left: 0;
   width: 100%;
   overflow: hidden;
-  background: rgb(255,255,255);
   background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(232,234,245,1) 50%, rgba(230,236,255,1) 100%);
 }
 
@@ -181,12 +180,8 @@ these styles are post-login */
 }
 
 .mainPageHeaderItem {
-  padding: 0% 0%;
-  margin: auto auto;
-  font-size: 20px;
+  margin: 0px;
   color: white;
-  text-align: right;
-  justify-content: right;
   vertical-align: middle;
   background-color: rgba(0, 150, 40, 0);
 }
@@ -200,15 +195,21 @@ these styles are post-login */
   background-color: rgba(0, 150, 40, 0);
 }
 
-.recsColor {
+.petTitle {
+  font-weight: 100;
+  font-size: 23px;
+}
+
+.recsTitle {
   color: #3d72db;
   font-weight: 600;
+  font-size: 24px;
 }
 
 .btn-mainpage-header {
   color: white;
   background-color: rgba(0, 0, 0, 0);
-  padding: 0px 16px;
+  padding: 5px 16px;
   font-size: 16px;
   vertical-align: middle;
   border: none !important;
@@ -216,7 +217,7 @@ these styles are post-login */
 }
 
 .btn-mainpage-header:hover {
-  color:  #3d72db;;
+  color:  #3d72db;
   transition: 0.1s;
 }
 
@@ -238,6 +239,12 @@ these styles are post-login */
   text-align: center;
   padding: 0px 0px 2px 0px;
   vertical-align: middle;
+}
+
+.petsAccentBar {
+  background: #3d72db;
+  vertical-align: middle;
+  height: 6px;
 }
 
 .petProfileCard {
@@ -306,14 +313,26 @@ these styles are post-login */
 }
 
 .back-btn-petprofile-nav {
-  background-color: rgba(57, 97, 207, 0);
-  font-size: 12px;
+  background-color: rgba(57, 97, 207, 100);
+  margin: 15px 4px;
+  width: 28px;
+  height: 28px;
+  font-size: 18px;
   font-weight: 400;
-  height: 56px;
+  
   border: none !important;
   outline: none !important;
   color: white;
-  text-align: left;
+  border-radius: 100px;
+
+  transition: 0.23s;
+}
+
+.back-btn-petprofile-nav:hover {
+  color: white;
+  background-color: #3d72db;
+  transition: 0.23s;
+  border-radius: 100px;
 }
 
 .petProfileBody {
