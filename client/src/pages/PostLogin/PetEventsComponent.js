@@ -62,7 +62,7 @@ export default class PetEventsComponent extends Component {
               //this.setState({events: response.data});
               console.log("EventId " + EventId + " deleted sucessfully.");
               Swal.fire('Success!', 'This event has been deleted', 'success').then(function() {
-                PetEventsComponent.location.reload();
+                window.location.reload();
               });
             })
             .catch((error) => {
@@ -137,7 +137,7 @@ export default class PetEventsComponent extends Component {
             ]}
             options={{
               actionsColumnIndex: -1,
-              pageSize: 10
+              pageSize: 10,
             }}
             >
             </MaterialTable>
@@ -217,12 +217,16 @@ class AddEventComponent extends Component {
 
     axios.post(`/api/pet-events/`, data, {withCredentials: true} )
         .then(response=>{
-            console.log(response);
-        })
-        .catch((error) => {
-            console.log(data);
-            console.log(error);
-        })
+          console.log(response);
+          console.log("Event added successfully.");
+              Swal.fire('Success!', 'This event has been added', 'success').then(function() {
+                window.location.reload();
+              });
+            })
+            .catch((error) => {
+              console.log(error);
+              Swal.fire('Oops...', "You do not have permission to create this event", 'error');
+            })
   }
 
   render() {
@@ -311,23 +315,28 @@ class UpdateEventComponent extends Component {
   }
 
   handleUpdate = event => {
+    
     event.preventDefault();
 
-  const data = {
-      EventTypeId: this.state.EventTypeId,
-      PetId: this.state.PetId,
-      EventDescription: this.state.EventDescription,
-      Date: this.state.Date,
-    };
+    const data = {
+        EventTypeId: this.state.EventTypeId,
+        PetId: this.state.PetId,
+        EventDescription: this.state.EventDescription,
+        Date: this.state.Date,
+      };
 
-  axios.put(`/api/pet-events/` + this.state.EventId, data, {withCredentials: true} )
-        .then(response=>{
-            console.log(response);
-        })
-        .catch((error) => {
-            console.log(error);
-        })
-  }
+    axios.put(`/api/pet-events/` + this.state.EventId, data, {withCredentials: true} )
+          .then(response=>{
+            console.log("Event added successfully.");
+                Swal.fire('Success!', 'This event has been updated', 'success').then(function() {
+                  window.location.reload();
+                });
+              })
+              .catch((error) => {
+                console.log(error);
+                Swal.fire('Oops...', "You do not have permission to update this event", 'error');
+              })
+      }
 
   render() {
     return (
