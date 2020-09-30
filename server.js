@@ -1,7 +1,9 @@
 const express = require('express');
-const bodyParser = require("body-parser");
 const cors = require("cors");
 const path = require('path');
+const authenticate = require('./middleware/authenticate');
+const session = require("./middleware/session");
+//const routes = require('./routes');
 
 const app = express();
 
@@ -10,40 +12,32 @@ const app = express();
 // requested from another domain outside the domain from which the first resource was served.
 // This basically means our APIs are on a secret domain that clients cannot access, but the application itself can.
 const corsOptions = { // was var
-    origin: "http://localhost:5001"
+    origin: (process.env.NODE_ENV === "production")? "https://petrecs.herokuapp.com/" : "http://localhost:3000",
+    credentials: true
 };
 app.use(cors(corsOptions));
 
-// parse requests of content-type - application/json
-app.use(express.json());
+// Makes it more difficult for users to see we are running express. Helps against targeted attacks.
+app.disable('x-powered-by');
 
-// parse requests of content-type - application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: true }));
+// Express middleware that allows POSTing data
+// -parse requests of content-type - application/json
+app.use(express.json());
+// -parse requests of content-type - application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: true }));
 
 const db = require("./models");
 
-// Create the tables if they do not exist (and do nothing if they already exist)
-db.sequelize.sync();
+// if you run behind a proxy
+//app.set('trust proxy', 1);
 
-// This is just a test. Should be changed to serve up the homepage.
-app.get("/", (req, res) => {
-    res.json({message: "Welcome to PetRecs"});
-})
+// Configure Session
+app.use(session);
 
-// Serve the static files from the React app
-app.use(express.static(path.join(__dirname, '/client/build/')));
+// Check if user is authenticated or not
+app.use(authenticate);
 
-// An api endpoint that returns a short list of items
-/*app.get('/', (req,res) => {
-    var list = ["item1", "item2", "item3"];
-    res.json(list);
-    console.log('Sent list of items');
-});*/
-
-// Handles any requests that don't match the ones above
-/*app.get('*', (req,res) =>{
-    res.sendFile(path.join(__dirname+'/client/build/index.html'));
-});*/
+//app.use(routes);
 
 const apiPet = require('./routes/pet.routes');
 app.use('/api/pets', apiPet);
@@ -54,8 +48,40 @@ app.use('/api/pet-weights', apiPetWeight);
 const apiAccount = require('./routes/account.routes');
 app.use('/api/accounts', apiAccount);
 
+const apiPetEvent = require('./routes/pet-event.routes');
+app.use('/api/pet-events', apiPetEvent);
+
+const apiSession = require('./routes/session.routes');
+app.use('/api/sessions', apiSession);
+
+const apiSpecies = require('./routes/species.routes');
+app.use('/api/species', apiSpecies);
+
+const apiFileUpload = require('./routes/firebase.routes');
+app.use('/api/upload', apiFileUpload);
+
+const apiPetRecord = require('./routes/pet-record.routes');
+app.use('/api/pet-records', apiPetRecord);
+
+const apiMedication = require('./routes/medication.routes');
+app.use('/api/medications', apiMedication);
+
+if (process.env.NODE_ENV === "production") {
+    // Serve the static files from the React app
+    app.use(express.static(path.join(__dirname,'client', 'build')));
+    
+    app.get("/*", (req, res) => {
+        res.sendFile(path.join('client','build', 'index.html'), {root: __dirname});
+    })
+}
+
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-    console.log(`App is listening on port ${PORT}.`);
+
+// Create the tables if they do not exist (and do nothing if they already exist)
+db.sequelize.sync().then(() => {
+    // Only start the server if a connection to the DB has been made
+    app.listen(PORT, () => {
+        console.log(`App is listening on port ${PORT}.`);
+    })
 })
 

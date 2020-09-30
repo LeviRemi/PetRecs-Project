@@ -9,12 +9,14 @@ module.exports = (sequelize) => {
         },
         SpeciesId: {
             type: DataTypes.INTEGER,
+            allowNull: false
         },
         BreedId: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.INTEGER
         },
         PetName: {
-            type: DataTypes.STRING(45)
+            type: DataTypes.STRING(45),
+            allowNull: false
         },
         PetGender: {
             type: DataTypes.STRING(2)
@@ -36,6 +38,9 @@ module.exports = (sequelize) => {
         },
         CareNotes: {
             type: DataTypes.STRING(300)
+        },
+        ProfileUrl: {
+            type: DataTypes.STRING(100)
         }
     }, {
         // creates a model named Pet, pointing to a table named Pet

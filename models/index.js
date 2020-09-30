@@ -21,6 +21,13 @@ db.pet = require("./pet.model.js")(sequelize, Sequelize);
 db.species = require("./species.model")(sequelize, Sequelize);
 db.breed = require("./breed.model")(sequelize, Sequelize);
 db.account = require("./account.model")(sequelize, Sequelize);
-db.petweight = require("./pet-weight.model")(sequelize, Sequelize);
+db.petWeight = require("./pet-weight.model")(sequelize, Sequelize);
+db.petEvent = require("./pet-event.model")(sequelize, Sequelize);
+db.petRecord = require("./pet-record.model")(sequelize, Sequelize);
+db.petContact = require("./pet-contact.model")(sequelize, Sequelize);
+db.eventType = require("./event-type.model")(sequelize, Sequelize);
+db.accountType = require("./account-type.model")(sequelize, Sequelize);
+db.session = require("./session.model")(sequelize, Sequelize);
+db.medication = require("./medication.model")(sequelize, Sequelize);
 
 module.exports = db;

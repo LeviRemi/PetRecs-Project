@@ -2,6 +2,8 @@ const petweights = require("../controllers/pet-weight.controller.js");
 
 const router = require("express").Router();
 
+// Root: "/api/pet-weights"
+
 // Create a new pet weight
 router.post("/", petweights.create);
 

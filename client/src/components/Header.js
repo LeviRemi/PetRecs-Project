@@ -1,16 +1,43 @@
 // Header.js
 
 import React from 'react'
-import Breadcrumb from 'react-bootstrap/Breadcrumb';
+import { Link } from 'react-router-dom';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
 
 function Header() {
     return (
-        <div>
-            <h1>PetRecs</h1>
-            <Breadcrumb>
-                <Breadcrumb.Item as="h5">Pets</Breadcrumb.Item>
-                <Breadcrumb.Item as="h2" href="#">My Account</Breadcrumb.Item>
-            </Breadcrumb>
+        <div className="mainPageHeaderBar">
+            <div className="mainPageHeader">
+            <Row>
+            <Col sm="auto">
+            <span className="mainPageHeaderTitle">
+                &nbsp;&nbsp;&nbsp;&nbsp; Pet<span className="recsColor">Recs</span>
+            </span>
+            </Col>
+            <Col>
+            </Col>
+            <Col md="auto">
+            <span className="mainPageHeaderItem">
+                <Link to="/pets">
+                    <button className="btn-mainpage-header">
+                        Pets
+                    </button>
+                </Link>
+                <Link to="/account">
+                    <button className="btn-mainpage-header">
+                        Account
+                    </button>
+                </Link>
+                <Link to="/logout">
+                    <button className="btn-mainpage-header">
+                        Log Out
+                    </button>
+                </Link>
+            </span>
+            </Col>
+            </Row>
+        </div>
         </div>
     )
 }
