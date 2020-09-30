@@ -40,6 +40,10 @@ function PetCard(props) {
         ageYears = moment().diff(date, 'years') + 'y';
     }
 
+    else if (moment().diff(date, 'month') < 1 ) {
+        ageYears = moment().diff(date, 'days') + 'd';
+    }
+
     else {
         ageYears = moment().diff(date, 'months') + 'm';
     }
