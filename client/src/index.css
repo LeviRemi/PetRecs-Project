@@ -92,7 +92,7 @@ these styles are pre-login */
   margin: auto;
   height: 36px;
   width: 30%;
-  text-align: left;
+  /*text-align: left;*/
 }
 
 .loginRegPageHeader {
