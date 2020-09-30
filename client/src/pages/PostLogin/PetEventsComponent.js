@@ -315,9 +315,8 @@ class UpdateEventComponent extends Component {
                 <Form.Label>Event Type</Form.Label>
                 <Form.Control name="eventTypeId" as="select"
                               onChange={this.handleEventTypeIdChange}
-                              defaultValue={{
-                                value: this.state.EventTypeId
-                              }} >
+                              value={this.state.EventTypeId}
+                               >
                   <option value="1">Medical</option>
                   <option value="2">Grooming</option>
                   <option value="3">Fitness</option>
@@ -343,7 +342,7 @@ class UpdateEventComponent extends Component {
               <Col>
                 <Form.Group controlId="formEventDescription">
                     <Form.Label>Description</Form.Label>
-                    <Form.Control name="eventDescription" type="textarea" rows={5}
+                    <Form.Control name="eventDescription" type="textarea" as="textarea" rows={5}
                                   defaultValue={this.state.EventDescription}
                                   onChange={this.handleEventDescriptionChange}
                                   required/>
