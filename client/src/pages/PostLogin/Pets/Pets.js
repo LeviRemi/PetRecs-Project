@@ -16,18 +16,14 @@ import PetImage from '../../../components/PetImage.js'
 
 export default class Pets extends Component {
 
-    state = { pets: [], 
-              account: {},
+    state = { pets: [],
               petImages: [] }
 
     componentDidMount() {
-      Promise.all([
-        axios.get("/api/pets/", { withCredentials: true }), 
-        axios.get("/api/accounts/1/", { withCredentials: true })
-      ]).then(([petResponse, accountResponse]) => {
+        axios.get("/api/pets/", { withCredentials: true })
+            .then((petResponse) => {
           const pets = petResponse.data;
-          const account = accountResponse.data;
-          this.setState({  pets, account });
+          this.setState({ pets });
         })
         .catch((error) => {
           console.log(error);
@@ -35,7 +31,6 @@ export default class Pets extends Component {
     }
 
     render() {
-    const account = this.state.account;
     return (
 
       <div className="fontWrap">
