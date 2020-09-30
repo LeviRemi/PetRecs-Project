@@ -51,8 +51,7 @@ function PetCard(props) {
                         </button>
                     </Link>
                 </Col>
-                <Col md="3">
-                    <FileUpload value={petprofile.PetId}/>
+                <Col md="1">
                 </Col>
                 <Col md="auto">
                     <PetCardImage {...{PetId: petprofile.PetId, ProfileUrl: petprofile.ProfileUrl}}/>
