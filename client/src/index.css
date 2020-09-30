@@ -176,21 +176,16 @@ these styles are post-login */
   margin: 0 auto;
   position: relative;
   text-align: center;
-  padding: 2px 0px 2px 0px;
 }
 
 .mainPageHeaderItem {
-  margin: 0px;
   color: white;
   vertical-align: middle;
   background-color: rgba(0, 150, 40, 0);
 }
 
 .mainPageHeaderTitle {
-  text-align: left;
   justify-content: left;
-  padding: 2px 0px;
-  font-size: 22px;
   color: white;
   background-color: rgba(0, 150, 40, 0);
 }

@@ -11,7 +11,6 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Modal from 'react-bootstrap/Modal';
 import Swal from "sweetalert2";
-import {useHistory} from "react-router";
 
 import MaterialTable, {MTableToolbar} from "material-table";
 
@@ -38,13 +37,9 @@ export default class PetEventsComponent extends Component {
   }
 
   handleCloseAdd() { this.setState({ showAdd: false }); }
-
   handleShowAdd() { this.setState({ showAdd: true }); }
-
   handleCloseUpdate() { this.setState({ showUpdate: false }); }
-
   handleShowUpdate() { this.setState({ showUpdate: true }); }
-
   updateStateEventId(buttonEventId) { this.setState({ EventId: buttonEventId }); }
   
   deleteEvent = async (EventId) => {
@@ -59,7 +54,6 @@ export default class PetEventsComponent extends Component {
         if (result.isDenied) {
             axios.delete(`/api/pet-events/` + EventId, {withCredentials: true} )
             .then(response=>{
-              //this.setState({events: response.data});
               console.log("EventId " + EventId + " deleted sucessfully.");
               Swal.fire('Success!', 'This event has been deleted', 'success').then(function() {
                 window.location.reload();
@@ -336,7 +330,7 @@ class UpdateEventComponent extends Component {
                 console.log(error);
                 Swal.fire('Oops...', "You do not have permission to update this event", 'error');
               })
-      }
+    }
 
   render() {
     return (
