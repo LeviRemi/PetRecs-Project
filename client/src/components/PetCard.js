@@ -34,13 +34,20 @@ function PetCard(props) {
     }
 
     let date = (petprofile.PetAgeYear + '-' + petprofile.PetAgeMonth + ' ' +petprofile.PetAgeDay);
-    let ageYears = moment().diff(date, 'years');
+    let ageYears = 10;
+
+    if ( moment().diff(date, 'year') >= 1) {
+        ageYears = moment().diff(date, 'years') + 'y';
+    }
+
+    else {
+        ageYears = moment().diff(date, 'months') + 'm';
+    }
 
     useEffect(() => {
         fetchPetProfile();
     }, [])
     
-
     return (
         <div className="petProfileCard">
             <Row>
@@ -58,14 +65,9 @@ function PetCard(props) {
                 </Col>
                 <Col md="auto">
                     <div className="petCardInfo">
-                        <Row>
-                            <Col md="auto">
-                                &#128062; {petprofile.PetName} <br />
-                                &#9892; {petprofile.PetGender} &nbsp;&nbsp;&nbsp;
-                                &#128197; {ageYears} y/o       &nbsp;&nbsp;&nbsp;
-                            </Col>
-                        </Row>
-                        
+                                &#128062; {petprofile.PetName} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                &#9892; {petprofile.PetGender} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                &#128197; {ageYears} &nbsp;&nbsp;&nbsp;
                     </div>
                 </Col>
             </Row>
