@@ -12,6 +12,14 @@ import Row from 'react-bootstrap/Row';
 import Table from 'react-bootstrap/Table';
 import Modal from 'react-bootstrap/Modal';
 
+import MaterialTable, {MTableToolbar} from "material-table";
+
+// MT Icons
+import tableIcons from '../../utils/TableIcons.js'
+import AddRounded from '@material-ui/icons/AddRounded';
+import UpdateRounded from '@material-ui/icons/UpdateRounded';
+import DeleteRounded from '@material-ui/icons/DeleteRounded';
+
 export default class PetEventsComponent extends Component {
   constructor(props) {
     super();
@@ -100,25 +108,47 @@ export default class PetEventsComponent extends Component {
   render() {
   return (
       <div className="petProfileBody nopadding">
-        <h2> Events </h2>
-        <div>
-          <Table size="sm">
-            <thead>
-              <tr>
-                <th>Type</th>
-                <th>Date</th>
-                <th>Description</th>
-                <th>Update</th>
-                <th>Delete</th>
-              </tr>
-            </thead>
-            <tbody>
-              {this.renderTableData()}
-            </tbody>
-          </Table>
-        </div>
-        <div>
-          <Button onClick={this.handleShowAdd} variant="outline-dark">Add Event</Button>
+        <div style={{ maxWidth: '100%'}}>
+          <MaterialTable
+            columns={[
+              { title: 'Type', field: 'EventTypeId',
+                lookup:  { 1: 'Medical', 2: 'Grooming',
+                           3: 'Fitness', 4: 'Food',
+                           5: 'Potty',   6: 'Behavior',
+                           7: 'Other' }},
+              { title: 'Date', field: 'Date', type: 'datetime'},
+              { title: 'Description', field: 'EventDescription'}
+            ]}
+            data={this.state.events}
+            title="Pet Events"
+            icons={tableIcons}
+            actions={[
+              {
+                icon: UpdateRounded,
+                tooltip: 'Update Event',
+                onClick: (event, rowData) => {
+                  this.updateStateEventId(rowData.EventId);
+                  this.handleShowUpdate();
+               }
+              },
+              {
+                icon: DeleteRounded,
+                tooltip: 'Delete Event',
+                onClick: (event, rowData) => this.deleteEvent(rowData.EventId)
+              },
+              {
+                icon: AddRounded,
+                tooltip: 'Add Event',
+                isFreeAction: true,
+                onClick: (event) => this.handleShowAdd()
+              }
+            ]}
+            options={{
+              actionsColumnIndex: -1,
+              pageSize: 10
+            }}
+            >
+            </MaterialTable>
           <Modal
                 show={this.state.showAdd}
                 onHide={this.handleCloseAdd}
