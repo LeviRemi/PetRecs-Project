@@ -38,9 +38,13 @@ function PetAboutComponent(props) {
                 axios.get(`/api/species/${response.data.SpeciesId}`, {withCredentials: true})
                     .then(response=>{
                         setPetSpecies(response.data);
-                    });
-                    document.getElementById("petProfileBodyId").hidden = false;
-                    manuallyDecrementPromiseCounter();
+                        document.getElementById("petProfileBodyId").hidden = false;
+                        manuallyDecrementPromiseCounter();
+                    })
+                    .catch(err=> {
+                        console.log(err);
+                        manuallyDecrementPromiseCounter();
+                    })
             })
             .catch(err=> {
                 Swal.fire('Oops...', "A pet with this ID does not exist", 'error');
