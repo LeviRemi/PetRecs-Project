@@ -41,35 +41,34 @@ export default class Pets extends Component {
         <div className="petsAccentBar"></div>
     
         <div className="fullPageContainer">
-          <div className="mainContent">
             <Container fluid>
               <div className="mainPageBody nopadding">
-                  <div className="mainPageContents">
-                    { this.state.pets.map(pet => 
-                    <Link id="PetLink" to={"/Pets/" + pet.PetId} key={pet.PetId}>
-                      <PetImage {...{PetId: pet.PetId, ProfileUrl: pet.ProfileUrl}}/>
-                        <div>
-                            <p className="NameText">{pet.PetName}</p> 
+                  <div style={{display: "flex", flexWrap: "wrap", justifyContent: "start", alignItems: "baseline"}} className="mainPageContents">
+                    { this.state.pets.map(pet =>
+                        <div id="PetContainer">
+                            <Link id="PetLink" to={"/Pets/" + pet.PetId} key={pet.PetId}>
+                                <PetImage {...{PetId: pet.PetId, ProfileUrl: pet.ProfileUrl}}/>
+                            </Link>
+                            <div className="text-center">
+                                <p style={{width: "129px", margin: "auto"}} className="NameText">{pet.PetName}</p>
+                            </div>
                         </div>
-                    </Link>
                     )}
-                    <Link id="PetLink" to={"/Pets/New"}>
-                      <div id="AddPetContainer">
-                        <div id="AddPetCircle">
-                          <img className="AddPetImage"></img>
-                          <p id="AddPetText">Add Pet<br />< FontAwesomeIcon id="PlusIcon" icon="plus" size="2x" /></p>
-                        </div>
-                      </div>
-                    </Link>
+                    <div id="PetContainer">
+                        <Link id="PetLink" to={"/Pets/New"}>
+                            <div id="AddPetCircle">
+                              <img className="AddPetImage"></img>
+                              <p id="AddPetText">Add Pet<br />< FontAwesomeIcon id="PlusIcon" icon="plus" size="2x" /></p>
+                            </div>
+                        </Link>
+                    </div>
                   </div>
               </div>
             </Container>
-
-            <div className="mainPageFooter">
-              <Footer />
-            </div>
-          </div>
       </div>
+          <div className="mainPageFooter">
+              <Footer />
+          </div>
     </div>   
     )
   }
