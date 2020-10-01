@@ -23,6 +23,7 @@ import {Redirect} from 'react-router-dom';
 
 import FileUpload from '../../utils/FileUpload/FileUpload.js';
 import NotFound from "../NotFound";
+import LoadingIndicator from '../../utils/LoadingIndicator.js'
 
 function PetScene() {
   console.log("'PetScene' loaded");
@@ -46,7 +47,7 @@ function PetScene() {
         </Row>
       </div>
       </div>
-    
+    <LoadingIndicator></LoadingIndicator>
     <div className="fullPageContainer">
       <div className="mainContent">
         <Route exact path='/Pets/:PetId/Records' component={(props)=>isUserLoggedIn()?<PetRecordsComponent {...props} /> : <Redirect to={"/"}/>} />

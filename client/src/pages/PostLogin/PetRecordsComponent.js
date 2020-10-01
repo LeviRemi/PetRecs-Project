@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 import axios from 'axios';
+import trackPromise, { manuallyDecrementPromiseCounter, manuallyIncrementPromiseCounter } from 'react-promise-tracker';
 
 import RecordUpload from '../../utils/FileUpload/RecordUpload.js';
 import MaterialTable, {MTableToolbar} from "material-table";
@@ -37,19 +38,23 @@ class PetRecordsComponent extends Component {
   }
 
   componentDidMount() {
+    manuallyIncrementPromiseCounter();
     axios.get(`/api/pet-records/pet/` + this.state.PetId, {withCredentials: true} )
       .then(response=>{
         this.setState({records: response.data});
         console.log(response.data);
+        document.getElementById("petRecordsBodyId").hidden=false;
+        manuallyDecrementPromiseCounter();
       })
       .catch((error) => {
           console.log(error);
+          manuallyDecrementPromiseCounter();
       })
   }
   
   render() {
   return (
-      <div className="petProfileBody nopadding">
+      <div id="petRecordsBodyId" className="petProfileBody nopadding" hidden='true'>
         <div style={{ maxWidth: '100%' }}>
           <MaterialTable
             columns={[

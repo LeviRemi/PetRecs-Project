@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 import axios from 'axios';
+import trackPromise, { manuallyDecrementPromiseCounter, manuallyIncrementPromiseCounter } from 'react-promise-tracker';
 
 import moment from 'moment';
 
@@ -68,13 +69,17 @@ export default class PetEventsComponent extends Component {
   };
 
   componentDidMount() {
+    manuallyIncrementPromiseCounter();
     axios.get(`/api/pet-events/pet/` + this.state.PetId, {withCredentials: true} )
       .then(response=>{
         this.setState({events: response.data});
+        document.getElementById("PetEventBodyId").hidden = false;
+        manuallyDecrementPromiseCounter();
         //console.log(response.data);
       })
       .catch((error) => {
         console.log(error);
+        manuallyDecrementPromiseCounter();
       })
   };
 
@@ -93,7 +98,7 @@ export default class PetEventsComponent extends Component {
 
   render() {
   return (
-      <div className="petProfileBody nopadding">
+      <div id="PetEventBodyId" className="petProfileBody nopadding" hidden="true">
         <div style={{ maxWidth: '100%'}}>
           <MaterialTable
             columns={[

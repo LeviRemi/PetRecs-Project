@@ -3,6 +3,7 @@
 import React, {useEffect, useState} from 'react';
 import PetImage, {PetCardImage, PetProfileImage} from "../../components/PetImage";
 import axios from "axios";
+import trackPromise, { manuallyDecrementPromiseCounter, manuallyIncrementPromiseCounter } from 'react-promise-tracker';
 
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -30,6 +31,7 @@ function PetAboutComponent(props) {
 
 
     function fetchPetProfile() {
+        manuallyIncrementPromiseCounter();
         axios.get(`/api/pets/${props.match.params.PetId}`, {withCredentials: true} )
             .then(response=>{
                 setPetprofile(response.data);
@@ -37,21 +39,28 @@ function PetAboutComponent(props) {
                     .then(response=>{
                         setPetSpecies(response.data);
                     });
+                    document.getElementById("petProfileBodyId").hidden = false;
+                    manuallyDecrementPromiseCounter();
             })
             .catch(err=> {
                 Swal.fire('Oops...', "A pet with this ID does not exist", 'error');
+                manuallyDecrementPromiseCounter();
                 history.push('/pets');
             })
     }
 
     function fetchSpeciesList() {
+        manuallyIncrementPromiseCounter();
         axios.get(`/api/species`, {withCredentials: true} )
             .then(response=>{
                 setSpeciesList(response.data);
+                manuallyDecrementPromiseCounter();
             })
             .catch(err=> {
                 console.log(err);
+                manuallyDecrementPromiseCounter();
             })
+            
     }
 
     useEffect(() => {
@@ -152,7 +161,7 @@ function PetAboutComponent(props) {
     }
 
     return (
-        <Container className="petProfileBody" style={{textAlign: "center"}}>
+        <Container id="petProfileBodyId" className="petProfileBody" style={{textAlign: "center"}} hidden='true'>
 
             <Modal
                 show={show}

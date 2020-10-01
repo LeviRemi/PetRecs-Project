@@ -22,7 +22,7 @@ export function PetCardImage(props) {
                 <img id={"ImageId" + props.PetId} src={props.ProfileUrl} className="PetCardImage"></img>
             </div>
         </div>
-    )
+    ) 
 }
 
 export function PetProfileImage(props) {
@@ -32,6 +32,7 @@ export function PetProfileImage(props) {
                 <img id={"ImageId" + props.PetId} src={props.ProfileUrl} className="PetImage"></img>
             </div>
         </div>
+        
     )
 }
 

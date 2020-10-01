@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 import axios from 'axios';
+import trackPromise, { manuallyDecrementPromiseCounter, manuallyIncrementPromiseCounter } from 'react-promise-tracker';
 
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import moment from 'moment';
@@ -49,7 +50,7 @@ export default class PetHealthComponent extends Component {
     
     return (
 
-      <div>
+      <div id="petHealthBodyId" hidden='true'>
         <Row>
           <Col>
           <MedsComponent petid={this.state.PetId}/>
@@ -96,12 +97,16 @@ class ViewWeightComponent extends Component {
   }
 
   componentDidMount() {
+    manuallyIncrementPromiseCounter();
     axios.get(`/api/pet-weights/pet/` + this.props.petid, {withCredentials: true} )
       .then(response=>{
         this.setState({data: response.data});
+        document.getElementById("petHealthBodyId").hidden = false;
+        manuallyDecrementPromiseCounter();
       })
       .catch((error) => {
           console.log(error);
+          manuallyDecrementPromiseCounter();
       })
   }
 
@@ -248,20 +253,24 @@ class MedsComponent extends Component {
   };
 
   componentDidMount() {
+    manuallyIncrementPromiseCounter();
     axios.get(`/api/medications/pet/` + this.state.PetId, {withCredentials: true} )
       .then(response=>{
         this.setState({medications: response.data});
         console.log(this.state.medications);
+        document.getElementById("petMedTableId").hidden=false;
+        manuallyDecrementPromiseCounter();
         //console.log(response.data);
       })
       .catch((error) => {
         console.log(error);
+        manuallyDecrementPromiseCounter();
       })
   };
 
   render(){
     return (
-      <div className="petProfileBody nopadding">
+      <div id="petMedTableId" className="petProfileBody nopadding" >
         <div style={{ maxWidth: '100%'}}>
         <MaterialTable
             columns={[
