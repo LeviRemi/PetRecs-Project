@@ -15,6 +15,7 @@ import Swal from "sweetalert2";
 import Spinner from "react-bootstrap/Spinner";
 import {useHistory} from "react-router";
 import Alert from "react-bootstrap/Alert";
+import FileUpload from "../../utils/FileUpload/FileUpload";
 
 function PetAboutComponent(props) {
     const history = useHistory();
@@ -22,14 +23,11 @@ function PetAboutComponent(props) {
     const [petSpecies, setPetSpecies] = useState('');
     const [show, setShow] = useState(false);
     const [showShare, setShowShare] = useState(false);
+    const [showUpload, setShowUpload] = useState(false);
     const [speciesList, setSpeciesList] = useState([]);
     const { register, handleSubmit, errors } = useForm();
     const [isLoading, setLoading] = useState({display: "none"});
 
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
-    const handleCloseShare = () => setShowShare(false);
-    const handleShowShare = () => setShowShare(true);
 
     function fetchPetProfile() {
         axios.get(`/api/pets/${props.match.params.PetId}`, {withCredentials: true} )
@@ -60,6 +58,13 @@ function PetAboutComponent(props) {
         fetchPetProfile();
         fetchSpeciesList();
     }, [])
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+    const handleCloseShare = () => setShowShare(false);
+    const handleShowShare = () => setShowShare(true);
+    const handleCloseUpload = () => setShowUpload(false);
+    const handleShowUpload = () => setShowUpload(true);
 
     const onSubmit = (data) => {
         setLoading({display: "initial"});
@@ -161,45 +166,53 @@ function PetAboutComponent(props) {
                 <Modal.Body>
 
                     <Form id="EditPetForm" onSubmit={handleSubmit(onSubmit)} className="loginRegForm">
-
-                        <Form.Group controlId="formPetName">
-                            <Form.Label>Name</Form.Label>
-                            <Form.Control name="petName" type="text" placeholder="Pet name" defaultValue={petprofile.PetName}
-                                          ref={register({ required: true,
-                                              maxLength: {value: 45, message: "Name must be under 45 characters in length"}
-                                          })}/>
-                            <div className="text-danger">{errors.petName && (errors.petName.message || "Name is required")}</div>
-                        </Form.Group>
-
-                        <Form.Group controlId="formPetSpecies">
-                            <Form.Label>Species</Form.Label>
-                            <Form.Control name="petSpecies" as="select" defaultValue={petprofile.SpeciesId} ref={register()}
-                            >
-                                {
-                                    speciesList.map((option, label) => {
-                                        return (<option value={option.SpeciesId}>{option.SpeciesName}</option>)
-                                    })
-                                }
-                            </Form.Control>
-                        </Form.Group>
-
-                        <Form.Group controlId="formPetGender">
-                            <Form.Label>Gender</Form.Label>
-                            <Form.Control name="petGender" as="select"  defaultValue={petprofile.PetGender}  ref={register()}
-                            >
-                                <option value="F">Female</option>
-                                <option value="M">Male</option>
-                                <option value="NA">Unknown</option>
-                            </Form.Control>
-                        </Form.Group>
-
-                        <Form.Group controlId="formPetBirthdate">
-                            <Form.Label>Birthdate</Form.Label>
-                            <Form.Control name="petBirthdate" type="date"
-                                          defaultValue={petprofile.PetAgeYear + "-"
-                                          + String(petprofile.PetAgeMonth).padStart(2, '0') + "-"
-                                          + String(petprofile.PetAgeDay).padStart(2, '0') } ref={register()}/>
-                        </Form.Group>
+                        <Form.Row>
+                            <Col>
+                                <Form.Group controlId="formPetName">
+                                    <Form.Label>Name</Form.Label>
+                                    <Form.Control name="petName" type="text" placeholder="Pet name" defaultValue={petprofile.PetName}
+                                                  ref={register({ required: true,
+                                                      maxLength: {value: 45, message: "Name must be under 45 characters in length"}
+                                                  })}/>
+                                    <div className="text-danger">{errors.petName && (errors.petName.message || "Name is required")}</div>
+                                </Form.Group>
+                            </Col>
+                            <Col>
+                                <Form.Group controlId="formPetSpecies">
+                                    <Form.Label>Species</Form.Label>
+                                    <Form.Control name="petSpecies" as="select" defaultValue={petprofile.SpeciesId} ref={register()}
+                                    >
+                                        {
+                                            speciesList.map((option, label) => {
+                                                return (<option key={label} value={option.SpeciesId}>{option.SpeciesName}</option>)
+                                            })
+                                        }
+                                    </Form.Control>
+                                </Form.Group>
+                            </Col>
+                        </Form.Row>
+                        <Form.Row>
+                            <Col>
+                                <Form.Group controlId="formPetGender">
+                                    <Form.Label>Gender</Form.Label>
+                                    <Form.Control name="petGender" as="select"  defaultValue={petprofile.PetGender}  ref={register()}
+                                    >
+                                        <option value="F">Female</option>
+                                        <option value="M">Male</option>
+                                        <option value="NA">Unknown</option>
+                                    </Form.Control>
+                                </Form.Group>
+                            </Col>
+                            <Col>
+                                <Form.Group controlId="formPetBirthdate">
+                                    <Form.Label>Birthdate</Form.Label>
+                                    <Form.Control name="petBirthdate" type="date"
+                                                  defaultValue={petprofile.PetAgeYear + "-"
+                                                  + String(petprofile.PetAgeMonth).padStart(2, '0') + "-"
+                                                  + String(petprofile.PetAgeDay).padStart(2, '0') } ref={register()}/>
+                                </Form.Group>
+                            </Col>
+                        </Form.Row>
 
                         <Form.Group controlId="formPetAllergy">
                             <Form.Label>Allergy Notes</Form.Label>
@@ -294,15 +307,37 @@ function PetAboutComponent(props) {
 
             </Modal>
 
+            <Modal
+                show={showUpload}
+                onHide={handleCloseUpload}
+                backdrop="static"
+                keyboard={false}
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Update Profile Picture</Modal.Title>
+                </Modal.Header>
+
+                <FileUpload value={petprofile.PetId} closeModal={handleCloseUpload}/>
+
+
+            </Modal>
+
             <Row>
                 <Col></Col>
                 <Col>
                     <PetProfileImage {...{PetId: petprofile.PetId, ProfileUrl: petprofile.ProfileUrl}}/>
+                    <Button onClick={handleShowUpload} style={{borderRadius: "50%", position: "absolute", bottom: "5px", backgroundColor: "rgba(219,219,219,0.6)", right: "85px", zIndex: "5"}} variant="light"><svg width="1.5em" height="1.5em" viewBox="0 0 16 16" className="bi bi-camera-fill" fill="currentColor"
+                                 xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10.5 8.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
+                        <path fillRule="evenodd"
+                              d="M2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4H2zm.5 2a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1zm9 2.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0z"/>
+                    </svg></Button>
+
                 </Col>
                 <Col style={{textAlign: "right"}}>
                     <Button onClick={handleShowShare} variant="none" style={{top: "0%"}} >
                         <svg fill="none" viewBox="0 0 24 24" height="24" width="24" xmlns="http://www.w3.org/2000/svg">
-                            <path xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" d="M11.2929 2.29289C11.6834 1.90237 12.3166 1.90237 12.7071 2.29289L15.7071 5.29289C16.0976 5.68342 16.0976 6.31658 15.7071 6.70711C15.3166 7.09763 14.6834 7.09763 14.2929 6.70711L13 5.41421V15C13 15.5523 12.5523 16 12 16C11.4477 16 11 15.5523 11 15V5.41421L9.70711 6.70711C9.31658 7.09763 8.68342 7.09763 8.29289 6.70711C7.90237 6.31658 7.90237 5.68342 8.29289 5.29289L11.2929 2.29289ZM4 11C4 9.89543 4.89543 9 6 9H8C8.55228 9 9 9.44772 9 10C9 10.5523 8.55228 11 8 11H6V20H18V11H16C15.4477 11 15 10.5523 15 10C15 9.44772 15.4477 9 16 9H18C19.1046 9 20 9.89543 20 11V20C20 21.1046 19.1046 22 18 22H6C4.89543 22 4 21.1046 4 20V11Z" fill="#282828"></path>
+                            <path xmlns="http://www.w3.org/2000/svg" fillRule="evenodd" clipRule="evenodd" d="M11.2929 2.29289C11.6834 1.90237 12.3166 1.90237 12.7071 2.29289L15.7071 5.29289C16.0976 5.68342 16.0976 6.31658 15.7071 6.70711C15.3166 7.09763 14.6834 7.09763 14.2929 6.70711L13 5.41421V15C13 15.5523 12.5523 16 12 16C11.4477 16 11 15.5523 11 15V5.41421L9.70711 6.70711C9.31658 7.09763 8.68342 7.09763 8.29289 6.70711C7.90237 6.31658 7.90237 5.68342 8.29289 5.29289L11.2929 2.29289ZM4 11C4 9.89543 4.89543 9 6 9H8C8.55228 9 9 9.44772 9 10C9 10.5523 8.55228 11 8 11H6V20H18V11H16C15.4477 11 15 10.5523 15 10C15 9.44772 15.4477 9 16 9H18C19.1046 9 20 9.89543 20 11V20C20 21.1046 19.1046 22 18 22H6C4.89543 22 4 21.1046 4 20V11Z" fill="#282828"></path>
                         </svg>
                     </Button>
                     <Button onClick={handleShow} variant="outline-dark">Edit Profile</Button>

@@ -8,11 +8,16 @@ import axios from 'axios';
 // Style
 import './FileUpload.css'
 import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+import * as swal from "sweetalert2";
 
-function FileUpload() {
+function FileUpload(props) {
 
     const [selectedFile, setSelectedFile] = useState(null);
+    const [fileName, setFileName] = useState("");
     const [urlpetid, setUrlpetid] = useState(useParams());
+
+    const handleCloseUpload = () => props.closeModal();
 
     // Create a reference to the hidden file input element
     const hiddenFileInput = React.useRef(null);
@@ -29,6 +34,7 @@ function FileUpload() {
         console.log("File Selected");
       if (e.target.files[0]) {
         setSelectedFile(e.target.files[0], handleFileUpload);
+        setFileName(e.target.files[0].name);
       }
     };
   
@@ -36,6 +42,13 @@ function FileUpload() {
     const handleFileUpload = async (e) => {
         console.log("File Uploaded");
       e.preventDefault();
+
+      console.log("last 3 =", fileName.substr(fileName.length - 3).toLowerCase());
+
+      if (fileName.substr(fileName.length - 3).toLowerCase() !== "png" && "jpg") {
+          swal.fire("Oops...", "We only accept jpg or png files", "error");
+          return;
+      }
   
       try {
         if (selectedFile !== '') {
@@ -54,27 +67,36 @@ function FileUpload() {
           .then((response) => {
             axios.put('/api/pets/' + urlpetid.PetId, {"ProfileUrl": response.data.fileLocation}, {Params: {id: urlpetid.PetId}, withCredentials: true })
               .then((res) => {
+                    swal.fire("Congratulations!", "Profile picture updated", "success");
+                    props.closeModal();
                   console.log(res);
             })
           }, (error) => {
+              swal.fire("Oops...", `Error uploading file ${fileName}`, "error");
             console.log(error);
           });
         }
       } catch (error) {
+          swal.fire("Oops...", "No file was selected", "error");
         console.log(error);
       }
     };
 //<button onClick={handleFileUpload}>Save</button> 
     return (
-      <div id="UploadButtons"> 
-        <div>        
-          <Button onClick={handleClick} variant="secondary">Upload Image</Button>
-          <input type="file" ref={hiddenFileInput} className="custom-file-input" onChange={onFileSelected} />      
-        </div>
-        <div id="FileUploadSave">
-          <Button  variant="secondary" onClick={handleFileUpload}>Save</Button> 
-          
-        </div>
+      <div id="UploadButtons">
+          <Modal.Body>
+              <div>
+                  <br />
+                  <Button onClick={handleClick} variant="secondary">Select Image</Button>
+                  <input type="file" ref={hiddenFileInput} className="custom-file-input" onChange={onFileSelected} style={{display: "none"}} />
+                  <p id="fileChosen">File Selected: {fileName || "none"}</p>
+              </div>
+          </Modal.Body>
+
+          <Modal.Footer>
+              <Button variant="secondary" onClick={handleCloseUpload}>Close</Button>
+              <Button variant="primary" onClick={handleFileUpload}>Save Profile Picture</Button>
+          </Modal.Footer>
       </div>
     )
 }
