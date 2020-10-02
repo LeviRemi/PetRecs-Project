@@ -113,20 +113,24 @@ export default class PetEventsComponent extends Component {
                 icon: DeleteRounded,
                 tooltip: 'Delete Event',
                 onClick: (event, rowData) => this.deleteEvent(rowData.EventId)
-              },
-              {
-                icon: AddRounded,
-                tooltip: 'Add Event',
-                isFreeAction: true,
-                onClick: (event) => this.handleShowAdd()
               }
             ]}
             options={{
               actionsColumnIndex: -1,
               pageSize: 10,
             }}
-            >
-            </MaterialTable>
+            components={{
+              Toolbar: props => (
+                <div>
+                  <MTableToolbar {...props}></MTableToolbar>
+                  <div style={{padding: '0px 10px'}}>
+                  <Button onClick={this.handleShowAdd} variant="secondary">Add Event</Button>
+
+                  </div>
+                </div>
+              ),
+            }}
+            />
           <Modal
                 show={this.state.showAdd}
                 onHide={this.handleCloseAdd}
