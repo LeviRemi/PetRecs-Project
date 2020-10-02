@@ -35,6 +35,7 @@ export default class PetMedicationsComponent extends Component {
     this.handleCloseAddMed = this.handleCloseAddMed.bind(this);
     this.handleShowUpdateMed = this.handleShowUpdateMed.bind(this);
     this.handleCloseUpdateMed = this.handleCloseUpdateMed.bind(this);
+    console.log("PetMedicationsComponent - Using PetId: " + this.state.PetId);
   }
 
   handleCloseAddMed() { this.setState({ showAddMed: false }); }
@@ -75,7 +76,7 @@ export default class PetMedicationsComponent extends Component {
       .then(response=>{
         this.setState({medications: response.data});
         //console.log(this.state.medications);
-        document.getElementById("petMedTableId").hidden=false;
+        document.getElementById("PetMedTableId").hidden=false;
         manuallyDecrementPromiseCounter();
         //console.log(response.data);
       })
@@ -87,7 +88,7 @@ export default class PetMedicationsComponent extends Component {
 
   render(){
     return (
-      <div id="petMedTableId" className="petProfileBody nopadding" >
+      <div id="PetMedTableId" className="petProfileBody nopadding" hidden="true">
         <div style={{ maxWidth: '100%'}}>
         <MaterialTable
             columns={[
