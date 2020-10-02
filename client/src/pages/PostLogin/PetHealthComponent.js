@@ -477,7 +477,7 @@ class UpdateMedicationComponent extends Component {
         console.log(response);
         this.setState({ DosageAmount: response.data.DosageAmount,
                         DosageUnit: response.data.DosageUnit,
-                        StartDate: response.data.StateDate,
+                        StartDate: response.data.StartDate,
                         EndDate: response.data.EndDate,
                         Notes: response.data.Notes }); 
       })
@@ -546,6 +546,7 @@ class UpdateMedicationComponent extends Component {
                 <Form.Group controlId="formStartDate">
                 <Form.Label>Start Date</Form.Label>
                 <Form.Control name="date" type="date" max={moment().format("YYYY-MM-DD")}
+                              defaultValue={this.state.StartDate}
                               onChange={this.handleStartDateChange}
                               required/>
                 </Form.Group>
@@ -555,6 +556,7 @@ class UpdateMedicationComponent extends Component {
                 <Form.Label>End Date</Form.Label>
                 <Form.Control name="date" type="date" 
                               min={moment(this.state.StartDate).format("YYYY-MM-DD")}
+                              defaultValue={this.state.EndDate}
                               onChange={this.handleEndDateChange}
                               required/>
                 </Form.Group>

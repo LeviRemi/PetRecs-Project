@@ -364,6 +364,7 @@ class UpdateEventComponent extends Component {
                 <Form.Group controlId="formDate">
                 <Form.Label>Date</Form.Label>
                 <Form.Control name="date" type="date" max={moment().format("YYYY-MM-DD")}
+                              defaultValue={this.state.Date.substr(0, 10)}
                               onChange={this.handleDateChange}
                               required/>
                 </Form.Group>
