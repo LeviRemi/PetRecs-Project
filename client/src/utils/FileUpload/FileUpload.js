@@ -43,9 +43,10 @@ function FileUpload(props) {
         console.log("File Uploaded");
       e.preventDefault();
 
-      console.log("last 3 =", fileName.substr(fileName.length - 3).toLowerCase());
+      const allowedFileTypes = ["png", "jpg", "jpeg"];
 
-      if (fileName.substr(fileName.length - 3).toLowerCase() !== "png" && "jpg") {
+      if (!allowedFileTypes.includes(fileName.substr(fileName.length - 3).toLowerCase())
+      && !allowedFileTypes.includes(fileName.substr(fileName.length - 4).toLowerCase())) {
           swal.fire("Oops...", "We only accept jpg or png files", "error");
           return;
       }
@@ -68,6 +69,7 @@ function FileUpload(props) {
             axios.put('/api/pets/' + urlpetid.PetId, {"ProfileUrl": response.data.fileLocation}, {Params: {id: urlpetid.PetId}, withCredentials: true })
               .then((res) => {
                     swal.fire("Congratulations!", "Profile picture updated", "success");
+                    props.fetchPet();
                     props.closeModal();
                   console.log(res);
             })

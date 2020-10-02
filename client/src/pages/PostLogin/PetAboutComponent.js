@@ -330,7 +330,7 @@ function PetAboutComponent(props) {
                     <Modal.Title>Update Profile Picture</Modal.Title>
                 </Modal.Header>
 
-                <FileUpload value={petprofile.PetId} closeModal={handleCloseUpload}/>
+                <FileUpload value={petprofile.PetId} closeModal={handleCloseUpload} fetchPet={fetchPetProfile}/>
 
 
             </Modal>
