@@ -83,19 +83,6 @@ export default class PetEventsComponent extends Component {
       })
   };
 
-  eventTypeIdToString(TypeId) {
-    let stringType = "";
-    if (TypeId === 1) { stringType = "Medical"; } 
-    else if (TypeId === 2) { stringType = "Grooming"; } 
-    else if (TypeId === 3) { stringType = "Fitness"; } 
-    else if (TypeId === 4) { stringType = "Food"; } 
-    else if (TypeId === 5) { stringType = "Potty"; } 
-    else if (TypeId === 6) { stringType = "Behavior"; } 
-    else if (TypeId === 7) { stringType = "Other"; } 
-
-    return stringType;
-  }
-
   render() {
   return (
       <div id="PetEventBodyId" className="petProfileBody nopadding" hidden="true">
@@ -126,20 +113,24 @@ export default class PetEventsComponent extends Component {
                 icon: DeleteRounded,
                 tooltip: 'Delete Event',
                 onClick: (event, rowData) => this.deleteEvent(rowData.EventId)
-              },
-              {
-                icon: AddRounded,
-                tooltip: 'Add Event',
-                isFreeAction: true,
-                onClick: (event) => this.handleShowAdd()
               }
             ]}
             options={{
               actionsColumnIndex: -1,
               pageSize: 10,
             }}
-            >
-            </MaterialTable>
+            components={{
+              Toolbar: props => (
+                <div>
+                  <MTableToolbar {...props}></MTableToolbar>
+                  <div style={{padding: '0px 10px'}}>
+                  <Button onClick={this.handleShowAdd} variant="secondary">Add Event</Button>
+
+                  </div>
+                </div>
+              ),
+            }}
+            />
           <Modal
                 show={this.state.showAdd}
                 onHide={this.handleCloseAdd}
@@ -237,7 +228,7 @@ class AddEventComponent extends Component {
                 <Form.Group controlId="formEventType">
                 <Form.Label>Event Type</Form.Label>
                 <Form.Control name="eventTypeId" as="select"
-                              value="1"
+                              defaultValue="1"
                               onChange={this.handleEventTypeIdChange}>
                   <option value="1">Medical</option>
                   <option value="2">Grooming</option>

@@ -296,20 +296,24 @@ class MedsComponent extends Component {
                 icon: DeleteRounded,
                 tooltip: 'Delete Medication',
                 onClick: (event, rowData) => this.deleteMedication(rowData.MedId)
-              },
-              {
-                icon: AddRounded,
-                tooltip: 'Add Medication',
-                isFreeAction: true,
-                onClick: (event) => this.handleShowAddMed()
               }
             ]}
             options={{
               actionsColumnIndex: -1,
               pageSize: 5,
             }}
-            >
-            </MaterialTable>
+            components={{
+              Toolbar: props => (
+                <div>
+                  <MTableToolbar {...props}></MTableToolbar>
+                  <div style={{padding: '0px 10px'}}>
+                  <Button onClick={this.handleShowAddMed} variant="secondary">Add Medication</Button>
+
+                  </div>
+                </div>
+              ),
+            }}
+            />
             <Modal
                 show={this.state.showAddMed}
                 onHide={this.handleCloseAddMed}
