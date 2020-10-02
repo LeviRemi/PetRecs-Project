@@ -339,7 +339,7 @@ function PetAboutComponent(props) {
                 <Col></Col>
                 <Col>
                     <PetProfileImage {...{PetId: petprofile.PetId, ProfileUrl: petprofile.ProfileUrl}}/>
-                    <Button onClick={handleShowUpload} style={{borderRadius: "50%", position: "absolute", bottom: "5px", backgroundColor: "rgba(255,255,255,0.7)", right: "85px", zIndex: "5"}} variant="light"><svg width="1.5em" height="1.5em" viewBox="0 0 16 16" className="bi bi-camera-fill" fill="currentColor"
+                    <Button onClick={handleShowUpload} style={{borderRadius: "100%", height: "48px", position: "absolute", bottom: "5px", backgroundColor: "rgba(255,255,255,0.7)", right: "85px", zIndex: "5"}} variant="light"><svg width="1.5em" height="1.5em" viewBox="0 0 16 16" className="bi bi-camera-fill" fill="currentColor"
                                  xmlns="http://www.w3.org/2000/svg">
                         <path d="M10.5 8.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
                         <path fillRule="evenodd"

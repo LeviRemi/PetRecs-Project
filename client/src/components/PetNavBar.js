@@ -21,14 +21,14 @@ function PetNavBar(props) {
               Records
             </button>
           </NavLink>
-          <NavLink to={{pathname: `/Pets/${props.value.PetId}/Health`}}>
-            <button className="btn-petprofile-nav">
-              Health
-            </button>
-          </NavLink>
           <NavLink to={{pathname: `/Pets/${props.value.PetId}/Events`}}>
             <button className="btn-petprofile-nav">
               Events
+            </button>
+          </NavLink>
+          <NavLink to={{pathname: `/Pets/${props.value.PetId}/Health`}}>
+            <button className="btn-petprofile-nav">
+              Health
             </button>
           </NavLink>
           <NavLink to={{pathname: `/Pets/${props.value.PetId}/Medications`}}>
