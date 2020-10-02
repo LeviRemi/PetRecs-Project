@@ -17,7 +17,6 @@ import MaterialTable, {MTableToolbar} from "material-table";
 
 // MT Icons
 import tableIcons from '../../utils/TableIcons.js'
-import AddRounded from '@material-ui/icons/AddRounded';
 import UpdateRounded from '@material-ui/icons/UpdateRounded';
 import DeleteRounded from '@material-ui/icons/DeleteRounded';
 
@@ -94,7 +93,7 @@ export default class PetEventsComponent extends Component {
                            3: 'Fitness', 4: 'Food',
                            5: 'Potty',   6: 'Behavior',
                            7: 'Other' }},
-              { title: 'Date', field: 'Date', type: 'datetime'},
+              { title: 'Date', field: 'Date', render: row => <span>{ moment(row["Date"]).format("MM/DD/YYYY") }</span>},
               { title: 'Description', field: 'EventDescription'}
             ]}
             data={this.state.events}

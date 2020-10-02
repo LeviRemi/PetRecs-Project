@@ -31,9 +31,9 @@ function PetNavBar(props) {
               Events
             </button>
           </NavLink>
-          <NavLink to={{pathname: `/Pets/${props.value.PetId}/Reminders`}}>
+          <NavLink to={{pathname: `/Pets/${props.value.PetId}/Medications`}}>
             <button className="btn-petprofile-nav">
-              Reminders
+              Medications
             </button>
           </NavLink>
         </div>

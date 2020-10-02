@@ -15,7 +15,7 @@ import PetCard from '../../components/PetCard.js';
 import PetRecordsComponent from './PetRecordsComponent.js';
 import PetHealthComponent from './PetHealthComponent.js';
 import PetEventsComponent from './PetEventsComponent.js';
-import PetRemindersComponent from './PetRemindersComponent.js';
+import PetMedicationsComponent from './PetMedicationsComponent.js';
 import PetAboutComponent from "./PetAboutComponent";
 
 import isUserLoggedIn from '../../utils/AuthApi';
@@ -52,8 +52,8 @@ function PetScene() {
       <div className="mainContent">
         <Route exact path='/Pets/:PetId/Records' component={(props)=>isUserLoggedIn()?<PetRecordsComponent {...props} /> : <Redirect to={"/"}/>} />
         <Route exact path="/Pets/:PetId/Health" component={(props)=>isUserLoggedIn()?<PetHealthComponent {...props} /> : <Redirect to={"/"}/>} />
-        <Route exact path='/Pets/:PetId/Events' component={PetEventsComponent} />
-        <Route exact path='/Pets/:PetId/Reminders' component={PetRemindersComponent} />
+        <Route exact path='/Pets/:PetId/Events' component={(props)=>isUserLoggedIn()?<PetEventsComponent {...props} /> : <Redirect to={"/"}/>} />
+        <Route exact path='/Pets/:PetId/Medications' component={(props)=>isUserLoggedIn()?<PetMedicationsComponent {...props} /> : <Redirect to={"/"}/>} />
         <Route exact path='/Pets/:PetId/' component={(props)=>isUserLoggedIn()?<PetAboutComponent {...props} /> : <Redirect to={"/"}/>} />
       </div>
     </div>
