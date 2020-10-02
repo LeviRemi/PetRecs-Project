@@ -178,7 +178,7 @@ class AddMedicationComponent extends Component {
   constructor(props) {
     super();
     this.state = { PetId: props.petid,
-                   DosageAmount: "",
+                   DosageAmount: 1,
                    DosageUnit: "",
                    StartDate: "",
                    EndDate: "",
@@ -198,7 +198,7 @@ class AddMedicationComponent extends Component {
 
     const data = {
       PetId: this.state.PetId,
-      DosageAmount: "1",
+      DosageAmount: this.state.DosageAmount,
       DosageUnit: this.state.DosageUnit,
       StartDate: this.state.StartDate,
       EndDate: this.state.EndDate,
@@ -218,6 +218,22 @@ class AddMedicationComponent extends Component {
             console.log(data);
             Swal.fire('Oops...', "You do not have permission to add this medication", 'error');
         })
+  }
+
+  checkBoxDisableDate() {
+    var checkbox = document.getElementById("formNoEndCheckbox");
+    var endDateElement = document.getElementById("formEndDate");
+
+    if (checkbox.checked) {
+      //console.log("noEndCheckBox is checked");
+      endDateElement.setAttribute("disabled", "true")
+      this.setState( {EndDate: null} );
+      
+    }
+    else {
+      //console.log("noEndCheckBox is unchecked");
+      endDateElement.removeAttribute("disabled")
+    }
   }
 
   render() {
@@ -248,19 +264,25 @@ class AddMedicationComponent extends Component {
               <Col>
                 <Form.Group controlId="formStartDate">
                 <Form.Label>Start Date</Form.Label>
-                <Form.Control name="date" type="date" max={moment().format("YYYY-MM-DD")}
+                <Form.Control name="startDate" type="date" max={moment().format("YYYY-MM-DD")}
                               onChange={this.handleStartDateChange}
                               required/>
                 </Form.Group>
               </Col>
               <Col>
-              <Form.Group controlId="formEndDate">
+              <Form.Group controlId="formNoEndCheckbox">
                 <Form.Label>End Date</Form.Label>
-                <Form.Control name="date" type="date" 
+                <Form.Check name="noEndCheckbox" type="checkbox" label="Indefinite"
+                            onChange={ () => this.checkBoxDisableDate() }/>
+              </Form.Group>
+
+              <Form.Group controlId="formEndDate">
+                <Form.Control name="endDate" type="date" 
                               min={moment(this.state.StartDate).format("YYYY-MM-DD")}
                               onChange={this.handleEndDateChange}
                               required/>
                 </Form.Group>
+
               </Col>
             </Row>
             <Row>
