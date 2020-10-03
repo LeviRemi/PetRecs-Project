@@ -10,7 +10,6 @@ import moment from 'moment';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 
-import FileUpload from '../utils/FileUpload/FileUpload.js';
 import PetImage, { PetCardImage } from './PetImage.js'
 import {useHistory} from "react-router";
 import Swal from "sweetalert2";
