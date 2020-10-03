@@ -21,7 +21,6 @@ import PetAboutComponent from "./PetAboutComponent";
 import isUserLoggedIn from '../../utils/AuthApi';
 import {Redirect} from 'react-router-dom';
 
-import FileUpload from '../../utils/FileUpload/FileUpload.js';
 import NotFound from "../NotFound";
 import LoadingIndicator from '../../utils/LoadingIndicator.js'
 
