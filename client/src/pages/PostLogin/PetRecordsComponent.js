@@ -141,7 +141,7 @@ function PetRecordsComponent(props) {
   };
   
   return (
-      <div id="petRecordsBodyId" className="petProfileBody nopadding" hidden='true'>
+      <div id="petRecordsBodyId" className="petProfileBody nopadding" hidden='true' style={{height: "824px"}}>
         <div style={{ maxWidth: '100%' }}>
           <MaterialTable
             columns={[
@@ -166,7 +166,8 @@ function PetRecordsComponent(props) {
             ]}
             options={{
               actionsColumnIndex: -1,
-              pageSize: 10
+              pageSize: 10,
+              pageSizeOptions: [ 10 ]
             }}
             onRowClick={(event, rowData) => openInNewTab(rowData.RecordUrl)}
             components={{

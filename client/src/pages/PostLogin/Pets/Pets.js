@@ -54,7 +54,7 @@ export default class Pets extends Component {
               <div className="mainPageBody nopadding">
                   <div style={{display: "flex", flexWrap: "wrap", justifyContent: "start", alignItems: "baseline"}} className="mainPageContents">
                     { this.state.pets.map(pet =>
-                        <div id="PetContainer">
+                        <div class="PetContainer">
                             <Link id="PetLink" to={"/Pets/" + pet.PetId} key={pet.PetId}>
                                 <PetImage {...{PetId: pet.PetId, ProfileUrl: pet.ProfileUrl}}/>
                             </Link>
@@ -63,8 +63,8 @@ export default class Pets extends Component {
                             </div>
                         </div>
                     )}
-                    <div id="PetContainer">
-                        <Link id="AddPetLink" to={"/Pets/New"} hidden='true'>
+                    <div class="PetContainer">
+                        <Link id="AddPetLink" to={"/Pets/New"} hidden={true}>
                             <div id="AddPetCircle">
                               <img className="AddPetImage"></img>
                               <p id="AddPetText">Add Pet<br />< FontAwesomeIcon id="PlusIcon" icon="plus" size="2x" /></p>
