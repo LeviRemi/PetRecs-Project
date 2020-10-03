@@ -28,8 +28,7 @@ function PetCard(props) {
                 setPetprofile(response.data);
             })
             .catch(err=> {
-                Swal.fire('Oops...', "A pet with this ID does not exist", 'error');
-                history.push('/pets');
+                console.log(err);
             })
     }
 
