@@ -160,3 +160,7 @@
     position: absolute;
     left: 50px;
 }
+
+.hiddenForm {
+    display: none;
+}

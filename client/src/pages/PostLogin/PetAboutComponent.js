@@ -22,11 +22,14 @@ function PetAboutComponent(props) {
     const history = useHistory();
     const [petprofile, setPetprofile] = useState('');
     const [petSpecies, setPetSpecies] = useState('');
+    const [petBreed, setPetBreed] = useState('');
     const [show, setShow] = useState(false);
     const [showShare, setShowShare] = useState(false);
     const [showUpload, setShowUpload] = useState(false);
     const [speciesList, setSpeciesList] = useState([]);
-    const { register, handleSubmit, errors } = useForm();
+    const [dogBreedList, setDogBreedList] = useState([]);
+    const [catBreedList, setCatBreedList] = useState([]);
+    const { register, handleSubmit, errors, watch } = useForm();
     const [isLoading, setLoading] = useState({display: "none"});
 
 
@@ -35,16 +38,21 @@ function PetAboutComponent(props) {
         axios.get(`/api/pets/${props.match.params.PetId}`, {withCredentials: true} )
             .then(response=>{
                 setPetprofile(response.data);
-                axios.get(`/api/species/${response.data.SpeciesId}`, {withCredentials: true})
-                    .then(response=>{
-                        setPetSpecies(response.data);
-                        document.getElementById("petProfileBodyId").hidden = false;
-                        manuallyDecrementPromiseCounter();
-                    })
-                    .catch(err=> {
-                        console.log(err);
-                        manuallyDecrementPromiseCounter();
-                    })
+                const requestSpecies = axios.get(`/api/species/${response.data.SpeciesId}`, {withCredentials: true});
+                const requestBreed = (response.data.SpeciesId === 1 || response.data.SpeciesId === 2)? axios.get(`/api/breeds/${response.data.BreedId}`, {withCredentials: true}) : "";
+
+                axios.all([requestSpecies, requestBreed]).then(axios.spread((...responses) => {
+                    const responseSpecies = responses[0];
+                    const responseBreed = responses[1];
+
+                    setPetSpecies(responseSpecies.data);
+                    setPetBreed(responseBreed.data);
+                    document.getElementById("petProfileBodyId").hidden = false;
+                    manuallyDecrementPromiseCounter();
+                })).catch(err =>{
+                    console.log(err);
+                    manuallyDecrementPromiseCounter();
+                })
             })
             .catch(err=> {
                 Swal.fire('Oops...', "A pet with this ID does not exist", 'error');
@@ -54,22 +62,40 @@ function PetAboutComponent(props) {
     }
 
     function fetchSpeciesList() {
-        manuallyIncrementPromiseCounter();
         axios.get(`/api/species`, {withCredentials: true} )
             .then(response=>{
                 setSpeciesList(response.data);
-                manuallyDecrementPromiseCounter();
             })
             .catch(err=> {
                 console.log(err);
-                manuallyDecrementPromiseCounter();
             })
-            
+    }
+
+    function fetchDogBreedList() {
+        axios.get(`/api/breeds/dog`, {withCredentials: true} )
+            .then(response=>{
+                setDogBreedList(response.data);
+            })
+            .catch(err=> {
+                console.log(err);
+            })
+    }
+
+    function fetchCatBreedList() {
+        axios.get(`/api/breeds/cat`, {withCredentials: true} )
+            .then(response=>{
+                setCatBreedList(response.data);
+            })
+            .catch(err=> {
+                console.log(err);
+            })
     }
 
     useEffect(() => {
         fetchPetProfile();
         fetchSpeciesList();
+        fetchDogBreedList();
+        fetchCatBreedList();
     }, [])
 
     const handleClose = () => setShow(false);
@@ -88,6 +114,7 @@ function PetAboutComponent(props) {
         axios.put(`/api/pets/${petprofile.PetId}`, {
             PetName: data.petName,
             SpeciesId: data.petSpecies,
+            BreedId: data.petSpecies == 1? data.petDogBreed : data.petSpecies == 2? data.petCatBreed : 599,
             PetGender: data.petGender,
             PetAgeYear: bod.substring(0, 4),
             PetAgeMonth: bod.substring(5, 7),
@@ -100,8 +127,8 @@ function PetAboutComponent(props) {
                 setLoading({display: "none"});
                 console.log(res);
                 Swal.fire('Congratulations!', "This pet profile has been updated", 'success');
+                fetchPetProfile();
                 handleClose();
-                fetchPetProfile()
             }, (err) => {
                 setLoading({display: "none"});
                 console.log(err.response.status)
@@ -166,7 +193,7 @@ function PetAboutComponent(props) {
 
     return (
         <Container id="petProfileBodyId" className="petProfileBody" style={{textAlign: "center"}} hidden='true'>
-
+            {/*Edit Pet Profile*/}
             <Modal
                 show={show}
                 onHide={handleClose}
@@ -204,6 +231,35 @@ function PetAboutComponent(props) {
                                 </Form.Group>
                             </Col>
                         </Form.Row>
+                        <Form.Group controlId="formDogPetBreed" className={watch('petSpecies') == 1? "" : petprofile.SpeciesId === 1? "" : "hiddenForm"}>
+                            <Form.Label>Breed</Form.Label>
+                            <Form.Control name="petDogBreed" as="select" defaultValue={petprofile.BreedId}
+                                          ref={register()}>
+                                <option>Select...</option>
+                                {
+                                    dogBreedList.map((option, label) => {
+                                        return (<option value={option.BreedId}>{option.BreedName}</option>)
+                                    })
+                                }
+                            </Form.Control>
+
+                            <div className="text-danger">{errors.petDogBreed && "Breed is required"}</div>
+                        </Form.Group>
+
+                        <Form.Group controlId="formCatPetBreed" className={watch('petSpecies') == 2? "" : petprofile.SpeciesId === 2? ""  : "hiddenForm"}>
+                            <Form.Label>Breed</Form.Label>
+                            <Form.Control name="petCatBreed" as="select" defaultValue={petprofile.BreedId}
+                                          ref={register()}>
+                                <option>Select...</option>
+                                {
+                                    catBreedList.map((option, label) => {
+                                        return (<option value={option.BreedId}>{option.BreedName}</option>)
+                                    })
+                                }
+                            </Form.Control>
+
+                            <div className="text-danger">{errors.petCatBreed && "Breed is required"}</div>
+                        </Form.Group>
                         <Form.Row>
                             <Col>
                                 <Form.Group controlId="formPetGender">
@@ -272,7 +328,7 @@ function PetAboutComponent(props) {
                 </Modal.Footer>
 
             </Modal>
-
+            {/*Share Pet Profile*/}
             <Modal
                 show={showShare}
                 onHide={handleCloseShare}
@@ -319,7 +375,7 @@ function PetAboutComponent(props) {
                 </Modal.Footer>
 
             </Modal>
-
+            {/*Update Profile Picture*/}
             <Modal
                 show={showUpload}
                 onHide={handleCloseUpload}
@@ -364,6 +420,11 @@ function PetAboutComponent(props) {
             <Row>
                 <Col></Col>
                 <Col><h6>Species: {petSpecies.SpeciesName}</h6></Col>
+                <Col></Col>
+            </Row>
+            <Row>
+                <Col></Col>
+                {petSpecies.SpeciesName === "Dog"? <Col><h6>Breed: {petBreed.BreedName}</h6></Col> : ""}
                 <Col></Col>
             </Row>
             <Row>

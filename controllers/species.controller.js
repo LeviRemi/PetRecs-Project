@@ -30,7 +30,7 @@ exports.findOne = (req, res) => {
         })
         .catch(err => {
             res.status(500).send({
-                message: err.message || "Some error occured while retrieving species with id=" + id
+                message: err.message || "Some error occurred while retrieving species with id=" + id
             });
         });
 };
