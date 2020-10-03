@@ -44,6 +44,22 @@ export default class PetMedicationsComponent extends Component {
   handleShowUpdateMed() { this.setState({ showUpdateMed: true }); }
   updateStateMedicationId(buttonMedicationId) { this.setState({ MedicationId: buttonMedicationId }); }
 
+  componentDidMount() {
+    manuallyIncrementPromiseCounter();
+    axios.get(`/api/medications/pet/` + this.state.PetId, {withCredentials: true} )
+      .then(response=>{
+        this.setState({medications: response.data});
+        //console.log(this.state.medications);
+        document.getElementById("PetMedTableId").hidden=false;
+        manuallyDecrementPromiseCounter();
+        //console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+        manuallyDecrementPromiseCounter();
+      })
+  };
+
   deleteMedication = async (MedicationId) => {
     Swal.fire({
       title: 'Are you sure you want to delete this medication?',
@@ -70,21 +86,10 @@ export default class PetMedicationsComponent extends Component {
     })
   };
 
-  componentDidMount() {
-    manuallyIncrementPromiseCounter();
-    axios.get(`/api/medications/pet/` + this.state.PetId, {withCredentials: true} )
-      .then(response=>{
-        this.setState({medications: response.data});
-        //console.log(this.state.medications);
-        document.getElementById("PetMedTableId").hidden=false;
-        manuallyDecrementPromiseCounter();
-        //console.log(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-        manuallyDecrementPromiseCounter();
-      })
-  };
+  checkNullDate(date) {
+    if (date === null) { return (<span> No end date</span>) } 
+    else { return ( <span> { moment(date).format("MM/DD/YYYY") } </span>) };
+  }
 
   render(){
     return (
@@ -93,10 +98,9 @@ export default class PetMedicationsComponent extends Component {
         <MaterialTable
             columns={[
               { title: 'Dosage', field: 'DosageAmount' },
-              { title: 'Unit', field: 'DosageUnit' },
+              { title: 'Unit of Measurement', field: 'DosageUnit' },
               { title: 'Start', field: 'StartDate', render: row => <span>{ moment(row["StartDate"]).format("MM/DD/YYYY") }</span> },
-              { title: 'End', field: 'EndDate', render: row => <span>{ moment(row["EndDate"]).format("MM/DD/YYYY") }</span> },
-              { title: 'Notes', field: 'Notes' }
+              { title: 'End', field: 'EndDate', render: row => this.checkNullDate( row["EndDate"])}
             ]}
             data={this.state.medications}
             title="Pet Medcations"
@@ -310,7 +314,7 @@ class UpdateMedicationComponent extends Component {
                    DosageUnit: "",
                    StartDate: "",
                    EndDate: "",
-                   Notes: ""};
+                   Notes: "",};
 
     //console.log("Component: 'UpdateMedicationComponent' loaded");
   }
@@ -327,6 +331,14 @@ class UpdateMedicationComponent extends Component {
       })
       .catch((error) => {
           console.log(error);
+      })
+      .finally(() => {
+        var checkbox = document.getElementById("formNoEndCheckbox");
+        // if end date is null
+        if (!this.state.EndDate) {
+          checkbox.setAttribute("checked", "true");
+        }
+        this.checkBoxDisableDate();
       })
   }
 
@@ -345,7 +357,7 @@ class UpdateMedicationComponent extends Component {
       DosageUnit: this.state.DosageUnit,
       StartDate: this.state.StartDate,
       EndDate: this.state.EndDate,
-      Notes: this.state.Notes
+      Notes: this.state.Notes,
     };
 
     axios.put(`/api/medications/` + this.state.MedId, data, {withCredentials: true} )
@@ -359,6 +371,34 @@ class UpdateMedicationComponent extends Component {
             console.log(error);
             Swal.fire('Oops...', "You do not have permission to update this medication", 'error');
         })
+  }
+
+  checkBoxDisableDate() {
+    var checkbox = document.getElementById("formNoEndCheckbox");
+    var endDateElement = document.getElementById("formEndDate");
+    // console.log(checkbox.checked);
+
+    if (checkbox.checked) {
+      console.log("noEndCheckBox is checked");
+      endDateElement.setAttribute("disabled", "true")
+      this.setState( {EndDate: null} );
+      
+    }
+    else {
+      console.log("noEndCheckBox is unchecked");
+      endDateElement.removeAttribute("disabled")
+      this.setState( {EndDate: "" } );
+    }
+  }
+
+  checkNullDate(date) {
+    if (date === null) { return (<span> No end date</span>) } 
+    else { return ( <span> { moment(date).format("MM/DD/YYYY") } </span>) };
+  }
+
+  getDateValue(date) {
+    if (date === null) { return null; }
+    else { return ( moment(date).format("MM/DD/YYYY") ); };
   }
 
   render() {
@@ -389,16 +429,21 @@ class UpdateMedicationComponent extends Component {
               <Col>
                 <Form.Group controlId="formStartDate">
                 <Form.Label>Start Date</Form.Label>
-                <Form.Control name="date" type="date" max={moment().format("YYYY-MM-DD")}
+                <Form.Control name="startDate" type="date" max={moment().format("YYYY-MM-DD")}
                               defaultValue={this.state.StartDate}
                               onChange={this.handleStartDateChange}
                               required/>
                 </Form.Group>
               </Col>
               <Col>
-              <Form.Group controlId="formEndDate">
+              <Form.Group controlId="formNoEndCheckbox">
                 <Form.Label>End Date</Form.Label>
-                <Form.Control name="date" type="date" 
+                <Form.Check name="noEndCheckbox" type="checkbox" label="Indefinite"
+                            onChange={ () => this.checkBoxDisableDate() }/>
+              </Form.Group>
+
+              <Form.Group controlId="formEndDate">
+                <Form.Control name="endDate" type="date" 
                               min={moment(this.state.StartDate).format("YYYY-MM-DD")}
                               defaultValue={this.state.EndDate}
                               onChange={this.handleEndDateChange}
