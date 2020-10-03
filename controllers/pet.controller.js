@@ -114,7 +114,8 @@ exports.findAll = (req, res) => {
                 contactArr.push(data[i].PetId);
             }
             Pet.findAll( {
-                where: { PetId: contactArr }
+                where: { PetId: contactArr },
+                attributes: ['PetId', 'PetName', 'ProfileUrl']
             })
                 .then(data => {
                     res.send(data);
