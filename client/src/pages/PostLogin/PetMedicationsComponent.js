@@ -93,7 +93,7 @@ export default class PetMedicationsComponent extends Component {
 
   render(){
     return (
-      <div id="PetMedTableId" className="petProfileBody nopadding" hidden="true">
+      <div id="PetMedTableId" className="petProfileBody nopadding" hidden="true" style={{height: "524px"}}>
         <div style={{ maxWidth: '100%'}}>
         <MaterialTable
             columns={[
@@ -123,6 +123,7 @@ export default class PetMedicationsComponent extends Component {
             options={{
               actionsColumnIndex: -1,
               pageSize: 5,
+              pageSizeOptions: [ 5 ],
             }}
             components={{
               Toolbar: props => (

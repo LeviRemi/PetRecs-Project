@@ -84,7 +84,7 @@ export default class PetEventsComponent extends Component {
 
   render() {
   return (
-      <div id="PetEventBodyId" className="petProfileBody nopadding" hidden="true">
+      <div id="PetEventBodyId" className="petProfileBody nopadding" hidden={true} style={{height: "750px"}}>
         <div style={{ maxWidth: '100%'}}>
           <MaterialTable
             columns={[
@@ -117,6 +117,7 @@ export default class PetEventsComponent extends Component {
             options={{
               actionsColumnIndex: -1,
               pageSize: 10,
+              pageSizeOptions: [ 10 ],
             }}
             components={{
               Toolbar: props => (

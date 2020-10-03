@@ -1,6 +1,7 @@
 // PetAboutComponent.js
 
 import React, {useEffect, useState} from 'react';
+import { useParams } from 'react-router';
 import PetImage, {PetCardImage, PetProfileImage} from "../../components/PetImage";
 import axios from "axios";
 import trackPromise, { manuallyDecrementPromiseCounter, manuallyIncrementPromiseCounter } from 'react-promise-tracker';
@@ -16,11 +17,13 @@ import Swal from "sweetalert2";
 import Spinner from "react-bootstrap/Spinner";
 import {useHistory} from "react-router";
 import Alert from "react-bootstrap/Alert";
-import FileUpload from "../../utils/FileUpload/FileUpload";
+
+import '../../utils/FileUpload/FileUpload.css'
 
 function PetAboutComponent(props) {
     const history = useHistory();
     const [petprofile, setPetprofile] = useState('');
+    const [profilepreview, setProfilePreview] = useState('');
     const [petSpecies, setPetSpecies] = useState('');
     const [show, setShow] = useState(false);
     const [showShare, setShowShare] = useState(false);
@@ -29,15 +32,25 @@ function PetAboutComponent(props) {
     const { register, handleSubmit, errors } = useForm();
     const [isLoading, setLoading] = useState({display: "none"});
 
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [fileName, setFileName] = useState("");
+    const [urlpetid, setUrlpetid] = useState(useParams());
+
+    //const handleCloseUpload = () => props.closeModal();
+
+    // Create a reference to the hidden file input element
+    const hiddenFileInput = React.useRef(null);
 
     function fetchPetProfile() {
+        document.getElementById("petProfileBodyId").hidden = true;
         manuallyIncrementPromiseCounter();
         axios.get(`/api/pets/${props.match.params.PetId}`, {withCredentials: true} )
             .then(response=>{
                 setPetprofile(response.data);
+                setProfilePreview(response.data.ProfileUrl);
                 axios.get(`/api/species/${response.data.SpeciesId}`, {withCredentials: true})
                     .then(response=>{
-                        setPetSpecies(response.data);
+                        setPetSpecies(response.data);                  
                         document.getElementById("petProfileBodyId").hidden = false;
                         manuallyDecrementPromiseCounter();
                     })
@@ -78,6 +91,22 @@ function PetAboutComponent(props) {
     const handleShowShare = () => setShowShare(true);
     const handleCloseUpload = () => setShowUpload(false);
     const handleShowUpload = () => setShowUpload(true);
+
+    // Programatically click the hidden file input element
+    // when the Button component is clicked
+    const handleClick = event => {
+        hiddenFileInput.current.click();
+    };
+
+    // Handling file selection from input
+    const onFileSelected = async (e) => {
+        console.log("File Selected");
+      if (e.target.files[0]) {
+        setSelectedFile(e.target.files[0], handleFileUpload);
+        setFileName(e.target.files[0].name);
+        setProfilePreview(URL.createObjectURL(e.target.files[0]));
+      }
+    };
 
     const onSubmit = (data) => {
         setLoading({display: "initial"});
@@ -164,8 +193,55 @@ function PetAboutComponent(props) {
         })
     }
 
+    // Uploading image to Cloud Storage
+    const handleFileUpload = async (e) => {
+        setLoading({display: "initial"});
+        e.preventDefault();
+
+        const allowedFileTypes = ["png", "jpg", "jpeg"];
+
+        if (!allowedFileTypes.includes(fileName.substr(fileName.length - 3).toLowerCase())
+        && !allowedFileTypes.includes(fileName.substr(fileName.length - 4).toLowerCase())) {
+            Swal.fire("Oops...", "We only accept jpg or png files", "error");
+            return;
+        }
+      
+        try {
+          if (selectedFile !== '') {
+            // Creating a FormData object
+            let fileData = new FormData();
+            
+            // Adding the 'image' field and the selected file as value to our FormData object
+            // Changing file name to make it unique and avoid potential later overrides
+            fileData.set(
+              'image',
+              selectedFile,
+              `${Date.now()}-${selectedFile.name}`,
+            );
+            console.log(fileData);
+            axios.post("/api/upload", fileData, {withCredentials: true})
+            .then((response) => {
+              axios.put('/api/pets/' + urlpetid.PetId, {"ProfileUrl": response.data.fileLocation}, {Params: {id: urlpetid.PetId}, withCredentials: true })
+                .then((res) => {
+                    Swal.fire("Congratulations!", "Profile picture updated", "success");
+                      setLoading({display: "none"});
+                      handleCloseUpload();
+                      fetchPetProfile()
+                    console.log(res);
+              })
+            }, (error) => {
+              Swal.fire("Oops...", `Error uploading file ${fileName}`, "error");
+              console.log(error);
+            });
+          }
+        } catch (error) {
+            Swal.fire("Oops...", "No file was selected", "error");
+            console.log(error);
+        }
+    };
+
     return (
-        <Container id="petProfileBodyId" className="petProfileBody" style={{textAlign: "center"}} hidden='true'>
+        <Container id="petProfileBodyId" className="petProfileBody" style={{textAlign: "center"}} hidden={true}>
 
             <Modal
                 show={show}
@@ -330,8 +406,30 @@ function PetAboutComponent(props) {
                     <Modal.Title>Update Profile Picture</Modal.Title>
                 </Modal.Header>
 
-                <FileUpload value={petprofile.PetId} closeModal={handleCloseUpload} fetchPet={fetchPetProfile}/>
+                <div id="UploadButtons">
+                    <Modal.Body>
+                        <PetProfileImage {...{PetId: petprofile.PetId, ProfileUrl: profilepreview}}/>
+                        <div>
+                            <br />
+                            <Button onClick={handleClick} variant="secondary">Select Image</Button>
+                            <input type="file" ref={hiddenFileInput} className="custom-file-input" onChange={onFileSelected} style={{display: "none"}} />
+                            <p id="fileChosen">File Selected: {fileName || "none"}</p>
+                        </div>
+                        <div style={{textAlign: "center"}}>
+                            <div style={isLoading}>
+                                <Spinner animation="border" role="status">
+                                    <span className="sr-only">Loading...</span>
+                                </Spinner>
+                            </div>
+                        </div>
+                    </Modal.Body>
 
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={handleCloseUpload}>Close</Button>
+                        <Button variant="primary" onClick={handleFileUpload}>Save Profile Picture</Button>
+                    </Modal.Footer>
+                    
+                </div>
 
             </Modal>
 
