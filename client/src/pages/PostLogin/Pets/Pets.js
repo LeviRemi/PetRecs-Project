@@ -29,26 +29,23 @@ export default class Pets extends Component {
       manuallyIncrementPromiseCounter();
         axios.get("/api/pets/", { withCredentials: true })
             .then((petResponse) => {
-          const pets = petResponse.data;
-          this.setState({ pets });
-          manuallyDecrementPromiseCounter();
-          document.getElementById('petsPage').hidden = false;
-        })
-        .catch((error) => {
-          console.log(error);
-          manuallyDecrementPromiseCounter();
-        })
+              const pets = petResponse.data;
+              this.setState({ pets });
+              manuallyDecrementPromiseCounter();
+              document.getElementById('petsPage').hidden = false;
+            })
+            .catch((error) => {
+              console.log(error);
+              manuallyDecrementPromiseCounter();
+            })
         // Get shared pets
-        manuallyIncrementPromiseCounter();
         axios.get("/api/pets/shared", { withCredentials: true })
             .then((petResponse) => {
                 const sharedPets = petResponse.data;
                 this.setState({ sharedPets });
-                manuallyDecrementPromiseCounter();
             })
             .catch((error) => {
                 console.log(error);
-                manuallyDecrementPromiseCounter();
             })
     }
 
