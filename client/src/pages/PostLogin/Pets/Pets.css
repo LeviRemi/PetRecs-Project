@@ -144,3 +144,13 @@
 .hiddenForm {
     display: none;
 }
+
+.activeNav button, .btn-petprofile-nav:hover {
+    color: black !important;
+}
+
+.btn-petprofile-nav {
+    color: white;
+    font-weight: 500;
+    transition:0.2s;
+}
