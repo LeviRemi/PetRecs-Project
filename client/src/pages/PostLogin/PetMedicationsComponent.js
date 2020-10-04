@@ -377,7 +377,6 @@ class UpdateMedicationComponent extends Component {
   checkBoxDisableDate() {
     var checkbox = document.getElementById("formNoEndCheckbox");
     var endDateElement = document.getElementById("formEndDate");
-    // console.log(checkbox.checked);
 
     if (checkbox.checked) {
       console.log("noEndCheckBox is checked");
@@ -431,7 +430,7 @@ class UpdateMedicationComponent extends Component {
                 <Form.Group controlId="formStartDate">
                 <Form.Label>Start Date</Form.Label>
                 <Form.Control name="startDate" type="date" max={moment().format("YYYY-MM-DD")}
-                              defaultValue={this.state.StartDate}
+                              defaultValue={this.state.StartDate.substr(0, 10)}
                               onChange={this.handleStartDateChange}
                               required/>
                 </Form.Group>
