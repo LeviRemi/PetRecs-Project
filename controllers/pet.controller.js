@@ -396,4 +396,21 @@ exports.share = (req, res, next) => {
         });
 
 }
+// Check if current logged-in user is owner of pet by PetId
+exports.validate = (req, res, next) => {
+    // Validate that user is owner of pet
+    Contact.findOne({
+        where: {PetId: req.params.id, AccountId: req.session.user.AccountId, Owner: 1}
+    })
+        .then(data => {
+            if (data === null) {
+                res.status(401).send("This user is not owner of this pet, or pet does not exist");
+            } else {
+                res.status(200).send("This user is a valid owner of pet")
+            }
+        })
+        .catch(err => {
+            res.status(500).send("Error retrieving pet contacts for account id=" + req.params.id)
+        });
+}
 

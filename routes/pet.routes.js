@@ -25,4 +25,7 @@ router.delete("/:id", pets.delete);
 // Share a pet with id (put email in JSON body)
 router.post("/:id/share", pets.share);
 
+// Check if current user is owner of pet
+router.get("/:id/validate", pets.validate);
+
 module.exports = router;

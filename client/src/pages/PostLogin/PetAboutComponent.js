@@ -227,45 +227,59 @@ function PetAboutComponent(props) {
         e.preventDefault();
 
         const allowedFileTypes = ["png", "jpg", "jpeg"];
+        // First validate that user is owner of pet
+        axios.get(`/api/pets/${petprofile.PetId}/validate`, {withCredentials: true})
+            .then(res => {
+                // Then validate that file is of the correct type
+                if (!allowedFileTypes.includes(fileName.substr(fileName.length - 3).toLowerCase())
+                    && !allowedFileTypes.includes(fileName.substr(fileName.length - 4).toLowerCase())) {
+                    setLoading({display: "none"});
+                    Swal.fire("Oops...", "We only accept jpg or png files", "error");
+                    return;
+                } else {
+                    // If validations pass, attempt the upload
+                    try {
+                        if (selectedFile !== '') {
+                            // Creating a FormData object
+                            let fileData = new FormData();
 
-        if (!allowedFileTypes.includes(fileName.substr(fileName.length - 3).toLowerCase())
-        && !allowedFileTypes.includes(fileName.substr(fileName.length - 4).toLowerCase())) {
-            Swal.fire("Oops...", "We only accept jpg or png files", "error");
-            return;
-        }
-
-        try {
-          if (selectedFile !== '') {
-            // Creating a FormData object
-            let fileData = new FormData();
-
-            // Adding the 'image' field and the selected file as value to our FormData object
-            // Changing file name to make it unique and avoid potential later overrides
-            fileData.set(
-              'image',
-              selectedFile,
-              `${Date.now()}-${selectedFile.name}`,
-            );
-            console.log(fileData);
-            axios.post("/api/upload", fileData, {withCredentials: true})
-            .then((response) => {
-              axios.put('/api/pets/' + urlpetid.PetId, {"ProfileUrl": response.data.fileLocation}, {Params: {id: urlpetid.PetId}, withCredentials: true })
-                .then((res) => {
-                    Swal.fire("Congratulations!", "Profile picture updated", "success");
-                      setLoading({display: "none"});
-                      handleCloseUpload();
-                      fetchPetProfile()
-                    console.log(res);
-              })
-            }, (error) => {
-              Swal.fire("Oops...", `Error uploading file ${fileName}`, "error");
-              console.log(error);
-            });
-          }
-        } catch (error) {
-            Swal.fire("Oops...", "No file was selected", "error");
-            console.log(error);
-        }
+                            // Adding the 'image' field and the selected file as value to our FormData object
+                            // Changing file name to make it unique and avoid potential later overrides
+                            fileData.set(
+                                'image',
+                                selectedFile,
+                                `${Date.now()}-${selectedFile.name}`,
+                            );
+                            console.log(fileData);
+                            axios.post("/api/upload", fileData, {withCredentials: true})
+                                .then((response) => {
+                                    axios.put('/api/pets/' + urlpetid.PetId, {"ProfileUrl": response.data.fileLocation},
+                                        {Params: {id: urlpetid.PetId}, withCredentials: true })
+                                        .then((res) => {
+                                            Swal.fire("Congratulations!", "Profile picture updated", "success");
+                                            setLoading({display: "none"});
+                                            handleCloseUpload();
+                                            fetchPetProfile()
+                                            console.log(res);
+                                        })
+                                }, (error) => {
+                                    setLoading({display: "none"});
+                                    Swal.fire("Oops...", `Error uploading file ${fileName}`, "error");
+                                    console.log(error);
+                                });
+                        }
+                    } catch (error) {
+                        setLoading({display: "none"});
+                        Swal.fire("Oops...", "No file was selected", "error");
+                        console.log(error);
+                    }
+                }
+            })
+            .catch(err => {
+                setLoading({display: "none"});
+                Swal.fire("Oops...", "Only owners can change a pet's profile photo", "error");
+                return;
+            })
     };
 
     return (
