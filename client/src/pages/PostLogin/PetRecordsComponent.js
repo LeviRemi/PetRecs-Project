@@ -60,6 +60,7 @@ function PetRecordsComponent(props) {
         console.log(response.data);
       })
       .catch((error) => {
+        console.log(PetRecordId);
           console.log(error);
       })
     }

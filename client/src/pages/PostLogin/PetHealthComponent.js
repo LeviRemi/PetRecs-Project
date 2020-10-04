@@ -193,10 +193,10 @@ class ViewWeightComponent extends Component {
         <div>
           <MaterialTable
             columns={[
-              { title: 'Date', field: 'Date', defaultSort: 'desc', render: row => <span>{ moment(row["Date"]).format("MM/DD/YYYY") }</span>},
+              { title: 'Date', field: 'Date', defaultSort: 'desc', type: 'date' },
               { title: 'Weight', field: 'Weight' },
             ]}
-            data={fixedData}
+            data={this.state.data}
             title="Pet Weights"
             icons={tableIcons}
             actions={[
@@ -204,14 +204,14 @@ class ViewWeightComponent extends Component {
                 icon: UpdateRounded,
                 tooltip: 'Update Weight',
                 onClick: (event, rowData) => {
-                  this.updateStateWeightId(rowData.WeightId);
+                  this.updateStateWeightId(rowData.PetWeightId);
                   this.handleShowUpdateWeight();
                }
               },
               {
                 icon: DeleteRounded,
                 tooltip: 'Delete Weight',
-                onClick: (event, rowData) => this.deleteWeight(rowData.WeightId)
+                onClick: (event, rowData) => this.deleteWeight(rowData.PetWeightId)
               }
             ]}
             options={{
@@ -331,7 +331,7 @@ class UpdateWeightComponent extends Component {
     this.state = { WeightId: props.weightid,
                    Weight: '',
                    Date: '' }
-    console.log("Component: 'UpdateWeightComponent' loaded");
+    console.log("Component: 'UpdateWeightComponent' loaded for WeightId: " + this.state.WeightId);
   };
 
   componentDidMount() {
@@ -418,8 +418,8 @@ class UpdateWeightComponent extends Component {
                             onChange={ () => this.checkBoxDisableDate() }/>
                 </Form.Group>
                 <Form.Group controlId="formDate">
-                <Form.Control name="date" type="date" max={moment().format("YYYY-MM-DD")}
-                              defaultValue={this.state.Date.substr(0, 10)}
+                <Form.Control name="date" type="date" max={moment.utc().format("YYYY-MM-DD")}
+                              defaultValue={this.state.Date.substr(0,10)}
                               onChange={this.handleDateChange}
                               required/>
                 </Form.Group>
