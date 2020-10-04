@@ -25,16 +25,34 @@ import DeleteRounded from '@material-ui/icons/DeleteRounded';
 export default class PetHealthComponent extends Component {
   constructor(props) {
     super();
-    this.state = { PetId: props.match.params.PetId,
+    this.state = { PetId: props.match.params.PetId }
+  }
+
+  render() {
+    
+    console.log("Component: 'PetHealthComponent' loaded");
+    
+    return (
+
+      <div id="petHealthBodyId" hidden='true'>
+          <ViewWeightComponent petid={this.state.PetId}/>
+      </div>
+    )
+  }
+}
+
+class ViewWeightComponent extends Component {
+  constructor(props) {
+    super();
+    this.state = { data: [],
+                   PetId: props.petid,
                    showAddWeight: false,
                    showUpdateWeight: false
-                  };
-    this.handleShowAddWeight = this.handleShowAddWeight.bind(this);
-    this.handleCloseAddWeight = this.handleCloseAddWeight.bind(this);
-    this.handleShowUpdateWeight = this.handleShowUpdateWeight.bind(this);
-    this.handleCloseUpdateWeight = this.handleCloseUpdateWeight.bind(this);
-    console.log("PetHealthComponent - Using PetId: " + this.state.PetId);
-  }
+                };
+              this.handleShowAddWeight = this.handleShowAddWeight.bind(this);
+              this.handleCloseAddWeight = this.handleCloseAddWeight.bind(this);
+              this.handleShowUpdateWeight = this.handleShowUpdateWeight.bind(this);
+              this.handleCloseUpdateWeight = this.handleCloseUpdateWeight.bind(this); };
 
   handleCloseAddWeight() {  this.setState({ showAddWeight: false }); }
 
@@ -44,18 +62,94 @@ export default class PetHealthComponent extends Component {
 
   handleShowUpdateWeight() { this.setState({ showUpdateWeight: true }); }
 
-  render() {
+  componentDidMount() {
+    manuallyIncrementPromiseCounter();
+    axios.get(`/api/pet-weights/pet/` + this.props.petid, {withCredentials: true} )
+      .then(response=>{
+        this.setState({data: response.data});
+        document.getElementById("petHealthBodyId").hidden = false;
+        manuallyDecrementPromiseCounter();
+      })
+      .catch((error) => {
+          console.log(error);
+          manuallyDecrementPromiseCounter();
+      })
+  }
+
+  deleteWeight = async (WeightId) => {
+    Swal.fire({
+      title: 'Are you sure you want to delete this event?',
+      showDenyButton: true,
+      showCancelButton: true,
+      showConfirmButton: false,
+      denyButtonText: `Delete`,
+  }).then((result) => {
+      // User selects "delete"
+      if (result.isDenied) {
+          axios.delete(`/api/pet-weights/` + WeightId, {withCredentials: true} )
+          .then(response=>{
+            //console.log(response);
+            console.log("WeightId " + WeightId + " deleted sucessfully.");
+            Swal.fire('Success!', 'This weight has been deleted', 'success').then(function() {
+              window.location.reload();
+            });
+          })
+          .catch((error) => {
+            console.log(error);
+            Swal.fire('Oops...', "You do not have permission to delete this weight", 'error');
+          })
+      }
+    })
+  };
+
+  render(){
+    let petData = this.state.data;
+
+    let sortedData = petData.sort(function (a, b) {
+      let formattedA = moment(a.Date);
+      let formattedB = moment(b.Date);
+      return ( formattedA - formattedB );
+    });
     
-    console.log("Component: 'PetHealthComponent' loaded");
+    let fixedData = [];
+    
+    sortedData.forEach(function (weightEntry) {
+      fixedData.push({Date: moment.utc(weightEntry.Date).format("MM/DD/YYYY"), Weight: weightEntry.Weight, WeightId: weightEntry.PetWeightId});
+    });
+    
+    const dateFormatter = tickItem => moment(tickItem).format("MMM YY");
     
     return (
-
-      <div id="petHealthBodyId" hidden='true'>
-          <h5>Weight</h5>
-
-          <ViewWeightComponent petid={this.state.PetId}/>
-          <Button onClick={this.handleShowAddWeight} variant="outline-dark">Add Weight</Button>
-          <Modal
+      <div>
+      <Row>
+        <Col md="auto">
+          <div className="weightTableBox shadowedBox">
+          <LineChart
+              width={660} height={280}
+              data={fixedData}
+              margin={{ top: 2, right:28, left: 2, bottom: 10, }}
+            >
+              <XAxis tickFormatter={dateFormatter} dataKey="Date" />
+              <YAxis unit="lb"/>
+              <CartesianGrid strokeDasharray="3 3" />
+              <Tooltip />
+              <Line type="monotone" dataKey="Weight" stroke="#8884d8" activeDot={{r: 4}} />
+            </LineChart>
+          </div>
+        </Col>
+          <div className="currentWeightBox shadowedBox">
+            Current Weight: <br />
+            <div className="bigFont"> { fixedData.length > 0 && fixedData[fixedData.length - 1].Weight } lb</div> 
+            <div className="smallFont"> { fixedData.length > 0 && fixedData[fixedData.length - 1].Date } </div>
+          </div>
+        <Col>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+        </Col>
+      </Row>
+      <Modal
                 show={this.state.showAddWeight}
                 onHide={this.handleCloseAddWeight}
                 backdrop="static"
@@ -72,61 +166,52 @@ export default class PetHealthComponent extends Component {
                     <Button variant="primary" type="submit" form="AddWeightForm">Add Weight</Button>
             </Modal.Footer>
           </Modal>
+        <div>
+          
+        </div>
 
+        <div>
+          <MaterialTable
+            columns={[
+              { title: 'Date', field: 'Date', defaultSort: 'desc', render: row => <span>{ moment(row["Date"]).format("MM/DD/YYYY") }</span>},
+              { title: 'Weight', field: 'Weight' },
+            ]}
+            data={fixedData}
+            title="Pet Weights"
+            icons={tableIcons}
+            actions={[
+              {
+                icon: UpdateRounded,
+                tooltip: 'Update Weight',
+                onClick: (event, rowData) => {
+                  this.updateStateEventId(rowData.WeightId);
+                  this.handleShowUpdate();
+               }
+              },
+              {
+                icon: DeleteRounded,
+                tooltip: 'Delete Weight',
+                onClick: (event, rowData) => this.deleteWeight(rowData.WeightId)
+              }
+            ]}
+            options={{
+              actionsColumnIndex: -1,
+              pageSize: 10,
+              pageSizeOptions: [ 10 ],
+            }}
+            components={{
+              Toolbar: props => (
+                <div>
+                  <MTableToolbar {...props} />
+                  <div style={{padding: '0px 10px'}}>
+                    <Button onClick={this.handleShowAddWeight} variant="secondary">Add Weight</Button>
+                  </div>
+                </div>
+              ),
+            }}
+            />
+        </div>
       </div>
-    )
-  }
-}
-
-class ViewWeightComponent extends Component {
-  constructor(props) {
-    super();
-    this.state = { data: [{Weight: '', Date: ''}] };
-  }
-
-  componentDidMount() {
-    manuallyIncrementPromiseCounter();
-    axios.get(`/api/pet-weights/pet/` + this.props.petid, {withCredentials: true} )
-      .then(response=>{
-        this.setState({data: response.data});
-        document.getElementById("petHealthBodyId").hidden = false;
-        manuallyDecrementPromiseCounter();
-      })
-      .catch((error) => {
-          console.log(error);
-          manuallyDecrementPromiseCounter();
-      })
-  }
-
-  render(){
-    let petData = this.state.data;
-
-    let sortedData = petData.sort(function (a, b) {
-      let formattedA = moment(a.Date);
-      let formattedB = moment(b.Date);
-      return ( formattedA - formattedB );
-    });
-    
-    const fixedData = [];
-    
-    sortedData.forEach(function (weightEntry) {
-      fixedData.push({Date: moment(weightEntry.Date).format("MMM DD, YYYY"), Weight: weightEntry.Weight});
-    });
-
-    const dateFormatter = tickItem => moment(tickItem).format("MMM YY");
-
-    return (
-      <LineChart
-        width={500} height={300}
-        data={fixedData}
-        margin={{top: 5, right: 20, left: 20, bottom: 10,}}
-      >
-        <XAxis tickFormatter={dateFormatter} dataKey="Date" />
-        <YAxis unit="lb"/>
-        <CartesianGrid strokeDasharray="3 3" />
-        <Tooltip />
-        <Line type="monotone" dataKey="Weight" stroke="#8884d8" activeDot={{r: 4}} />
-      </LineChart>
     )
   }
 }
@@ -144,7 +229,6 @@ class AddWeightComponent extends Component {
   handleDateChange = event => {
     this.setState({Date: event.target.value});
   }
-
   handleSubmit = event => {
     event.preventDefault();
 
@@ -157,10 +241,34 @@ class AddWeightComponent extends Component {
     axios.post(`/api/pet-weights/`, data, {withCredentials: true} )
         .then(response=>{
             console.log(response);
-        })
-        .catch((error) => {
-            console.log(error);
-        })
+            console.log("Event added successfully.");
+            Swal.fire('Success!', 'The weight has been added', 'success').then(function() {
+            window.location.reload();
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+        Swal.fire('Oops...', "You do not have permission to add a weight", 'error');
+      })
+  }
+
+  checkBoxDisableDate() {
+    var checkbox = document.getElementById("formTodayCheckbox");
+    var dateElement = document.getElementById("formDate");
+
+    if (checkbox.checked) {
+      //console.log("noEndCheckBox is checked");
+      let dateNow = moment.utc().format();
+      dateElement.setAttribute("value", dateNow.substr(0,10) );
+      dateElement.setAttribute("disabled", "true");
+      this.setState( {Date: dateNow } );
+      
+    }
+    else {
+      //console.log("noEndCheckBox is unchecked");
+      dateElement.removeAttribute("disabled");
+      dateElement.removeAttribute("value");
+    }
   }
 
   render() {
@@ -178,8 +286,12 @@ class AddWeightComponent extends Component {
                 </Form.Group>
               </Col>
               <Col>
-                <Form.Group controlId="formDate">
+              <Form.Group controlId="formTodayCheckbox">
                 <Form.Label>Date</Form.Label>
+                <Form.Check inline name="noEndCheckbox" type="checkbox" label="Today"
+                            onChange={ () => this.checkBoxDisableDate() }/>
+                </Form.Group>
+                <Form.Group controlId="formDate">
                 <Form.Control name="date" type="date" max={moment().format("YYYY-MM-DD")}
                               onChange={this.handleDateChange}
                               required/>

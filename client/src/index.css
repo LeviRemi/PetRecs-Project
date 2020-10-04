@@ -296,7 +296,6 @@ these styles are post-login */
   color: white;
 }
 
-
 .btn-petprofile-nav:hover {
   color: black;
   transition: 0.23s;
@@ -344,6 +343,38 @@ these styles are post-login */
   border-color: white;
   border-width: 2px 1px 2px 1px;
 }
+
+.bigFont {
+  font-size: 72px;
+  font-weight: 600;
+}
+
+.smallFont {
+  font-size: 12x;
+}
+
+.shadowedBox {
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 1px 4px;
+  border-color: white;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 2px;
+}
+
+.currentWeightBox {
+  text-align: center;
+  padding: 80px 0 0 0;
+  margin-bottom: 20px ;
+  width: 300px ;
+}
+
+.weightTableBox {
+  text-align: center;
+  padding: 20px 0 0 0;
+  margin-bottom: 20px ;
+  width: 670px;
+}
+
 
 .mainContent {
   margin: auto;
