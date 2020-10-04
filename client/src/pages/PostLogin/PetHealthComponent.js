@@ -113,27 +113,28 @@ class ViewWeightComponent extends Component {
       return ( formattedA - formattedB );
     });
     
-    let fixedData = [];
+    let formattedData = [];
     
     sortedData.forEach(function (weightEntry) {
-      fixedData.push({Date: moment.utc(weightEntry.Date).format("MM/DD/YYYY"), Weight: weightEntry.Weight, WeightId: weightEntry.PetWeightId});
+      formattedData.push({Date: moment.utc(weightEntry.Date).format("M/D/YY"), Weight: weightEntry.Weight, WeightId: weightEntry.PetWeightId});
     });
     
-    const dateFormatter = tickItem => moment(tickItem).format("MMM YY");
+    const dateFormatter = tickItem => moment(tickItem).format("M/D");
     
     return (
       <div>
       <Row>
         <Col md="auto">
           <div className="weightTableBox shadowedBox">
+          <h5> Weight </h5>
           <LineChart
               width={660} height={280}
-              data={fixedData}
-              margin={{ top: 2, right:28, left: 2, bottom: 10, }}
+              margin={{ top: 20, right:28, left: 10, bottom: 20, }}
+              data={formattedData}
             >
-              <XAxis tickFormatter={dateFormatter} dataKey="Date" />
+              <XAxis tickFormatter={dateFormatter} dataKey="Date"/>
               <YAxis unit="lb"/>
-              <CartesianGrid strokeDasharray="3 3" />
+              <CartesianGrid strokeDasharray="2 5" />
               <Tooltip />
               <Line type="monotone" dataKey="Weight" stroke="#8884d8" activeDot={{r: 4}} />
             </LineChart>
@@ -141,8 +142,8 @@ class ViewWeightComponent extends Component {
         </Col>
           <div className="currentWeightBox shadowedBox">
             Current Weight: <br />
-            <div className="bigFont"> { fixedData.length > 0 && fixedData[fixedData.length - 1].Weight } lb</div> 
-            <div className="smallFont"> { fixedData.length > 0 && fixedData[fixedData.length - 1].Date } </div>
+            <div className="bigFont"> { sortedData.length > 0 && sortedData[sortedData.length - 1].Weight } lb</div> 
+            <div className="smallFont"> { sortedData.length > 0 && moment.utc(sortedData[sortedData.length - 1].Date).format("M/D/YY") } </div>
           </div>
         <Col>
         </Col>
@@ -216,8 +217,8 @@ class ViewWeightComponent extends Component {
             ]}
             options={{
               actionsColumnIndex: -1,
-              pageSize: 10,
-              pageSizeOptions: [ 10 ],
+              pageSize: 5,
+              pageSizeOptions: [ 5 ],
             }}
             components={{
               Toolbar: props => (

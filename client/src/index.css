@@ -387,11 +387,15 @@ these styles are post-login */
   width: 670px;
 }
 
-
 .mainContent {
   margin: auto;
   position: relative;
   width: 1024px;
   padding: 14px 20px 10px 20px;
   background-color: rgb(255, 255, 255);
+}
+
+.tableContainer {
+  margin-top: 10px;
+  max-height: auto;
 }
