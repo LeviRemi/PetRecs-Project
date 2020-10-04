@@ -154,3 +154,7 @@
     font-weight: 500;
     transition:0.2s;
 }
+
+.nav-tabs {
+    margin-top: 10px;
+}
