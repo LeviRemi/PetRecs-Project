@@ -1,5 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap');
 
+html {
+  --COLOR_CORAL: #FF9389;
+  --COLOR_PALE_PINK: #EBD0CE;
+  --COLOR_CREAM: #F7ECEB;
+  --COLOR_WHITE: #F0F1F7;
+  --COLOR_GRAY: #DADBE6;
+  background: var(--COLOR_GRAY);
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -7,6 +16,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  
 }
 
 code {
@@ -16,12 +26,14 @@ code {
 
 .fontWrap {
   font-family: 'Sora', sans-serif;
+  
 }
 
 .fullPageContainer {
   height: 100%;
   margin: auto;
   width: 1024px;
+  
 }
 
 .nopadding {
@@ -81,7 +93,7 @@ these styles are pre-login */
 }
 
 .btn-homepage-header-register {
-  background-color: #005dff;
+  background-color: var(--COLOR_CORAL);
   color: white;
   padding: 12px 32px;
   text-align: center;

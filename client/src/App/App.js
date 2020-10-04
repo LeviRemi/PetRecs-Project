@@ -26,7 +26,7 @@ library.add(faPlus)
 
 function App(){
   return (
-    <div>
+    <div id="container" style={{background: '#DADBE6'}}>
       <Router>
         <Switch>
           <Route path="/" exact component={()=>isUserLoggedIn()?<Redirect to={"/pets"}/> : <HomePage/> } />

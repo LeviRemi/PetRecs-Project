@@ -45,48 +45,47 @@ function HomePage() {
                 </div>
             </div>
             
-            <Jumbotron fluid as="div">
-                <h1>possible placeholder for an image</h1>
-            </Jumbotron>
+            <div class="img-banner">
+                <img src={require('../dog-bone-banner.jpg')} class="img-fluid" alt="Different dog breeds on a bone"></img>
+            </div>
 
             <div className="homePageBody">
-                This is where the description of the website will go.<br />
-                This is where the description of the website will go.<br />
-                This is where the description of the website will go. Hopefully a wide image above this text block.<br />
-                This is where the description of the website will go.<br />
-                This is where the description of the website will go.<br />
+                PetRecs is the place for you to store all of the information for your furry, or scaly, friend. Store medical records 
+                digitally, track health data, and keep record of important events all in one place.
                 <Container>
                     <Row>
                         <Col>
-                            <p style={featureTitleStyle}>feature description #1<br /></p>
+                            <p style={featureTitleStyle}>Create Individual Profiles<br /></p>
                         </Col>
                         <Col>
-                            <p style={featureTitleStyle}>feature description #2<br /></p>
+                            <p style={featureTitleStyle}>Store Records Digitally<br /></p>
                         </Col>
                         <Col>
-                            <p style={featureTitleStyle}>feature description #3<br /></p>
+                            <p style={featureTitleStyle}>Monitor Health Data<br /></p>
                         </Col>
                     </Row>
                     <Row>
                         <Col>
                         <p style={featureDescStyle}>
-                        The description of feature #1 will be written here.
-                        Hopefully we can come up with a way to share the purpose
-                        of our website in concise statements.
+                        Setup a Pet Profile for each of your pets. This 
+                        allows you to keep all your information 
+                        separate and only share the pets you want.
                         </p>
                         </Col>
                         <Col>
                         <p style={featureDescStyle}>
-                        The description of feature #2 will be written here.
-                        Hopefully we can come up with a way to share the purpose
-                        of our website in concise statements.
+                        Upload scans/digital copies of your medical records 
+                        from the Vet. Minimize the chance of 
+                        physical records getting misplaced or 
+                        damaged.
                         </p>
                         </Col>
                         <Col>
                         <p style={featureDescStyle}>
-                        The description of feature #3 will be written here.
-                        Hopefully we can come up with a way to share the purpose
-                        of our website in concise statements.
+                        Track weight, current medication, and 
+                        significant events related to health. Have it 
+                        accessible all in once place to make sure you 
+                        don't forget something important. 
                         </p>
                         </Col>
                     </Row>
