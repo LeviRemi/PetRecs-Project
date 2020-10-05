@@ -66,8 +66,8 @@ function PetCard(props) {
                 </Col>
                 <Col md="auto">
                     <div className="petCardInfo">
-                                &#128062; {petprofile.PetName} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                &#9892; {petprofile.PetGender} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                &#128062; {petprofile.PetName} <br/>
+                                &#9892; {petprofile.PetGender} &nbsp;&nbsp;&nbsp;
                                 &#128197; {ageYears} &nbsp;&nbsp;&nbsp;
                     </div>
                 </Col>

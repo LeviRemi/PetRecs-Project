@@ -100,7 +100,7 @@
     /*border-color: gray;*/
     border-color: #e8e8e8;
     box-shadow: 2px 2px 10px black;
-    margin: 14px;
+    margin: 13px;
     position: relative;
 
     transition: border-color .3s;
@@ -141,20 +141,8 @@
     left: 50px;
 }
 
-.hiddenForm {
-    display: none;
+.PetContainer {
+    padding-bottom: 5px;
 }
 
-.activeNav button, .btn-petprofile-nav:hover {
-    color: black !important;
-}
 
-.btn-petprofile-nav {
-    color: white;
-    font-weight: 500;
-    transition:0.2s;
-}
-
-.nav-tabs {
-    margin-top: 10px;
-}

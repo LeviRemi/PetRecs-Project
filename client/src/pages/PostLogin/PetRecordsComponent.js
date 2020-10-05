@@ -141,7 +141,7 @@ function PetRecordsComponent(props) {
   };
   
   return (
-      <div id="petRecordsBodyId" className="petProfileBody nopadding" hidden='true' style={{height: "824px"}}>
+      <div id="petRecordsBodyId" className="petProfileBody nopadding" hidden='true' style={{height: "100%"}}>
         <div style={{ maxWidth: '100%' }}>
           <MaterialTable
             columns={[

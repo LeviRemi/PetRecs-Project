@@ -137,8 +137,6 @@ function PetAboutComponent(props) {
 
     const onSubmit = (data) => {
         setLoading({display: "initial"});
-        console.log(data);
-
         let bod = data.petBirthdate;
 
         axios.put(`/api/pets/${petprofile.PetId}`, {
@@ -283,7 +281,7 @@ function PetAboutComponent(props) {
     };
 
     return (
-        <Container id="petProfileBodyId" className="petProfileBody" style={{textAlign: "center"}} hidden={true}>
+        <Container id="petProfileBodyId" className="petProfileBody shadowedBox" style={{textAlign: "center"}} hidden={true}>
 
             <Modal
                 show={show}
