@@ -14,13 +14,13 @@ function HomePage() {
         paddingTop: 30,
         textAlign: 'center',
         fontWeight: 'bold',
-        backgroundColor: 'white',
+        backgroundColor: 'var(--COLOR_WHITE)',
     };
 
     const featureDescStyle = {
         fontSize: 15,
         textAlign: 'center',
-        backgroundColor: 'white'
+        backgroundColor: 'var(--COLOR_WHITE)'
     };
 
     return (
@@ -44,13 +44,13 @@ function HomePage() {
                     </Link>
                 </div>
             </div>
-            
+
             <div class="img-banner">
                 <img src={require('../dog-bone-banner.jpg')} class="img-fluid" alt="Different dog breeds on a bone"></img>
             </div>
 
             <div className="homePageBody">
-                PetRecs is the place for you to store all of the information for your furry, or scaly, friend. Store medical records 
+                PetRecs is the place for you to store all of the information for your furry, or scaly, friend. Store medical records
                 digitally, track health data, and keep record of important events all in one place.
                 <Container>
                     <Row>
@@ -67,35 +67,35 @@ function HomePage() {
                     <Row>
                         <Col>
                         <p style={featureDescStyle}>
-                        Setup a Pet Profile for each of your pets. This 
-                        allows you to keep all your information 
+                        Setup a Pet Profile for each of your pets. This
+                        allows you to keep all your information
                         separate and only share the pets you want.
                         </p>
                         </Col>
                         <Col>
                         <p style={featureDescStyle}>
-                        Upload scans/digital copies of your medical records 
-                        from the Vet. Minimize the chance of 
-                        physical records getting misplaced or 
+                        Upload scans/digital copies of your medical records
+                        from the Vet. Minimize the chance of
+                        physical records getting misplaced or
                         damaged.
                         </p>
                         </Col>
                         <Col>
                         <p style={featureDescStyle}>
-                        Track weight, current medication, and 
-                        significant events related to health. Have it 
-                        accessible all in once place to make sure you 
-                        don't forget something important. 
+                        Track weight, current medication, and
+                        significant events related to health. Have it
+                        accessible all in once place to make sure you
+                        don't forget something important.
                         </p>
                         </Col>
                     </Row>
                     </Container>
             </div>
-            
+
             <div>
                 <Footer />
             </div>
-            
+
         </div>
     )
 }

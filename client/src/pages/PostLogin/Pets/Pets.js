@@ -64,11 +64,11 @@ export default class Pets extends Component {
 
           <LoadingIndicator></LoadingIndicator>
             <Container fluid>
-              <div id="petsPage" className="mainPageBody nopadding" hidden={true}>
+              <div id="petsPage" className="mainPageBody" hidden={true}>
                   <Tabs defaultActiveKey="myPets" id="petsViewTab">
                       <Tab eventKey="myPets" title="My Pets">
                           <div style={{display: "flex", flexWrap: "wrap", justifyContent: "start", alignItems: "baseline"}}
-                               className="mainPageContents shadowedBox">
+                               className="mainPageContents shadowedBoxPets">
                               {this.state.pets.map(pet =>
                                   <div className="PetContainer">
                                       <Link id="PetLink" to={"/Pets/" + pet.PetId} key={pet.PetId}>
@@ -92,7 +92,7 @@ export default class Pets extends Component {
                       </Tab>
                       <Tab eventKey="sharedWithMe" title="Shared With Me">
                           <div style={{display: "flex", flexWrap: "wrap", justifyContent: "start", alignItems: "baseline"}}
-                               className="mainPageContents shadowedBox">
+                               className="mainPageContents shadowedBoxPets">
                               {this.state.sharedPets.map(pet =>
                                   <div className="PetContainer">
                                       <Link id="PetLink" to={"/Pets/" + pet.PetId} key={pet.PetId}>

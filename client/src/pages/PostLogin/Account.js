@@ -38,7 +38,7 @@ function Account() {
     }, [])
 
     const onSubmit = (data) => {
-        axios.put(`http://localhost:5000/api/accounts/${acct.AccountId}`, {
+        axios.put(`/api/accounts/${acct.AccountId}`, {
             FirstName: (data.firstName === "")? acct.FirstName : data.firstName,
             LastName: (data.lastName === "")? acct.LastName : data.lastName,
             Email: (data.email === "")? acct.Email : data.email
