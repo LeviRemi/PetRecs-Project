@@ -395,7 +395,6 @@ these styles are post-login */
   width: 670px;
 }
 
-
 .mainContent {
   margin: auto;
   position: relative;
@@ -404,6 +403,10 @@ these styles are post-login */
   background-color: var(--COLOR_GRAY);
 }
 
+.tableContainer {
+  margin-top: 10px;
+  max-height: auto;
+}
 .nav-link.active {
   background-color: var(--COLOR_WHITE) !important;
 }

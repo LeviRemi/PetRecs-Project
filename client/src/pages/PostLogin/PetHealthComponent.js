@@ -46,6 +46,7 @@ class ViewWeightComponent extends Component {
     super();
     this.state = { data: [],
                    PetId: props.petid,
+                   WeightId: '',
                    showAddWeight: false,
                    showUpdateWeight: false
                 };
@@ -53,6 +54,7 @@ class ViewWeightComponent extends Component {
               this.handleCloseAddWeight = this.handleCloseAddWeight.bind(this);
               this.handleShowUpdateWeight = this.handleShowUpdateWeight.bind(this);
               this.handleCloseUpdateWeight = this.handleCloseUpdateWeight.bind(this); };
+              updateStateWeightId(buttonWeightId) { this.setState({ WeightId: buttonWeightId }); }
 
   handleCloseAddWeight() {  this.setState({ showAddWeight: false }); }
 
@@ -111,27 +113,28 @@ class ViewWeightComponent extends Component {
       return ( formattedA - formattedB );
     });
     
-    let fixedData = [];
+    let formattedData = [];
     
     sortedData.forEach(function (weightEntry) {
-      fixedData.push({Date: moment.utc(weightEntry.Date).format("MM/DD/YYYY"), Weight: weightEntry.Weight, WeightId: weightEntry.PetWeightId});
+      formattedData.push({Date: moment.utc(weightEntry.Date).format("M/D/YY"), Weight: weightEntry.Weight, WeightId: weightEntry.PetWeightId});
     });
     
-    const dateFormatter = tickItem => moment(tickItem).format("MMM YY");
+    const dateFormatter = tickItem => moment(tickItem).format("M/D");
     
     return (
       <div>
       <Row>
         <Col md="auto">
           <div className="weightTableBox shadowedBox">
+          <h5> Weight </h5>
           <LineChart
               width={660} height={280}
-              data={fixedData}
-              margin={{ top: 2, right:28, left: 2, bottom: 10, }}
+              margin={{ top: 20, right:28, left: 10, bottom: 20, }}
+              data={formattedData}
             >
-              <XAxis tickFormatter={dateFormatter} dataKey="Date" />
+              <XAxis tickFormatter={dateFormatter} dataKey="Date"/>
               <YAxis unit="lb"/>
-              <CartesianGrid strokeDasharray="3 3" />
+              <CartesianGrid strokeDasharray="2 5" />
               <Tooltip />
               <Line type="monotone" dataKey="Weight" stroke="#8884d8" activeDot={{r: 4}} />
             </LineChart>
@@ -139,8 +142,8 @@ class ViewWeightComponent extends Component {
         </Col>
           <div className="currentWeightBox shadowedBox">
             Current Weight: <br />
-            <div className="bigFont"> { fixedData.length > 0 && fixedData[fixedData.length - 1].Weight } lb</div> 
-            <div className="smallFont"> { fixedData.length > 0 && fixedData[fixedData.length - 1].Date } </div>
+            <div className="bigFont"> { sortedData.length > 0 && sortedData[sortedData.length - 1].Weight } lb</div> 
+            <div className="smallFont"> { sortedData.length > 0 && moment.utc(sortedData[sortedData.length - 1].Date).format("M/D/YY") } </div>
           </div>
         <Col>
         </Col>
@@ -166,6 +169,24 @@ class ViewWeightComponent extends Component {
                     <Button variant="primary" type="submit" form="AddWeightForm">Add Weight</Button>
             </Modal.Footer>
           </Modal>
+
+          <Modal
+                show={this.state.showUpdateWeight}
+                onHide={this.handleCloseUpdateWeight}
+                backdrop="static"
+                keyboard={false}
+          >
+            <Modal.Header closeButton>
+            <Modal.Title>Update Weight</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <UpdateWeightComponent weightid={this.state.WeightId} />
+            </Modal.Body>
+            <Modal.Footer>
+                    <Button variant="secondary" onClick={this.handleCloseUpdateWeight}>Close</Button>
+                    <Button variant="primary" type="submit" form="UpdateWeightForm">Update Weight</Button>
+            </Modal.Footer>
+          </Modal>
         <div>
           
         </div>
@@ -173,10 +194,10 @@ class ViewWeightComponent extends Component {
         <div>
           <MaterialTable
             columns={[
-              { title: 'Date', field: 'Date', defaultSort: 'desc', render: row => <span>{ moment(row["Date"]).format("MM/DD/YYYY") }</span>},
+              { title: 'Date', field: 'Date', defaultSort: 'desc', type: 'date' },
               { title: 'Weight', field: 'Weight' },
             ]}
-            data={fixedData}
+            data={this.state.data}
             title="Pet Weights"
             icons={tableIcons}
             actions={[
@@ -184,20 +205,20 @@ class ViewWeightComponent extends Component {
                 icon: UpdateRounded,
                 tooltip: 'Update Weight',
                 onClick: (event, rowData) => {
-                  this.updateStateEventId(rowData.WeightId);
-                  this.handleShowUpdate();
+                  this.updateStateWeightId(rowData.PetWeightId);
+                  this.handleShowUpdateWeight();
                }
               },
               {
                 icon: DeleteRounded,
                 tooltip: 'Delete Weight',
-                onClick: (event, rowData) => this.deleteWeight(rowData.WeightId)
+                onClick: (event, rowData) => this.deleteWeight(rowData.PetWeightId)
               }
             ]}
             options={{
               actionsColumnIndex: -1,
-              pageSize: 10,
-              pageSizeOptions: [ 10 ],
+              pageSize: 5,
+              pageSizeOptions: [ 5 ],
             }}
             components={{
               Toolbar: props => (
@@ -293,6 +314,113 @@ class AddWeightComponent extends Component {
                 </Form.Group>
                 <Form.Group controlId="formDate">
                 <Form.Control name="date" type="date" max={moment().format("YYYY-MM-DD")}
+                              onChange={this.handleDateChange}
+                              required/>
+                </Form.Group>
+              </Col>
+            </Row>
+          </Form>
+      </div>
+    )
+  }
+}
+
+
+class UpdateWeightComponent extends Component {
+  constructor(props) {
+    super();
+    this.state = { WeightId: props.weightid,
+                   Weight: '',
+                   Date: '' }
+    console.log("Component: 'UpdateWeightComponent' loaded for WeightId: " + this.state.WeightId);
+  };
+
+  componentDidMount() {
+    axios.get(`/api/pet-weights/` + this.state.WeightId, {withCredentials: true} )
+      .then(response=>{
+        this.setState({ PetId: response.PetId,
+                        Weight: response.data.Weight,
+                        Date: response.data.Date });
+      })
+      .catch((error) => {
+          console.log(error);
+      })
+  }
+
+  handleWeightChange = event => {
+    this.setState({Weight: event.target.value});
+  }
+  handleDateChange = event => {
+    this.setState({Date: event.target.value});
+  }
+
+  handleUpdate = event => {
+    event.preventDefault();
+
+    const data = {
+      WeightId: this.state.WeightId,
+      Weight: this.state.Weight,
+      Date: this.state.Date,
+    };
+
+    axios.put(`/api/pet-weights/` + this.state.WeightId, data, {withCredentials: true} )
+        .then(response=>{
+            console.log(response);
+            console.log("Event added successfully.");
+            Swal.fire('Success!', 'The weight has been updated', 'success').then(function() {
+            window.location.reload();
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+        console.log(data);
+        Swal.fire('Oops...', "You do not have permission to update this weight", 'error');
+      })
+  }
+
+  checkBoxDisableDate() {
+    var checkbox = document.getElementById("formTodayCheckbox");
+    var dateElement = document.getElementById("formDate");
+
+    if (checkbox.checked) {
+      //console.log("noEndCheckBox is checked");
+      let dateNow = moment.utc().format();
+      dateElement.setAttribute("value", dateNow.substr(0,10) );
+      dateElement.setAttribute("disabled", "true");
+      this.setState( {Date: dateNow } );
+      
+    }
+    else {
+      //console.log("noEndCheckBox is unchecked");
+      dateElement.removeAttribute("disabled");
+      dateElement.removeAttribute("value");
+    }
+  }
+
+  render() {
+    return (
+      <div className="formBoxAddWeight">
+          <Form id="UpdateWeightForm" onSubmit={this.handleUpdate}>
+            <Row>
+              <Col>
+                <Form.Group controlId="formWeight">
+                <Form.Label>Pet weight</Form.Label>
+                <Form.Control name="weight" type="number" min={1}
+                              placeholder="Weight"
+                              defaultValue={this.state.Weight}
+                              onChange={this.handleWeightChange}
+                              required/>
+                </Form.Group>
+              </Col>
+              <Col>
+              <Form.Group controlId="formTodayCheckbox">
+                <Form.Label>Date</Form.Label>
+                <Form.Check inline name="noEndCheckbox" type="checkbox" label="Today"
+                            onChange={ () => this.checkBoxDisableDate() }/>
+                </Form.Group>
+                <Form.Group controlId="formDate">
+                <Form.Control name="date" type="date" max={moment.utc().format("YYYY-MM-DD")}
+                              defaultValue={this.state.Date.substr(0,10)}
                               onChange={this.handleDateChange}
                               required/>
                 </Form.Group>

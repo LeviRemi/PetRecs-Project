@@ -85,7 +85,7 @@ export default class PetEventsComponent extends Component {
   render() {
   return (
       <div id="PetEventBodyId" className="petProfileBody nopadding" hidden={true} style={{height: "100%"}}>
-        <div style={{ maxWidth: '100%'}}>
+        <div className="tableContainer">
           <MaterialTable
             columns={[
               { title: 'Type', field: 'EventTypeId',
@@ -93,7 +93,7 @@ export default class PetEventsComponent extends Component {
                            3: 'Fitness', 4: 'Food',
                            5: 'Potty',   6: 'Behavior',
                            7: 'Other' }},
-              { title: 'Date', field: 'Date', render: row => <span>{ moment(row["Date"]).format("MM/DD/YYYY") }</span>},
+              { title: 'Date', field: 'Date', defaultSort: 'desc', render: row => <span>{ moment(row["Date"]).format("MM/DD/YYYY") }</span>},
               { title: 'Description', field: 'EventDescription'}
             ]}
             data={this.state.events}
@@ -276,7 +276,8 @@ class UpdateEventComponent extends Component {
       EventTypeId: "",
       EventId: props.eventid,
       EventDescription: "",
-      Date: ''}
+      Date: ''};
+      console.log("Component: 'UpdateEventComponent' loaded");
   }
 
   componentDidMount() {

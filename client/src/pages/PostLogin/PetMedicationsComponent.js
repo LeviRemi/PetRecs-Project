@@ -99,11 +99,12 @@ export default class PetMedicationsComponent extends Component {
             columns={[
               { title: 'Dosage', field: 'DosageAmount' },
               { title: 'Unit of Measurement', field: 'DosageUnit' },
+              { title: 'Notes', field: 'Notes' },
               { title: 'Start', field: 'StartDate', render: row => <span>{ moment(row["StartDate"]).format("MM/DD/YYYY") }</span> },
               { title: 'End', field: 'EndDate', render: row => this.checkNullDate( row["EndDate"])}
             ]}
             data={this.state.medications}
-            title="Pet Medcations"
+            title="Pet Medications"
             icons={tableIcons}
             actions={[
               {
@@ -339,7 +340,7 @@ class UpdateMedicationComponent extends Component {
         if (!this.state.EndDate) {
           checkbox.setAttribute("checked", "true");
         }
-        this.checkBoxDisableDate();
+        this.initialCheckBoxCheck();
       })
   }
 
@@ -374,10 +375,25 @@ class UpdateMedicationComponent extends Component {
         })
   }
 
+  initialCheckBoxCheck() {
+    var checkbox = document.getElementById("formNoEndCheckbox");
+    var endDateElement = document.getElementById("formEndDate");
+
+    if (checkbox.checked) {
+      console.log("noEndCheckBox is checked");
+      endDateElement.setAttribute("disabled", "true")
+      this.setState( {EndDate: null} );
+      
+    }
+    else {
+      console.log("noEndCheckBox is unchecked");
+      endDateElement.removeAttribute("disabled")
+    };
+  }
+
   checkBoxDisableDate() {
     var checkbox = document.getElementById("formNoEndCheckbox");
     var endDateElement = document.getElementById("formEndDate");
-    // console.log(checkbox.checked);
 
     if (checkbox.checked) {
       console.log("noEndCheckBox is checked");
@@ -389,7 +405,7 @@ class UpdateMedicationComponent extends Component {
       console.log("noEndCheckBox is unchecked");
       endDateElement.removeAttribute("disabled")
       this.setState( {EndDate: "" } );
-    }
+    };
   }
 
   checkNullDate(date) {
