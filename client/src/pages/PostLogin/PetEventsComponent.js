@@ -1,7 +1,8 @@
 // PetEventsComponent.js
 
-import React, { Component, useEffect } from 'react';
+import React, { Component } from 'react';
 import axios from 'axios';
+import trackPromise, { manuallyDecrementPromiseCounter, manuallyIncrementPromiseCounter } from 'react-promise-tracker';
 
 import moment from 'moment';
 
@@ -9,8 +10,15 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import Table from 'react-bootstrap/Table';
 import Modal from 'react-bootstrap/Modal';
+import Swal from "sweetalert2";
+
+import MaterialTable, {MTableToolbar} from "material-table";
+
+// MT Icons
+import tableIcons from '../../utils/TableIcons.js'
+import UpdateRounded from '@material-ui/icons/UpdateRounded';
+import DeleteRounded from '@material-ui/icons/DeleteRounded';
 
 export default class PetEventsComponent extends Component {
   constructor(props) {
@@ -29,96 +37,100 @@ export default class PetEventsComponent extends Component {
   }
 
   handleCloseAdd() { this.setState({ showAdd: false }); }
-
   handleShowAdd() { this.setState({ showAdd: true }); }
-
   handleCloseUpdate() { this.setState({ showUpdate: false }); }
-
   handleShowUpdate() { this.setState({ showUpdate: true }); }
-
   updateStateEventId(buttonEventId) { this.setState({ EventId: buttonEventId }); }
   
   deleteEvent = async (EventId) => {
-    if (window.confirm("Are you sure you want to delete this event?")) {
-      axios.delete(`/api/pet-events/` + EventId, {withCredentials: true} )
-        .then(response=>{
-          //this.setState({events: response.data});
-          console.log("EventId " + EventId + " deleted sucessfully.");
-        })
-        .catch((error) => {
-          console.log(error);
-        })
-      }
+      Swal.fire({
+        title: 'Are you sure you want to delete this event?',
+        showDenyButton: true,
+        showCancelButton: true,
+        showConfirmButton: false,
+        denyButtonText: `Delete`,
+    }).then((result) => {
+        // User selects "delete"
+        if (result.isDenied) {
+            axios.delete(`/api/pet-events/` + EventId, {withCredentials: true} )
+            .then(response=>{
+              console.log("EventId " + EventId + " deleted sucessfully.");
+              Swal.fire('Success!', 'This event has been deleted', 'success').then(function() {
+                window.location.reload();
+              });
+            })
+            .catch((error) => {
+              console.log(error);
+              Swal.fire('Oops...', "You do not have permission to delete this event", 'error');
+            })
+        }
+    })
   };
 
   componentDidMount() {
+    manuallyIncrementPromiseCounter();
     axios.get(`/api/pet-events/pet/` + this.state.PetId, {withCredentials: true} )
       .then(response=>{
         this.setState({events: response.data});
+        document.getElementById("PetEventBodyId").hidden = false;
+        manuallyDecrementPromiseCounter();
         //console.log(response.data);
       })
       .catch((error) => {
         console.log(error);
+        manuallyDecrementPromiseCounter();
       })
   };
 
-  eventTypeIdToString(TypeId) {
-    let stringType = "";
-    if (TypeId === 1) { stringType = "Medical"; } 
-    else if (TypeId === 2) { stringType = "Grooming"; } 
-    else if (TypeId === 3) { stringType = "Fitness"; } 
-    else if (TypeId === 4) { stringType = "Food"; } 
-    else if (TypeId === 5) { stringType = "Potty"; } 
-    else if (TypeId === 6) { stringType = "Behavior"; } 
-    else if (TypeId === 7) { stringType = "Other"; } 
-
-    return stringType;
-  }
-
-  renderTableData() {
-    return this.state.events.map((event, index) => {
-      const { EventId, EventTypeId, EventDescription, Date } = event
-      return (
-        <tr key={EventId}>
-          <td>{this.eventTypeIdToString(EventTypeId)}</td>
-          <td>{moment(Date).format("MM/DD/YYYY")}</td>
-          <td>{EventDescription}</td>
-          <td>
-            <Button size="sm" variant="info" onClick={() => {
-                this.updateStateEventId(EventId);
-                this.handleShowUpdate();
-             }}>
-                &#x270E;
-            </Button>
-            </td>
-          <td><Button size="sm" variant="danger" onClick={ () => { this.deleteEvent(EventId)}}>&#x2716;</Button></td>
-        </tr>
-      )
-    })
-  }
-
   render() {
   return (
-      <div className="petProfileBody nopadding">
-        <h2> Events </h2>
-        <div>
-          <Table size="sm">
-            <thead>
-              <tr>
-                <th>Type</th>
-                <th>Date</th>
-                <th>Description</th>
-                <th>Update</th>
-                <th>Delete</th>
-              </tr>
-            </thead>
-            <tbody>
-              {this.renderTableData()}
-            </tbody>
-          </Table>
-        </div>
-        <div>
-          <Button onClick={this.handleShowAdd} variant="outline-dark">Add Event</Button>
+      <div id="PetEventBodyId" className="petProfileBody nopadding" hidden={true} style={{height: "100%"}}>
+        <div className="tableContainer">
+          <MaterialTable
+            columns={[
+              { title: 'Type', field: 'EventTypeId',
+                lookup:  { 1: 'Medical', 2: 'Grooming',
+                           3: 'Fitness', 4: 'Food',
+                           5: 'Potty',   6: 'Behavior',
+                           7: 'Other' }},
+              { title: 'Date', field: 'Date', defaultSort: 'desc', render: row => <span>{ moment(row["Date"]).format("MM/DD/YYYY") }</span>},
+              { title: 'Description', field: 'EventDescription'}
+            ]}
+            data={this.state.events}
+            title="Pet Events"
+            icons={tableIcons}
+            actions={[
+              {
+                icon: UpdateRounded,
+                tooltip: 'Update Event',
+                onClick: (event, rowData) => {
+                  this.updateStateEventId(rowData.EventId);
+                  this.handleShowUpdate();
+               }
+              },
+              {
+                icon: DeleteRounded,
+                tooltip: 'Delete Event',
+                onClick: (event, rowData) => this.deleteEvent(rowData.EventId)
+              }
+            ]}
+            options={{
+              actionsColumnIndex: -1,
+              pageSize: 10,
+              pageSizeOptions: [ 10 ],
+            }}
+            components={{
+              Toolbar: props => (
+                <div>
+                  <MTableToolbar {...props}></MTableToolbar>
+                  <div style={{padding: '0px 10px'}}>
+                  <Button onClick={this.handleShowAdd} variant="secondary">Add Event</Button>
+
+                  </div>
+                </div>
+              ),
+            }}
+            />
           <Modal
                 show={this.state.showAdd}
                 onHide={this.handleCloseAdd}
@@ -164,7 +176,7 @@ export default class PetEventsComponent extends Component {
 class AddEventComponent extends Component {
   constructor(props) {
     super();
-    this.state = { EventTypeId: 0,
+    this.state = { EventTypeId: 1,
                    PetId: props.petid,
                    EventDescription: "",
                    Date: ''}
@@ -195,11 +207,16 @@ class AddEventComponent extends Component {
 
     axios.post(`/api/pet-events/`, data, {withCredentials: true} )
         .then(response=>{
-            console.log(response);
-        })
-        .catch((error) => {
-            console.log(error);
-        })
+          console.log(response);
+          console.log("Event added successfully.");
+              Swal.fire('Success!', 'This event has been added', 'success').then(function() {
+                window.location.reload();
+              });
+            })
+            .catch((error) => {
+              console.log(error);
+              Swal.fire('Oops...', "You do not have permission to create this event", 'error');
+            })
   }
 
   render() {
@@ -211,6 +228,7 @@ class AddEventComponent extends Component {
                 <Form.Group controlId="formEventType">
                 <Form.Label>Event Type</Form.Label>
                 <Form.Control name="eventTypeId" as="select"
+                              defaultValue="1"
                               onChange={this.handleEventTypeIdChange}>
                   <option value="1">Medical</option>
                   <option value="2">Grooming</option>
@@ -258,7 +276,8 @@ class UpdateEventComponent extends Component {
       EventTypeId: "",
       EventId: props.eventid,
       EventDescription: "",
-      Date: ''}
+      Date: ''};
+      console.log("Component: 'UpdateEventComponent' loaded");
   }
 
   componentDidMount() {
@@ -287,23 +306,28 @@ class UpdateEventComponent extends Component {
   }
 
   handleUpdate = event => {
+    
     event.preventDefault();
 
-  const data = {
-      EventTypeId: this.state.EventTypeId,
-      PetId: this.state.PetId,
-      EventDescription: this.state.EventDescription,
-      Date: this.state.Date,
-    };
+    const data = {
+        EventTypeId: this.state.EventTypeId,
+        PetId: this.state.PetId,
+        EventDescription: this.state.EventDescription,
+        Date: this.state.Date,
+      };
 
-  axios.put(`/api/pet-events/` + this.state.EventId, data, {withCredentials: true} )
-        .then(response=>{
-            console.log(response);
-        })
-        .catch((error) => {
-            console.log(error);
-        })
-  }
+    axios.put(`/api/pet-events/` + this.state.EventId, data, {withCredentials: true} )
+          .then(response=>{
+            console.log("Event added successfully.");
+                Swal.fire('Success!', 'This event has been updated', 'success').then(function() {
+                  window.location.reload();
+                });
+              })
+              .catch((error) => {
+                console.log(error);
+                Swal.fire('Oops...', "You do not have permission to update this event", 'error');
+              })
+    }
 
   render() {
     return (
@@ -332,6 +356,7 @@ class UpdateEventComponent extends Component {
                 <Form.Group controlId="formDate">
                 <Form.Label>Date</Form.Label>
                 <Form.Control name="date" type="date" max={moment().format("YYYY-MM-DD")}
+                              defaultValue={this.state.Date.substr(0, 10)}
                               onChange={this.handleDateChange}
                               required/>
                 </Form.Group>

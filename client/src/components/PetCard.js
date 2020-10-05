@@ -10,7 +10,6 @@ import moment from 'moment';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 
-import FileUpload from '../utils/FileUpload/FileUpload.js';
 import PetImage, { PetCardImage } from './PetImage.js'
 import {useHistory} from "react-router";
 import Swal from "sweetalert2";
@@ -28,44 +27,48 @@ function PetCard(props) {
                 setPetprofile(response.data);
             })
             .catch(err=> {
-                Swal.fire('Oops...', "A pet with this ID does not exist", 'error');
-                history.push('/pets');
+                console.log(err);
             })
     }
 
     let date = (petprofile.PetAgeYear + '-' + petprofile.PetAgeMonth + ' ' +petprofile.PetAgeDay);
-    let ageYears = moment().diff(date, 'years');
+    let ageYears = 10;
+
+    if ( moment().diff(date, 'year') >= 1) {
+        ageYears = moment().diff(date, 'years') + 'y';
+    }
+
+    else if (moment().diff(date, 'month') < 1 ) {
+        ageYears = moment().diff(date, 'days') + 'd';
+    }
+
+    else {
+        ageYears = moment().diff(date, 'months') + 'm';
+    }
 
     useEffect(() => {
         fetchPetProfile();
     }, [])
     
-
     return (
         <div className="petProfileCard">
             <Row>
-                <Col md={1}>
-                    <Link to="/Pets">
+                <Col md="1">
+                <Link to="/Pets">
                         <button className="back-btn-petprofile-nav">
-                            &lt;Back
+                        &#x2b9c;
                         </button>
                     </Link>
                 </Col>
-                <Col md="1">
-                </Col>
                 <Col md="auto">
+                    
                     <PetCardImage {...{PetId: petprofile.PetId, ProfileUrl: petprofile.ProfileUrl}}/>
                 </Col>
                 <Col md="auto">
                     <div className="petCardInfo">
-                        <Row>
-                            <Col md="auto">
-                                &#128062; {petprofile.PetName} <br />
+                                &#128062; {petprofile.PetName} <br/>
                                 &#9892; {petprofile.PetGender} &nbsp;&nbsp;&nbsp;
-                                &#128197; {ageYears} y/o       &nbsp;&nbsp;&nbsp;
-                            </Col>
-                        </Row>
-                        
+                                &#128197; {ageYears} &nbsp;&nbsp;&nbsp;
                     </div>
                 </Col>
             </Row>

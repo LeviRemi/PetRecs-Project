@@ -57,6 +57,9 @@ app.use('/api/sessions', apiSession);
 const apiSpecies = require('./routes/species.routes');
 app.use('/api/species', apiSpecies);
 
+const apiBreed = require('./routes/breed.routes');
+app.use('/api/breeds', apiBreed);
+
 const apiFileUpload = require('./routes/firebase.routes');
 app.use('/api/upload', apiFileUpload);
 

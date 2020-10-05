@@ -7,8 +7,11 @@ const router = require("express").Router();
 // Create a new Pet
 router.post("/", pets.create);
 
-// Retrieve all Pets for logged in user
+// Retrieve all Owned Pets for logged in user
 router.get("/", pets.findAll);
+
+// Retrieve all Shared Pets for logged in user
+router.get("/shared", pets.findShared);
 
 // Retrieve a single Pet with id
 router.get("/:id", pets.findOne);
@@ -21,5 +24,8 @@ router.delete("/:id", pets.delete);
 
 // Share a pet with id (put email in JSON body)
 router.post("/:id/share", pets.share);
+
+// Check if current user is owner of pet
+router.get("/:id/validate", pets.validate);
 
 module.exports = router;

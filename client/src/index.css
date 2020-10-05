@@ -1,5 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap');
 
+html {
+  --COLOR_CORAL: #FF7B78;
+  --COLOR_PALE_PINK: #EBD0CE;
+  --COLOR_WHITE: #fbfbfb;
+  --COLOR_GRAY: #EEEEEE;
+  --COLOR_ROSE_GOLD: #E8C4B8;
+  --COLOR_BLUE: #52708A;
+  --COLOR_DARK: #24323D;
+  background: var(--COLOR_GRAY);
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -7,6 +18,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  
 }
 
 code {
@@ -16,6 +28,7 @@ code {
 
 .fontWrap {
   font-family: 'Sora', sans-serif;
+  background-color: var(--COLOR_GRAY);
 }
 
 .fullPageContainer {
@@ -46,7 +59,6 @@ these styles are pre-login */
   background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(252,252,252,1) 100%);
   display: flex;
   align-content: flex-start;
-  justify-content: top;
 }
 
 .homePageHeaderItem {
@@ -81,7 +93,7 @@ these styles are pre-login */
 }
 
 .btn-homepage-header-register {
-  background-color: #005dff;
+  background-color: var(--COLOR_CORAL);
   color: white;
   padding: 12px 32px;
   text-align: center;
@@ -125,7 +137,6 @@ these styles are pre-login */
 
 .formBoxAddEvent {
   background-color: white;
-  height: 400px;
   text-align: left;
   border-color: white;
   border-style: solid;
@@ -155,7 +166,6 @@ these styles are pre-login */
   left: 0;
   width: 100%;
   overflow: hidden;
-  background: rgb(255,255,255);
   background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(232,234,245,1) 50%, rgba(230,236,255,1) 100%);
 }
 
@@ -163,7 +173,7 @@ these styles are pre-login */
 these styles are post-login */
 
 .mainPageHeaderBar {
-  background: black;
+  background: #000000;
   padding: 0px;
   border-color: rgb(19, 62, 172);
   border-bottom-style: solid;
@@ -178,38 +188,36 @@ these styles are post-login */
   margin: 0 auto;
   position: relative;
   text-align: center;
-  padding: 2px 0px 2px 0px;
 }
 
 .mainPageHeaderItem {
-  padding: 0% 0%;
-  margin: auto auto;
-  font-size: 20px;
   color: white;
-  text-align: right;
-  justify-content: right;
   vertical-align: middle;
   background-color: rgba(0, 150, 40, 0);
 }
 
 .mainPageHeaderTitle {
-  text-align: left;
   justify-content: left;
-  padding: 2px 0px;
-  font-size: 22px;
   color: white;
   background-color: rgba(0, 150, 40, 0);
 }
 
-.recsColor {
-  color: #3d72db;
+.petTitle {
+  font-weight: 100;
+  font-size: 23px;
+  color: var(--COLOR_WHITE);
+}
+
+.recsTitle {
+  color: var(--COLOR_CORAL);
   font-weight: 600;
+  font-size: 24px;
 }
 
 .btn-mainpage-header {
-  color: white;
+  color: var(--COLOR_WHITE);
   background-color: rgba(0, 0, 0, 0);
-  padding: 0px 16px;
+  padding: 5px 16px;
   font-size: 16px;
   vertical-align: middle;
   border: none !important;
@@ -217,7 +225,7 @@ these styles are post-login */
 }
 
 .btn-mainpage-header:hover {
-  color:  #3d72db;;
+  color:  #3d72db;
   transition: 0.1s;
 }
 
@@ -226,10 +234,18 @@ these styles are post-login */
   transition: 0.23s;
 }
 
+.hiddenForm {
+  display: none;
+}
+
+.nav-tabs {
+  margin-top: 10px;
+}
+
 .navProfBar {
-  background: #3d72db;
+  background: var(--COLOR_BLUE);
   vertical-align: middle;
-  height: 56px;
+  /*height: 56px; removed because of weird artifact under pet card when loading new component*/
 }
 
 .navProf {
@@ -241,10 +257,16 @@ these styles are post-login */
   vertical-align: middle;
 }
 
+.petsAccentBar {
+  background: var(--COLOR_BLUE);
+  vertical-align: middle;
+  height: 6px;
+}
+
 .petProfileCard {
-  background-color: rgba(0, 255, 200, 0);
+  background-color: var(--COLOR_BLUE);
   text-align: left;
-  color: white;
+  color: var(--COLOR_WHITE);
   font-size: 14px;
   margin-top: 0px;
   border-color: #003da8;
@@ -254,7 +276,7 @@ these styles are post-login */
 }
 
 .petProfileNavBar {
-  background-color: rgba(200, 100, 200, 0);
+  background-color: var(--COLOR_BLUE);
   text-align: right;
   padding: 0px 0 2px 0;
   margin-top: 11px;
@@ -265,17 +287,17 @@ these styles are post-login */
   text-align: left;
   font-size: 14px;
   font-weight: 400;
-  margin-top: 6px;
+  margin-top: 9px;
 }
 
 .mainPageHeaderBar {
-  background: black;
+  background: var(--COLOR_DARK);
   padding: 0px;
 }
 
 .mainPageHeader {
   text-align: center;
-  background-color: rgba(200, 45, 40, 0);
+  background-color: var(--COLOR_DARK);
   height: 38px;
   width: 1024px;
   margin: 0 auto;
@@ -292,12 +314,7 @@ these styles are post-login */
   vertical-align: middle;
   border: none !important;
   outline: none !important;
-  color: white;
-}
-
-
-.btn-petprofile-nav:hover {
-  color: black;
+  color: var(--COLOR_WHITE);
   transition: 0.23s;
 }
 
@@ -306,30 +323,76 @@ these styles are post-login */
   transition: 0.1s;
 }
 
+.activeNav button, .btn-petprofile-nav:hover {
+  color: var(--COLOR_CORAL)
+}
+
 .back-btn-petprofile-nav {
-  background-color: rgba(57, 97, 207, 0);
-  font-size: 12px;
+  background-color: var(--COLOR_CORAL);
+  margin: 15px 4px;
+  width: 28px;
+  height: 28px;
+  font-size: 18px;
   font-weight: 400;
-  height: 56px;
+  
   border: none !important;
   outline: none !important;
   color: white;
-  text-align: left;
+  border-radius: 100px;
+
+  transition: 0.23s;
+}
+
+.back-btn-petprofile-nav:hover {
+  color: white;
+  background-color: #3d72db;
+  transition: 0.23s;
+  border-radius: 100px;
 }
 
 .petProfileBody {
-  border-style: solid;
-  border-color: white;
-  border-width: 0px 1px 2px 1px;
-  background: white;
+  background: var(--COLOR_WHITE);
   height: 400px;
   padding: 10px;
+  border-radius: 3px;
 }
 
 .petProfileWindow {
   border-style: solid;
-  border-color: white;
+  border-color: var(--COLOR_WHITE);
   border-width: 2px 1px 2px 1px;
+}
+
+.bigFont {
+  font-size: 72px;
+  font-weight: 600;
+}
+
+.smallFont {
+  font-size: 12px;
+}
+
+.shadowedBox {
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 1px 4px;
+  border-color: white;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 2px;
+  background-color: var(--COLOR_WHITE);
+}
+
+.currentWeightBox {
+  text-align: center;
+  padding: 80px 0 0 0;
+  margin-bottom: 20px ;
+  width: 300px ;
+}
+
+.weightTableBox {
+  text-align: center;
+  padding: 20px 0 0 0;
+  margin-bottom: 20px ;
+  width: 670px;
 }
 
 .mainContent {
@@ -337,5 +400,13 @@ these styles are post-login */
   position: relative;
   width: 1024px;
   padding: 14px 20px 10px 20px;
-  background-color: rgb(255, 255, 255);
+  background-color: var(--COLOR_GRAY);
+}
+
+.tableContainer {
+  margin-top: 10px;
+  max-height: auto;
+}
+.nav-link.active {
+  background-color: var(--COLOR_WHITE) !important;
 }

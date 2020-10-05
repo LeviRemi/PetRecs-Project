@@ -14,6 +14,8 @@ function PetCreation() {
     const { register, handleSubmit, errors, watch } = useForm();
 
     const [speciesList, setSpeciesList] = useState([]);
+    const [dogBreedList, setDogBreedList] = useState([]);
+    const [catBreedList, setCatBreedList] = useState([]);
 
     function fetchSpeciesList() {
         axios.get(`/api/species`, {withCredentials: true} )
@@ -25,18 +27,39 @@ function PetCreation() {
             })
     }
 
+    function fetchDogBreedList() {
+        axios.get(`/api/breeds/dog`, {withCredentials: true} )
+            .then(response=>{
+                setDogBreedList(response.data);
+            })
+            .catch(err=> {
+                console.log(err);
+            })
+    }
+
+    function fetchCatBreedList() {
+        axios.get(`/api/breeds/cat`, {withCredentials: true} )
+            .then(response=>{
+                setCatBreedList(response.data);
+            })
+            .catch(err=> {
+                console.log(err);
+            })
+    }
+
     useEffect(() => {
         fetchSpeciesList();
+        fetchDogBreedList();
+        fetchCatBreedList();
     }, [])
 
     const onSubmit = (data) => {
         console.log(data);
         let bod = data.petBirthdate;
 
-
         axios.post('/api/pets/', {
             SpeciesId: data.petSpecies,
-            BreedId: "599", /*the null breed (id: 599) is default*/
+            BreedId: data.petSpecies == 1? data.petDogBreed : data.petSpecies == 2? data.petCatBreed : 599,
             PetName: data.petName,
             PetGender: data.petGender,
             PetAgeYear: bod.substring(0, 4),
@@ -89,6 +112,36 @@ function PetCreation() {
                         </Form.Control>
 
                         <div className="text-danger">{errors.petSpecies && "Species is required"}</div>
+                    </Form.Group>
+
+                    <Form.Group controlId="formDogPetBreed" className={watch('petSpecies') == 1? "" : "hiddenForm"}>
+                        <Form.Label>Breed</Form.Label>
+                        <Form.Control name="petDogBreed" as="select"
+                                      ref={register()}>
+                            <option>Select...</option>
+                            {
+                                dogBreedList.map((option, label) => {
+                                    return (<option value={option.BreedId}>{option.BreedName}</option>)
+                                })
+                            }
+                        </Form.Control>
+
+                        <div className="text-danger">{errors.petDogBreed && "Breed is required"}</div>
+                    </Form.Group>
+
+                    <Form.Group controlId="formCatPetBreed" className={watch('petSpecies') == 2? "" : "hiddenForm"}>
+                        <Form.Label>Breed</Form.Label>
+                        <Form.Control name="petCatBreed" as="select"
+                                      ref={register()}>
+                            <option>Select...</option>
+                            {
+                                catBreedList.map((option, label) => {
+                                    return (<option value={option.BreedId}>{option.BreedName}</option>)
+                                })
+                            }
+                        </Form.Control>
+
+                        <div className="text-danger">{errors.petCatBreed && "Breed is required"}</div>
                     </Form.Group>
 
                     <Form.Group controlId="formPetBirthdate">

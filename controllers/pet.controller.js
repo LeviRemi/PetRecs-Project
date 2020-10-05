@@ -97,7 +97,7 @@ exports.create = (req, res, next) => {
         })
 };
 
-// Retrieve all Pets from the database belonging to specific user
+// Retrieve all *Owned* Pets from the database belonging to specific user
 exports.findAll = (req, res) => {
     if(!req.session.user) {
         res.status(401).send("You are not logged in.");
@@ -107,14 +107,15 @@ exports.findAll = (req, res) => {
     let contactArr = [];
 
     Contact.findAll({
-        where: { AccountId: req.session.user.AccountId}
+        where: { AccountId: req.session.user.AccountId, Owner: 1}
     })
         .then(data => {
             for(let i = 0; i < data.length; i++) {
                 contactArr.push(data[i].PetId);
             }
             Pet.findAll( {
-                where: { PetId: contactArr }
+                where: { PetId: contactArr },
+                attributes: ['PetId', 'PetName', 'ProfileUrl']
             })
                 .then(data => {
                     res.send(data);
@@ -122,7 +123,45 @@ exports.findAll = (req, res) => {
                 .catch(err => {
                     res.status(500).send({
                         message:
-                            err.message || "Some error occurred while retrieving Pets."
+                            err.message || "Some error occurred while retrieving owned Pets."
+                    });
+                });
+        })
+        .catch(err => {
+            res.status(500).send({
+                message:
+                    err.message || "Some error occurred while retrieving Pet Contacts."
+            });
+        });
+};
+
+// Retrieve all Pets from the database *shared* to a specific user
+exports.findShared = (req, res) => {
+    if(!req.session.user) {
+        res.status(401).send("You are not logged in.");
+        return;
+    }
+
+    let contactArr = [];
+
+    Contact.findAll({
+        where: { AccountId: req.session.user.AccountId, Owner: 0}
+    })
+        .then(data => {
+            for(let i = 0; i < data.length; i++) {
+                contactArr.push(data[i].PetId);
+            }
+            Pet.findAll( {
+                where: { PetId: contactArr },
+                attributes: ['PetId', 'PetName', 'ProfileUrl']
+            })
+                .then(data => {
+                    res.send(data);
+                })
+                .catch(err => {
+                    res.status(500).send({
+                        message:
+                            err.message || "Some error occurred while retrieving shared Pets."
                     });
                 });
         })
@@ -356,5 +395,22 @@ exports.share = (req, res, next) => {
             });
         });
 
+}
+// Check if current logged-in user is owner of pet by PetId
+exports.validate = (req, res, next) => {
+    // Validate that user is owner of pet
+    Contact.findOne({
+        where: {PetId: req.params.id, AccountId: req.session.user.AccountId, Owner: 1}
+    })
+        .then(data => {
+            if (data === null) {
+                res.status(401).send("This user is not owner of this pet, or pet does not exist");
+            } else {
+                res.status(200).send("This user is a valid owner of pet")
+            }
+        })
+        .catch(err => {
+            res.status(500).send("Error retrieving pet contacts for account id=" + req.params.id)
+        });
 }
 

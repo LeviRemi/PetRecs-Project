@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 import axios from 'axios';
+import trackPromise, { manuallyDecrementPromiseCounter, manuallyIncrementPromiseCounter } from 'react-promise-tracker';
 
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import moment from 'moment';
@@ -11,26 +12,49 @@ import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Modal from 'react-bootstrap/Modal';
-import Table from 'react-bootstrap/Table';
-  
+import Swal from "sweetalert2";
+
+import MaterialTable, {MTableToolbar} from "material-table";
+
+// MT Icons
+import tableIcons from '../../utils/TableIcons.js'
+import AddRounded from '@material-ui/icons/AddRounded';
+import UpdateRounded from '@material-ui/icons/UpdateRounded';
+import DeleteRounded from '@material-ui/icons/DeleteRounded';
+
 export default class PetHealthComponent extends Component {
   constructor(props) {
     super();
-    this.state = { PetId: props.match.params.PetId,
-                   showAddWeight: false,
-                   showUpdateWeight: false,
-                   showAddMed: false,
-                   showUpdateMed: false };
-    this.handleShowAddWeight = this.handleShowAddWeight.bind(this);
-    this.handleCloseAddWeight = this.handleCloseAddWeight.bind(this);
-    this.handleShowUpdateWeight = this.handleShowUpdateWeight.bind(this);
-    this.handleCloseUpdateWeight = this.handleCloseUpdateWeight.bind(this);
-    this.handleShowAddMed = this.handleShowAddMed.bind(this);
-    this.handleCloseAddMed = this.handleCloseAddMed.bind(this);
-    this.handleShowUpdateMed = this.handleShowUpdateMed.bind(this);
-    this.handleCloseUpdateMed = this.handleCloseUpdateMed.bind(this);
-    console.log("PetHealthComponent - Using PetId: " + this.state.PetId);
+    this.state = { PetId: props.match.params.PetId }
   }
+
+  render() {
+    
+    console.log("Component: 'PetHealthComponent' loaded");
+    
+    return (
+
+      <div id="petHealthBodyId" hidden='true'>
+          <ViewWeightComponent petid={this.state.PetId}/>
+      </div>
+    )
+  }
+}
+
+class ViewWeightComponent extends Component {
+  constructor(props) {
+    super();
+    this.state = { data: [],
+                   PetId: props.petid,
+                   WeightId: '',
+                   showAddWeight: false,
+                   showUpdateWeight: false
+                };
+              this.handleShowAddWeight = this.handleShowAddWeight.bind(this);
+              this.handleCloseAddWeight = this.handleCloseAddWeight.bind(this);
+              this.handleShowUpdateWeight = this.handleShowUpdateWeight.bind(this);
+              this.handleCloseUpdateWeight = this.handleCloseUpdateWeight.bind(this); };
+              updateStateWeightId(buttonWeightId) { this.setState({ WeightId: buttonWeightId }); }
 
   handleCloseAddWeight() {  this.setState({ showAddWeight: false }); }
 
@@ -40,52 +64,95 @@ export default class PetHealthComponent extends Component {
 
   handleShowUpdateWeight() { this.setState({ showUpdateWeight: true }); }
 
-  handleCloseAddMed() { this.setState({ showAddMed: false }); }
+  componentDidMount() {
+    manuallyIncrementPromiseCounter();
+    axios.get(`/api/pet-weights/pet/` + this.props.petid, {withCredentials: true} )
+      .then(response=>{
+        this.setState({data: response.data});
+        document.getElementById("petHealthBodyId").hidden = false;
+        manuallyDecrementPromiseCounter();
+      })
+      .catch((error) => {
+          console.log(error);
+          manuallyDecrementPromiseCounter();
+      })
+  }
 
-  handleShowAddMed() { this.setState({ showAddMed: true }); }
+  deleteWeight = async (WeightId) => {
+    Swal.fire({
+      title: 'Are you sure you want to delete this event?',
+      showDenyButton: true,
+      showCancelButton: true,
+      showConfirmButton: false,
+      denyButtonText: `Delete`,
+  }).then((result) => {
+      // User selects "delete"
+      if (result.isDenied) {
+          axios.delete(`/api/pet-weights/` + WeightId, {withCredentials: true} )
+          .then(response=>{
+            //console.log(response);
+            console.log("WeightId " + WeightId + " deleted sucessfully.");
+            Swal.fire('Success!', 'This weight has been deleted', 'success').then(function() {
+              window.location.reload();
+            });
+          })
+          .catch((error) => {
+            console.log(error);
+            Swal.fire('Oops...', "You do not have permission to delete this weight", 'error');
+          })
+      }
+    })
+  };
 
-  handleCloseUpdateMed() { this.setState({ showUpdateMed: false }); }
+  render(){
+    let petData = this.state.data;
 
-  handleShowUpdateMed() { this.setState({ showUpdateMed: true }); }
-
-  render() {
+    let sortedData = petData.sort(function (a, b) {
+      let formattedA = moment(a.Date);
+      let formattedB = moment(b.Date);
+      return ( formattedA - formattedB );
+    });
     
-    console.log("Component: 'PetHealthComponent' loaded");
+    let formattedData = [];
+    
+    sortedData.forEach(function (weightEntry) {
+      formattedData.push({Date: moment.utc(weightEntry.Date).format("M/D/YY"), Weight: weightEntry.Weight, WeightId: weightEntry.PetWeightId});
+    });
+    
+    const dateFormatter = tickItem => moment(tickItem).format("M/D");
     
     return (
-
       <div>
-        <Row>
-          <Col>
-          <h5>Meds</h5>
-          <MedsComponent petid={this.state.PetId}/>
-          <div>
-            <Button onClick={this.handleShowAddMed} variant="outline-dark">Add Event</Button>
-            <Modal
-                show={this.state.showAddMed}
-                onHide={this.handleCloseAddMed}
-                backdrop="static"
-                keyboard={false}
-          >
-            <Modal.Header closeButton>
-            <Modal.Title>Add Medication</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <AddMedicationComponent petid={this.state.PetId}/>
-            </Modal.Body>
-            <Modal.Footer>
-                    <Button variant="secondary" onClick={this.handleCloseAddMed}>Close</Button>
-                    <Button variant="primary" type="submit" form="AddMedForm">Add Medication</Button>
-            </Modal.Footer>
-          </Modal>
+      <Row>
+        <Col md="auto">
+          <div className="weightTableBox shadowedBox">
+          <h5> Weight </h5>
+          <LineChart
+              width={660} height={280}
+              margin={{ top: 20, right:28, left: 10, bottom: 20, }}
+              data={formattedData}
+            >
+              <XAxis tickFormatter={dateFormatter} dataKey="Date"/>
+              <YAxis unit="lb"/>
+              <CartesianGrid strokeDasharray="2 5" />
+              <Tooltip />
+              <Line type="monotone" dataKey="Weight" stroke="#8884d8" activeDot={{r: 4}} />
+            </LineChart>
           </div>
-          </Col>
-
-          <Col>
-          <h5>Weight</h5>
-          <ViewWeightComponent petid={this.state.PetId}/>
-          <Button onClick={this.handleShowAddWeight} variant="outline-dark">Add Weight</Button>
-          <Modal
+        </Col>
+          <div className="currentWeightBox shadowedBox">
+            Current Weight: <br />
+            <div className="bigFont"> { sortedData.length > 0 && sortedData[sortedData.length - 1].Weight } lb</div> 
+            <div className="smallFont"> { sortedData.length > 0 && moment.utc(sortedData[sortedData.length - 1].Date).format("M/D/YY") } </div>
+          </div>
+        <Col>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+        </Col>
+      </Row>
+      <Modal
                 show={this.state.showAddWeight}
                 onHide={this.handleCloseAddWeight}
                 backdrop="static"
@@ -102,61 +169,70 @@ export default class PetHealthComponent extends Component {
                     <Button variant="primary" type="submit" form="AddWeightForm">Add Weight</Button>
             </Modal.Footer>
           </Modal>
-          </Col>
-        </Row>
 
-        
+          <Modal
+                show={this.state.showUpdateWeight}
+                onHide={this.handleCloseUpdateWeight}
+                backdrop="static"
+                keyboard={false}
+          >
+            <Modal.Header closeButton>
+            <Modal.Title>Update Weight</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <UpdateWeightComponent weightid={this.state.WeightId} />
+            </Modal.Body>
+            <Modal.Footer>
+                    <Button variant="secondary" onClick={this.handleCloseUpdateWeight}>Close</Button>
+                    <Button variant="primary" type="submit" form="UpdateWeightForm">Update Weight</Button>
+            </Modal.Footer>
+          </Modal>
+        <div>
+          
+        </div>
+
+        <div>
+          <MaterialTable
+            columns={[
+              { title: 'Date', field: 'Date', defaultSort: 'desc', type: 'date' },
+              { title: 'Weight', field: 'Weight' },
+            ]}
+            data={this.state.data}
+            title="Pet Weights"
+            icons={tableIcons}
+            actions={[
+              {
+                icon: UpdateRounded,
+                tooltip: 'Update Weight',
+                onClick: (event, rowData) => {
+                  this.updateStateWeightId(rowData.PetWeightId);
+                  this.handleShowUpdateWeight();
+               }
+              },
+              {
+                icon: DeleteRounded,
+                tooltip: 'Delete Weight',
+                onClick: (event, rowData) => this.deleteWeight(rowData.PetWeightId)
+              }
+            ]}
+            options={{
+              actionsColumnIndex: -1,
+              pageSize: 5,
+              pageSizeOptions: [ 5 ],
+            }}
+            components={{
+              Toolbar: props => (
+                <div>
+                  <MTableToolbar {...props} />
+                  <div style={{padding: '0px 10px'}}>
+                    <Button onClick={this.handleShowAddWeight} variant="secondary">Add Weight</Button>
+                  </div>
+                </div>
+              ),
+            }}
+            />
+        </div>
       </div>
-        
-    )
-  }
-}
-
-class ViewWeightComponent extends Component {
-  constructor(props) {
-    super();
-    this.state = { data: [{Weight: '', Date: ''}] };
-  }
-
-  componentDidMount() {
-    axios.get(`/api/pet-weights/pet/` + this.props.petid, {withCredentials: true} )
-      .then(response=>{
-        this.setState({data: response.data});
-      })
-      .catch((error) => {
-          console.log(error);
-      })
-  }
-
-  render(){
-    let petData = this.state.data;
-
-    let sortedData = petData.sort(function (a, b) {
-      let formattedA = moment(a.Date);
-      let formattedB = moment(b.Date);
-      return ( formattedA - formattedB );
-    });
-    
-    const fixedData = [];
-    
-    sortedData.forEach(function (weightEntry) {
-      fixedData.push({Date: moment(weightEntry.Date).format("MMM DD, YYYY"), Weight: weightEntry.Weight});
-    });
-
-    const dateFormatter = tickItem => moment(tickItem).format("MMM YY");
-
-    return (
-      <LineChart
-        width={500} height={300}
-        data={fixedData}
-        margin={{top: 5, right: 20, left: 20, bottom: 10,}}
-      >
-        <XAxis tickFormatter={dateFormatter} dataKey="Date" />
-        <YAxis unit="lb"/>
-        <CartesianGrid strokeDasharray="3 3" />
-        <Tooltip />
-        <Line type="monotone" dataKey="Weight" stroke="#8884d8" activeDot={{r: 4}} />
-      </LineChart>
     )
   }
 }
@@ -174,7 +250,6 @@ class AddWeightComponent extends Component {
   handleDateChange = event => {
     this.setState({Date: event.target.value});
   }
-
   handleSubmit = event => {
     event.preventDefault();
 
@@ -187,10 +262,34 @@ class AddWeightComponent extends Component {
     axios.post(`/api/pet-weights/`, data, {withCredentials: true} )
         .then(response=>{
             console.log(response);
-        })
-        .catch((error) => {
-            console.log(error);
-        })
+            console.log("Event added successfully.");
+            Swal.fire('Success!', 'The weight has been added', 'success').then(function() {
+            window.location.reload();
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+        Swal.fire('Oops...', "You do not have permission to add a weight", 'error');
+      })
+  }
+
+  checkBoxDisableDate() {
+    var checkbox = document.getElementById("formTodayCheckbox");
+    var dateElement = document.getElementById("formDate");
+
+    if (checkbox.checked) {
+      //console.log("noEndCheckBox is checked");
+      let dateNow = moment.utc().format();
+      dateElement.setAttribute("value", dateNow.substr(0,10) );
+      dateElement.setAttribute("disabled", "true");
+      this.setState( {Date: dateNow } );
+      
+    }
+    else {
+      //console.log("noEndCheckBox is unchecked");
+      dateElement.removeAttribute("disabled");
+      dateElement.removeAttribute("value");
+    }
   }
 
   render() {
@@ -208,8 +307,12 @@ class AddWeightComponent extends Component {
                 </Form.Group>
               </Col>
               <Col>
-                <Form.Group controlId="formDate">
+              <Form.Group controlId="formTodayCheckbox">
                 <Form.Label>Date</Form.Label>
+                <Form.Check inline name="noEndCheckbox" type="checkbox" label="Today"
+                            onChange={ () => this.checkBoxDisableDate() }/>
+                </Form.Group>
+                <Form.Group controlId="formDate">
                 <Form.Control name="date" type="date" max={moment().format("YYYY-MM-DD")}
                               onChange={this.handleDateChange}
                               required/>
@@ -222,187 +325,104 @@ class AddWeightComponent extends Component {
   }
 }
 
-class MedsComponent extends Component {
+
+class UpdateWeightComponent extends Component {
   constructor(props) {
     super();
-    console.log(props);
-    this.state = { PetId: props.petid,
-                   medications: [],
-                   MedicationId: ''
-                  };
-  }
-
-  updateStateMedicationId(buttonMedicationId) { this.setState({ MedicationId: buttonMedicationId }); }
-
-
-  deleteMedication = async (MedicationId) => {
-    if (window.confirm("Are you sure you want to delete this medication?")) {
-      axios.delete(`/api/medications/` + MedicationId, {withCredentials: true} )
-        .then(response=>{
-          //this.setState({events: response.data});
-          console.log("Medication " + MedicationId + " deleted sucessfully.");
-        })
-        .catch((error) => {
-          console.log(error);
-        })
-      }
+    this.state = { WeightId: props.weightid,
+                   Weight: '',
+                   Date: '' }
+    console.log("Component: 'UpdateWeightComponent' loaded for WeightId: " + this.state.WeightId);
   };
 
   componentDidMount() {
-    axios.get(`/api/medications/pet/` + this.state.PetId, {withCredentials: true} )
+    axios.get(`/api/pet-weights/` + this.state.WeightId, {withCredentials: true} )
       .then(response=>{
-        this.setState({medications: response.data});
-        //console.log(response.data);
+        this.setState({ PetId: response.PetId,
+                        Weight: response.data.Weight,
+                        Date: response.data.Date });
       })
       .catch((error) => {
-        console.log(error);
+          console.log(error);
       })
-  };
-
-  renderTableData() {
-    return this.state.medications.map((medication, index) => {
-      const { MedicationId, DosageAmount, DosageUnit, StartDate, EndDate, Notes } = medication
-      return (
-        <tr key={MedicationId}>
-          <td>{DosageAmount}</td>
-          <td>{DosageUnit}</td>
-          <td>{moment(StartDate).format("MM/DD/YYYY")}</td>
-          <td>{moment(EndDate).format("MM/DD/YYYY")}</td>
-          <td>{Notes}</td>
-          <td>
-            <Button size="sm" variant="info" onClick={() => {
-                this.updateStateMedicationId(MedicationId);
-                this.handleShowUpdate();
-             }}>
-                &#x270E;
-            </Button>
-            </td>
-          <td><Button size="sm" variant="danger" onClick={ () => { this.deleteMedication(MedicationId)}}>&#x2716;</Button></td>
-        </tr>
-      )
-    })
   }
 
-
-
-  render(){
-    
-    return (
-      <div>
-        <h2> Meds </h2>
-        <div>
-          <Table size="sm">
-            <thead>
-              <tr>
-                <th>Dosage</th>
-                <th>Unit</th>
-                <th>Start</th>
-                <th>End</th>
-                <th>Notes</th>
-                <th>Edit</th>
-                <th>Delete</th>
-              </tr>
-            </thead>
-            <tbody>
-              {this.renderTableData()}
-            </tbody>
-          </Table>
-        </div>
-      </div>
-    )
+  handleWeightChange = event => {
+    this.setState({Weight: event.target.value});
   }
-}
+  handleDateChange = event => {
+    this.setState({Date: event.target.value});
+  }
 
-class AddMedicationComponent extends Component {
-  constructor(props) {
-    super();
-    this.state = { PetId: props.petid,
-                   DosageAmount: "",
-                   DosageUnit: "",
-                   StartDate: "",
-                   EndDate: "",
-                   Notes: ""}
-    console.log("Component: 'AddMedicationComponent' loaded");
-  };
-
-  handleDosageAmountChange = event => { this.setState({DosageAmount: event.target.value}); }
-  handleDosageUnitChange = event => { this.setState({DosageUnit: event.target.value}); }
-  handleStartDateChange = event => { this.setState({StartDate: event.target.value}); }
-  handleEndDateChange = event => { this.setState({EndDate: event.target.value}); }
-  handleNotesChange = event => { this.setState({Notes: event.target.value}); }
-
-  handleSubmit = event => {
+  handleUpdate = event => {
     event.preventDefault();
 
     const data = {
-      PetId: this.state.PetId,
-      DosageAmount: this.state.DosageAmount,
-      DosageUnit: this.state.DosageUnit,
-      StartDate: this.state.StartDate,
-      EndDate: this.state.EndDate,
-      Notes: this.state.Notes
+      WeightId: this.state.WeightId,
+      Weight: this.state.Weight,
+      Date: this.state.Date,
     };
 
-    axios.post(`/api/medications/`, data, {withCredentials: true} )
+    axios.put(`/api/pet-weights/` + this.state.WeightId, data, {withCredentials: true} )
         .then(response=>{
             console.log(response);
-        })
-        .catch((error) => {
-            console.log(error);
-        })
+            console.log("Event added successfully.");
+            Swal.fire('Success!', 'The weight has been updated', 'success').then(function() {
+            window.location.reload();
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+        console.log(data);
+        Swal.fire('Oops...', "You do not have permission to update this weight", 'error');
+      })
+  }
+
+  checkBoxDisableDate() {
+    var checkbox = document.getElementById("formTodayCheckbox");
+    var dateElement = document.getElementById("formDate");
+
+    if (checkbox.checked) {
+      //console.log("noEndCheckBox is checked");
+      let dateNow = moment.utc().format();
+      dateElement.setAttribute("value", dateNow.substr(0,10) );
+      dateElement.setAttribute("disabled", "true");
+      this.setState( {Date: dateNow } );
+      
+    }
+    else {
+      //console.log("noEndCheckBox is unchecked");
+      dateElement.removeAttribute("disabled");
+      dateElement.removeAttribute("value");
+    }
   }
 
   render() {
     return (
       <div className="formBoxAddWeight">
-          <Form id="AddMedForm" onSubmit={this.handleSubmit}>
+          <Form id="UpdateWeightForm" onSubmit={this.handleUpdate}>
             <Row>
               <Col>
-                <Form.Group controlId="formDosageAmount">
-                <Form.Label>Dosage amount</Form.Label>
-                <Form.Control name="DosageAmount" type="number" min={0}
-                              defaultValue={0}
-                              onChange={this.handleDosageAmountChange}
+                <Form.Group controlId="formWeight">
+                <Form.Label>Pet weight</Form.Label>
+                <Form.Control name="weight" type="number" min={1}
+                              placeholder="Weight"
+                              defaultValue={this.state.Weight}
+                              onChange={this.handleWeightChange}
                               required/>
                 </Form.Group>
               </Col>
               <Col>
-              <Form.Group controlId="formDosageUnit">
-                <Form.Label>unit</Form.Label>
-                <Form.Control name="DosageUnit" type="number" min={0}
-                              defaultValue={0}
-                              onChange={this.handleDosageUnitChange}
-                              required/>
-              </Form.Group>
-              </Col>
-              </Row>
-              <Row>
-              <Col>
-                <Form.Group controlId="formStartDate">
+              <Form.Group controlId="formTodayCheckbox">
                 <Form.Label>Date</Form.Label>
-                <Form.Control name="date" type="date" max={moment().format("YYYY-MM-DD")}
-                              onChange={this.handleStartDateChange}
-                              required/>
+                <Form.Check inline name="noEndCheckbox" type="checkbox" label="Today"
+                            onChange={ () => this.checkBoxDisableDate() }/>
                 </Form.Group>
-              </Col>
-              <Col>
-              <Form.Group controlId="formEndDate">
-                <Form.Label>Date</Form.Label>
-                <Form.Control name="date" type="date" 
-                              min={moment(this.state.StartDate).format("YYYY-MM-DD")}
-                              onChange={this.handleEndDateChange}
+                <Form.Group controlId="formDate">
+                <Form.Control name="date" type="date" max={moment.utc().format("YYYY-MM-DD")}
+                              defaultValue={this.state.Date.substr(0,10)}
+                              onChange={this.handleDateChange}
                               required/>
-                </Form.Group>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <Form.Group controlId="formNotes">
-                    <Form.Label>Notes</Form.Label>
-                    <Form.Control name="Notes" type="textarea" as="textarea" rows="5"
-                                  placeholder="Enter a description of the event here..."
-                                  onChange={this.handleNotesChange}
-                                  required/>
                 </Form.Group>
               </Col>
             </Row>
