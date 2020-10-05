@@ -31,10 +31,15 @@ code {
   background-color: var(--COLOR_GRAY);
 }
 
-.fullPageContainer {
+.fullPageContainer{
   height: 100%;
   margin: auto;
   width: 1024px;
+  background-color: var(--COLOR_GRAY);
+}
+
+#container {
+  background-color: var(--COLOR_GRAY) !important;
 }
 
 .nopadding {
@@ -55,8 +60,8 @@ these styles are pre-login */
 
 .homePageHeader {
   text-align: right;
-  background: rgb(255,255,255);
-  background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(252,252,252,1) 100%);
+  background: var(--COLOR_WHITE);
+  /*background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(252,252,252,1) 100%);*/
   display: flex;
   align-content: flex-start;
 }
@@ -65,12 +70,13 @@ these styles are pre-login */
   padding: 10px;
   font-size: 48px;
   font-weight: bold;
+  background-color: var(--COLOR_WHITE);
 }
 
 .homePageBody {
   padding: 20px 10px;
   text-align: left;
-  background-color: white;
+  background-color: var(--COLOR_WHITE);
   font-size: 20px;
   width: 100%;
 }
@@ -112,7 +118,7 @@ these styles are pre-login */
   margin: auto;
   margin-top: 20px;
   text-align: center;
-  background: rgb(255,255,255);
+  background: var(--COLOR_WHITE);
   background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(252,252,252,1) 100%);
 }
 
@@ -128,7 +134,7 @@ these styles are pre-login */
 }
 
 .formBox {
-  background-color: white;
+  background-color: var(--COLOR_WHITE);
   width: 480px;
   text-align: center;
   margin: 0px auto 0px auto;
@@ -136,7 +142,7 @@ these styles are pre-login */
 }
 
 .formBoxAddEvent {
-  background-color: white;
+  background-color: var(--COLOR_WHITE);
   text-align: left;
   border-color: white;
   border-style: solid;
@@ -144,7 +150,7 @@ these styles are pre-login */
 }
 
 .formBoxAddWeight {
-  background-color: white;
+  background-color: var(--COLOR_WHITE);
   width: 380px;
   text-align: left;
   margin: 0px auto 0px auto;
@@ -225,7 +231,7 @@ these styles are post-login */
 }
 
 .btn-mainpage-header:hover {
-  color:  #3d72db;
+  color:  var(--COLOR_CORAL);
   transition: 0.1s;
 }
 
@@ -337,22 +343,21 @@ these styles are post-login */
   
   border: none !important;
   outline: none !important;
-  color: white;
+  color: var(--COLOR_DARK);
   border-radius: 100px;
 
   transition: 0.23s;
 }
 
 .back-btn-petprofile-nav:hover {
-  color: white;
-  background-color: #3d72db;
+  color: var(--COLOR_WHITE);
+  background-color: var(--COLOR_DARK);
   transition: 0.23s;
   border-radius: 100px;
 }
 
 .petProfileBody {
   background: var(--COLOR_WHITE);
-  height: 400px;
   padding: 10px;
   border-radius: 3px;
 }
@@ -381,6 +386,16 @@ these styles are post-login */
   background-color: var(--COLOR_WHITE);
 }
 
+.shadowedBoxPets {
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 1px 4px;
+  background-color: var(--COLOR_WHITE);
+  border: 1px solid var(--COLOR_GRAY);
+  border-bottom-left-radius: .25rem;
+  border-bottom-right-radius: .25rem;
+  border-top-width: 0px;
+  padding: 15px;
+}
+
 .currentWeightBox {
   text-align: center;
   padding: 80px 0 0 0;
@@ -405,8 +420,19 @@ these styles are post-login */
 
 .tableContainer {
   margin-top: 10px;
-  max-height: auto;
 }
+
+.nav-link {
+  color: var(--COLOR_BLUE);
+  font-weight: 500;
+  transition: 0.1s;
+}
+.nav-link:hover {
+  color: var(--COLOR_CORAL);
+}
+
 .nav-link.active {
   background-color: var(--COLOR_WHITE) !important;
+  border-bottom-color: var(--COLOR_WHITE) !important;
+  color: var(--COLOR_DARK);
 }

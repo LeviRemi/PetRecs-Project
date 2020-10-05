@@ -1,5 +1,6 @@
 .NameText {
     text-align: center;
+    color: var(--COLOR_DARK);
 }
 
 #PetLink, #AddPetLink {
@@ -32,9 +33,9 @@
     border-radius: 135px;
     border-style: solid;
     /*border-color: gray;*/
-    border-color: #e8e8e8;
+    border-color: var(--COLOR_GRAY);
     position: relative;
-    transition: opacity .4s;
+    transition: opacity .23s;
     
 }
 
@@ -89,7 +90,7 @@
 #PetText {
     text-align: center;
     padding-top: 45px;
-    color: gray;
+    color: var(--COLOR_DARK);
 }
 
 #AddPetCircle {
@@ -102,6 +103,7 @@
     box-shadow: 2px 2px 10px black;
     margin: 13px;
     position: relative;
+    color: var(--COLOR_DARK);
 
     transition: border-color .3s;
     transition: background-color .3s;
@@ -134,6 +136,7 @@
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
     text-align: center;
+    backgrond-color: var(--COLOR_CORAL);
 }
 
 #PlusIcon {

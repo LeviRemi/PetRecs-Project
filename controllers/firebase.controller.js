@@ -50,3 +50,19 @@ const bucket = storage.bucket(process.env.GCLOUD_STORAGE_BUCKET_URL);
         return;
     }
 };
+
+exports.delete = (req, res) => {
+
+  // Create new blob in the bucket referencing the file
+  const blob = bucket.file(req.body.data);
+
+  blob.delete()
+  .then(function() {
+    res.status(200).send();
+  })
+  .catch((error) => {
+    res.status(400).send(`Error, could not delete file: ${error}`);
+    console.log(error);
+  });
+
+}
