@@ -52,17 +52,27 @@ function PetRecordsComponent(props) {
       })
   };
 
-  function DeleteRecord(RecordName, PetRecordId) {
+  function DeleteRecord(RecordName, PetRecordId, FireReference) {
     if (window.confirm("You want to delete " + RecordName)) {
-      axios.delete(`/api/pet-records/` + PetRecordId, {withCredentials: true} )
-      .then(response=>{
-        this.setState({records: response.data});
-        console.log(response.data);
+
+      axios.post(`/api/upload/delete`, {data: FireReference}, {withCredentials: true})
+      .then(response => {
+
+        axios.delete(`/api/pet-records/` + PetRecordId, {withCredentials: true} )
+        .then(response=>{
+          UpdateRecords();
+          Swal.fire('Record Deleted', ``, 'success');
+          console.log(response.data);
+        })
+        .catch((error) => {
+            console.log("Firebase Response: " + response);
+            console.log(error);
+        })
       })
       .catch((error) => {
-        console.log(PetRecordId);
-          console.log(error);
+        console.log(error);
       })
+      
     }
   };
 
@@ -101,10 +111,12 @@ function PetRecordsComponent(props) {
 
         // Adding the 'image' field and the selected file as value to our FormData object
         // Changing file name to make it unique and avoid potential later overrides
+
+        const uniqueFileName = `${Date.now()}-${fileUploaded.name}`;
         fileData.set(
           'file',
           fileUploaded,
-          `${Date.now()}-${fileUploaded.name}`,
+          uniqueFileName,
         );
 
         const enteredFileName = prompt('Please enter file name', `${fileUploaded.name}`);
@@ -120,7 +132,7 @@ function PetRecordsComponent(props) {
                 PetId: urlpetid.PetId,
                 RecordName: enteredFileName,
                 RecordUrl: response.data.fileLocation,
-                FileName: fileUploaded.name,
+                FileName: uniqueFileName,
                 UploadDate: Date.now()
               };
 
@@ -161,7 +173,7 @@ function PetRecordsComponent(props) {
               rowData => ({
                 icon: DeleteRounded,
                 tooltip: 'Delete File',
-                onClick: (event, rowData) => {DeleteRecord(rowData.RecordName, rowData.PetRecordId)},
+                onClick: (event, rowData) => {DeleteRecord(rowData.RecordName, rowData.PetRecordId, rowData.FileName)},
                 disabled: rowData.birthYear < 2000
               })
             ]}
