@@ -94,7 +94,7 @@ export default class PetEventsComponent extends Component {
                            5: 'Potty',   6: 'Behavior',
                            7: 'Other' }},
               { title: 'Date', field: 'Date', defaultSort: 'desc', render: row => <span>{ moment(row["Date"]).format("MM/DD/YYYY") }</span> },
-              { title: 'Description', field: 'EventDescription'}
+              { title: 'Description', field: 'EventDescription', render: row => <span className="tableWordBreak"> { row["EventDescription"] }</span>}
             ]}
             data={this.state.events}
             title="Pet Events"

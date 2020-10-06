@@ -66,6 +66,10 @@ these styles are pre-login */
   align-content: flex-start;
 }
 
+.tableWordBreak {
+  word-break: break-word;
+}
+
 .homePageHeaderItem {
   padding: 0px 0 6px 8px;
   font-size: 48px;

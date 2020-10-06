@@ -99,7 +99,7 @@ export default class PetMedicationsComponent extends Component {
             columns={[
               { title: 'Dosage', field: 'DosageAmount' },
               { title: 'Unit of Measurement', field: 'DosageUnit' },
-              { title: 'Notes', field: 'Notes' },
+              { title: 'Notes', field: 'Notes', render: row => <span className="tableWordBreak"> { row["Notes"] }</span>},
               { title: 'Start', field: 'StartDate', render: row => <span>{ moment(row["StartDate"]).format("MM/DD/YYYY") }</span> },
               { title: 'End', field: 'EndDate', render: row => this.checkNullDate( row["EndDate"])}
             ]}
