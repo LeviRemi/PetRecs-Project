@@ -154,9 +154,11 @@ function PetAboutComponent(props) {
             .then((res) => {
                 setLoading({display: "none"});
                 console.log(res);
-                Swal.fire('Congratulations!', "This pet profile has been updated", 'success');
-                fetchPetProfile();
                 handleClose();
+                Swal.fire('Congratulations!', "This pet profile has been updated", 'success').then(function() {
+                    //fetchPetProfile();
+                    window.location.reload();
+                  });
             }, (err) => {
                 setLoading({display: "none"});
                 console.log(err.response.status)
@@ -254,11 +256,12 @@ function PetAboutComponent(props) {
                                     axios.put('/api/pets/' + urlpetid.PetId, {"ProfileUrl": response.data.fileLocation},
                                         {Params: {id: urlpetid.PetId}, withCredentials: true })
                                         .then((res) => {
-                                            Swal.fire("Congratulations!", "Profile picture updated", "success");
                                             setLoading({display: "none"});
-                                            handleCloseUpload();
-                                            fetchPetProfile()
                                             console.log(res);
+                                            handleCloseUpload();
+                                            Swal.fire("Congratulations!", "Profile picture updated", "success").then(function() {
+                                                window.location.reload();
+                                              });
                                         })
                                 }, (error) => {
                                     setLoading({display: "none"});
