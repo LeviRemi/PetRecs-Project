@@ -19,7 +19,7 @@ import MaterialTable, {MTableToolbar} from "material-table";
 // MT Icons
 import tableIcons from '../../utils/TableIcons.js'
 import AddRounded from '@material-ui/icons/AddRounded';
-import UpdateRounded from '@material-ui/icons/UpdateRounded';
+import UpdateRounded from '@material-ui/icons/EditRounded';
 import DeleteRounded from '@material-ui/icons/DeleteRounded';
 
 export default class PetMedicationsComponent extends Component {

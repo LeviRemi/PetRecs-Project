@@ -24,7 +24,7 @@ function HomePage() {
     };
 
     return (
-        <div className="fullPageContainer">
+        <div className="fullPageContainer fontWrap">
             <div className="homePageHeader">
                 <div className="homePageHeaderItem">
                     <img src={require('../pet-recs-logo_low-qual.png')} alt='PetRecs Dogument Logo' width='48' height='55' />
