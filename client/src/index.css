@@ -369,12 +369,19 @@ these styles are post-login */
 }
 
 .bigFont {
-  font-size: 72px;
+  font-size: 60px;
   font-weight: 600;
+}
+
+.lbsFont {
+  color: var(--COLOR_DARK);
+  font-weight: 4500;
+  font-size: 40px;
 }
 
 .smallFont {
   font-size: 12px;
+  font-weight: 600;
 }
 
 .shadowedBox {
