@@ -250,8 +250,8 @@ class AddMedicationComponent extends Component {
               <Col>
                 <Form.Group controlId="formDosageAmount">
                 <Form.Label>Dosage amount</Form.Label>
-                <Form.Control name="DosageAmount" type="number" min={0}
-                              defaultValue={1}
+                <Form.Control name="DosageAmount" type="number" min={0} precision={2} step={0.01}
+                              placeholder="Dosage amount"
                               onChange={this.handleDosageAmountChange}
                               required/>
                 </Form.Group>
@@ -364,6 +364,7 @@ class UpdateMedicationComponent extends Component {
 
     axios.put(`/api/medications/` + this.state.MedId, data, {withCredentials: true} )
         .then(response=>{
+          console.log(response);
           console.log("Medication added successfully.");
           Swal.fire('Success!', 'The medication has been updated', 'success').then(function() {
             window.location.reload();
@@ -426,7 +427,7 @@ class UpdateMedicationComponent extends Component {
               <Col>
                 <Form.Group controlId="formDosageAmount">
                 <Form.Label>Dosage amount</Form.Label>
-                <Form.Control name="DosageAmount" type="number" min={0}
+                <Form.Control name="DosageAmount" type="number" min={0} precision={2} step={0.01}
                               value={this.state.DosageAmount}
                               onChange={this.handleDosageAmountChange}
                               required/>
