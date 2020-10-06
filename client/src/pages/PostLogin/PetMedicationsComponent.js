@@ -270,7 +270,7 @@ class AddMedicationComponent extends Component {
               <Col>
                 <Form.Group controlId="formStartDate">
                 <Form.Label>Start Date</Form.Label>
-                <Form.Control name="startDate" type="date" max={moment().format("YYYY-MM-DD")}
+                <Form.Control name="startDate" type="date"
                               onChange={this.handleStartDateChange}
                               required/>
                 </Form.Group>
@@ -446,7 +446,7 @@ class UpdateMedicationComponent extends Component {
               <Col>
                 <Form.Group controlId="formStartDate">
                 <Form.Label>Start Date</Form.Label>
-                <Form.Control name="startDate" type="date" max={moment().format("YYYY-MM-DD")}
+                <Form.Control name="startDate" type="date"
                               defaultValue={this.state.StartDate}
                               onChange={this.handleStartDateChange}
                               required/>
