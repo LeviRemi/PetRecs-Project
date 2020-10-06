@@ -4,7 +4,7 @@ import React from 'react'
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
-import Jumbotron from 'react-bootstrap/Jumbotron';
+
 import { Link } from 'react-router-dom';
 import Footer from '../components/Footer.js';
 
@@ -27,7 +27,7 @@ function HomePage() {
         <div className="fullPageContainer fontWrap">
             <div className="homePageHeader">
                 <div className="homePageHeaderItem">
-                    <img src={require('../pet-recs-logo_low-qual.png')} alt='PetRecs Dogument Logo' width='48' height='55' />
+                    <img src={require('../icon_lg.png')} alt='PetRecs Dogument Logo' width='58' height='64' />
                     PetRecs
                 </div>
 

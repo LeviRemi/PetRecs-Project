@@ -11,8 +11,9 @@ function Header() {
             <div className="mainPageHeader">
             <Row>
                 <Col sm="auto">
-                    <span className="mainPageHeaderTitle">
-                        &nbsp;&nbsp;&nbsp;&nbsp; <span className="petTitle">Pet</span><span className="recsTitle">Recs</span>
+                    <span className="mainPageHeaderTitle box">
+                        <img src={require('../icon_xsm.png')} alt='PetRecs Dogument Logo' width='33' height='36' />
+                        <span className="petTitle">Pet</span><span className="recsTitle">Recs</span>
                     </span>
                 </Col>
                 <Col>

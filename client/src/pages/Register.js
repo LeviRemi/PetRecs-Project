@@ -43,8 +43,8 @@ function Register() {
         return (
         <div className="fill-window fullPageContainer fontWrap">
             <div className="loginRegPageHeader">
-                <div className="homePageHeaderItem">
-                    <img alt="PetRecs Logo" src={require('../pet-recs-logo_low-qual.png')} width='48' height='55' />
+                <div className="loginRegHeaderItem">
+                    <img alt="PetRecs Logo" src={require('../icon_lg.png')} width='50' height='55' />
                     PetRecs
                 </div>
             </div>
