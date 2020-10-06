@@ -7,6 +7,7 @@ import axios from 'axios';
 
 import moment from 'moment';
 
+import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 
@@ -30,7 +31,7 @@ function PetCard(props) {
                 console.log(err);
             })
     }
-
+    
     let date = (petprofile.PetAgeYear + '-' + petprofile.PetAgeMonth + ' ' +petprofile.PetAgeDay);
     let ageYears = 10;
 
@@ -66,9 +67,18 @@ function PetCard(props) {
                 </Col>
                 <Col md="auto">
                     <div className="petCardInfo">
-                                &#128062; {petprofile.PetName} <br/>
-                                &#9892; {petprofile.PetGender} &nbsp;&nbsp;&nbsp;
-                                &#128197; {ageYears} &nbsp;&nbsp;&nbsp;
+                        <Container fluid>
+                            <Row>
+                                <Col sm={{ span: 1 }}> &#128062; </Col>
+                                <Col > {petprofile.PetName}</Col>
+                            </Row>
+                            <Row>
+                                <Col sm={{ span: 1 }}> &#9892; </Col>
+                                <Col sm={{ span: 3 }}> {petprofile.PetGender}</Col>
+                                <Col sm={{ span: 2 }}> &#128197; </Col> 
+                                <Col sm="auto"> {ageYears} </Col>
+                            </Row>
+                        </Container>
                     </div>
                 </Col>
             </Row>
