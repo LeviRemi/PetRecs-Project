@@ -12,7 +12,7 @@ module.exports = (sequelize) => {
             allowNull: false
         },
         DosageAmount: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.DOUBLE,
             allowNull: false
         },
         // tablet, tsp, shot, pill, gummy, etc.

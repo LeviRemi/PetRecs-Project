@@ -12,7 +12,7 @@ module.exports = (sequelize) => {
             allowNull: false
         },
         Weight: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.DOUBLE,
             allowNull: false,
             isInt: true
         },
