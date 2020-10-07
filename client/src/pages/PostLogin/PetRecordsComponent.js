@@ -53,7 +53,22 @@ function PetRecordsComponent(props) {
   };
 
   function DeleteRecord(RecordName, PetRecordId, FireReference) {
-    if (window.confirm("You want to delete " + RecordName)) {
+    Swal.fire({
+      title: 'Delete ' + RecordName + ' record?',
+      //text: "You won't be able to revert this!",
+      //icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#DD6B55',
+      cancelButtonColor: 'light-gray',
+      confirmButtonText: 'Delete'
+    }).then((result) => {
+    if (result.isConfirmed) {
+
+      Swal.fire({ 
+        title: 'Loading'  
+      });
+
+      Swal.showLoading();
 
       axios.post(`/api/upload/delete`, {data: FireReference}, {withCredentials: true})
       .then(response => {
@@ -74,6 +89,7 @@ function PetRecordsComponent(props) {
       })
       
     }
+  })
   };
 
   function openInNewTab(url) {
@@ -86,6 +102,7 @@ function PetRecordsComponent(props) {
   }, [])
 
   const handleClick = (event) => {
+    hiddenFileInput.current.value = null;
     hiddenFileInput.current.click();
   };
 
@@ -119,13 +136,34 @@ function PetRecordsComponent(props) {
           uniqueFileName,
         );
 
-        const enteredFileName = prompt('Please enter file name', `${fileUploaded.name}`);
+        //const enteredFileName = prompt('Please enter file name', `${fileUploaded.name}`);
+
+        const { value: enteredFileName } = await Swal.fire({
+          title: 'Enter a file name', 
+          input: 'text',
+          inputValue: `${fileUploaded.name}`,
+          showCancelButton: true,
+          reverseButtons: true,
+          inputValidator: (value) => {
+            if (!value) {
+              return 'You need to write something!'
+            }
+          } 
+        })
+
+        console.log(enteredFileName);
 
         if (enteredFileName != null) {
+          Swal.fire({ 
+            title: 'Loading'  
+          });
+   
+          Swal.showLoading();
 
           axios.post("/api/upload/record", fileData, {withCredentials: true})
           .then((response) => {
             console.log("upload success");
+
 
 
             const data = {
@@ -146,20 +184,22 @@ function PetRecordsComponent(props) {
           }, (error) => {
             console.log(error);
           });
-        } else {console.log("Cancelled");}
-      } else {console.log(e.target.files[0]);}
+        } else {
+          console.log("Cancelled");}
+      } else {
+        console.log(e.target.files[0]);}
     } catch (error) {
       console.log(error);
     }
   };
   
   return (
-      <div id="petRecordsBodyId" className="petProfileBody nopadding" hidden='true' style={{height: "100%"}}>
+      <div id="petRecordsBodyId" className="petProfileBody nopadding" hidden={true} style={{height: "100%"}}>
         <div style={{ maxWidth: '100%' }}>
           <MaterialTable
             columns={[
               { title: 'Name', field: 'RecordName' },
-              { title: 'Date Uploaded', field: 'UploadDate', type: 'datetime'}
+              { title: 'Date Uploaded', field: 'UploadDate', type: 'datetime', defaultSort: 'desc'}
             ]}
             data={records}
             title="Pet Records"
