@@ -34,7 +34,7 @@ export default class PetHealthComponent extends Component {
     
     return (
 
-      <div id="petHealthBodyId" hidden='true'>
+      <div id="petHealthBodyId" hidden={true}>
           <ViewWeightComponent petid={this.state.PetId}/>
       </div>
     )

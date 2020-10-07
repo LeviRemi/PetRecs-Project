@@ -93,7 +93,7 @@ export default class PetMedicationsComponent extends Component {
 
   render(){
     return (
-      <div id="PetMedTableId" className="petProfileBody nopadding" hidden="true" style={{height: "100%"}}>
+      <div id="PetMedTableId" className="petProfileBody nopadding" hidden={true} style={{height: "100%"}}>
         <div style={{ maxWidth: '100%'}}>
         <MaterialTable
             columns={[

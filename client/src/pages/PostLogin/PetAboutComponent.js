@@ -330,7 +330,7 @@ function PetAboutComponent(props) {
                                 <option>Select...</option>
                                 {
                                     dogBreedList.map((option, label) => {
-                                        return (<option value={option.BreedId}>{option.BreedName}</option>)
+                                        return (<option value={option.BreedId} key={option.BreedId}>{option.BreedName}</option>)
                                     })
                                 }
                             </Form.Control>
@@ -345,7 +345,7 @@ function PetAboutComponent(props) {
                                 <option>Select...</option>
                                 {
                                     catBreedList.map((option, label) => {
-                                        return (<option value={option.BreedId}>{option.BreedName}</option>)
+                                        return (<option value={option.BreedId} key={option.BreedId}>{option.BreedName}</option>)
                                     })
                                 }
                             </Form.Control>

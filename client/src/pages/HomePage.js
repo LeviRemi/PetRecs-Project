@@ -45,8 +45,8 @@ function HomePage() {
                 </div>
             </div>
 
-            <div class="img-banner">
-                <img src={require('../dog-bone-banner.jpg')} class="img-fluid" alt="Different dog breeds on a bone"></img>
+            <div className="img-banner">
+                <img src={require('../dog-bone-banner.jpg')} className="img-fluid" alt="Different dog breeds on a bone"></img>
             </div>
 
             <div className="homePageBody">
