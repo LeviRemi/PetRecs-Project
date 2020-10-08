@@ -67,8 +67,19 @@ these styles are pre-login */
   align-content: flex-start;
 }
 
+.tableWordBreak {
+  word-break: break-word;
+}
+
 .homePageHeaderItem {
-  padding: 10px;
+  padding: 0px 0 6px 8px;
+  font-size: 48px;
+  font-weight: bold;
+  background-color: var(--COLOR_WHITE);
+}
+
+.loginRegHeaderItem {
+  padding: 24px 0 0 0;
   font-size: 48px;
   font-weight: bold;
   background-color: var(--COLOR_WHITE);
@@ -181,16 +192,13 @@ these styles are post-login */
 
 .mainPageHeaderBar {
   background: #000000;
-  padding: 0px;
-  border-color: rgb(19, 62, 172);
-  border-bottom-style: solid;
-  border-width: 0px;
+  height: 44px
 }
 
 .mainPageHeader {
   text-align: center;
   background-color: rgba(200, 45, 40, 0);
-  height: 38px;
+  height: 30px;
   width: 1024px;
   margin: 0 auto;
   position: relative;
@@ -199,12 +207,17 @@ these styles are post-login */
 
 .mainPageHeaderItem {
   color: white;
-  vertical-align: middle;
   background-color: rgba(0, 150, 40, 0);
+  display: flex;
+  align-items: center;
+  padding: 4px 0 0 0;
 }
 
 .mainPageHeaderTitle {
   justify-content: left;
+  color: white;
+  vertical-align: middle;
+  background-color: rgba(0, 150, 40, 0);
   margin-left: 15px;
 }
 
@@ -212,9 +225,16 @@ these styles are post-login */
   text-decoration: none !important;
 }
 
+.box {
+  display: flex;
+  align-items: center;
+  padding: 2px 0 0 0;
+}
+
 .petTitle {
+  padding: 0 0 0 4px;
   font-weight: 100;
-  font-size: 23px;
+  font-size: 24px;
   color: var(--COLOR_WHITE);
 }
 
@@ -419,12 +439,19 @@ these styles are post-login */
 }
 
 .bigFont {
-  font-size: 72px;
+  font-size: 60px;
   font-weight: 600;
+}
+
+.lbsFont {
+  color: var(--COLOR_DARK);
+  font-weight: 4500;
+  font-size: 40px;
 }
 
 .smallFont {
   font-size: 12px;
+  font-weight: 600;
 }
 
 .shadowedBox {

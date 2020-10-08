@@ -1,6 +1,6 @@
 // Header.js
 
-import React, {useEffect} from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
@@ -11,13 +11,10 @@ function Header() {
             <div className="mainPageHeader">
             <Row>
                 <Col sm="auto">
-
-                        <span className="mainPageHeaderTitle">
-                            <Link to="/pets">
-                            <span className="petTitle">Pet</span><span className="recsTitle">Recs</span>
-                            </Link>
-                        </span>
-
+                    <span className="mainPageHeaderTitle box">
+                        <img src={require('../icon_xsm.png')} alt='PetRecs Dogument Logo' width='33' height='36' />
+                        <Link to="/pets"><span className="petTitle">Pet</span><span className="recsTitle">Recs</span></Link>
+                    </span>
                 </Col>
                 <Col>
                 </Col>

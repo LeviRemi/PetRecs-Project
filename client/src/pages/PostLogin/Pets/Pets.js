@@ -73,7 +73,7 @@ export default class Pets extends Component {
                           <div style={{display: "flex", flexWrap: "wrap", justifyContent: "start", alignItems: "baseline"}}
                                className="mainPageContents shadowedBoxPets">
                               {this.state.pets.map(pet =>
-                                  <div className="PetContainer">
+                                  <div className="PetContainer" key={pet.PetId}>
                                       <Link id="PetLink" to={"/Pets/" + pet.PetId} key={pet.PetId}>
                                           <PetImage {...{PetId: pet.PetId, ProfileUrl: pet.ProfileUrl}}/>
                                       </Link>
@@ -97,7 +97,7 @@ export default class Pets extends Component {
                           <div style={{display: "flex", flexWrap: "wrap", justifyContent: "start", alignItems: "baseline"}}
                                className="mainPageContents shadowedBoxPets">
                               {this.state.sharedPets.map(pet =>
-                                  <div className="PetContainer">
+                                  <div className="PetContainer" key={pet.PetId}>
                                       <Link id="PetLink" to={"/Pets/" + pet.PetId} key={pet.PetId}>
                                           <PetImage {...{PetId: pet.PetId, ProfileUrl: pet.ProfileUrl}}/>
                                       </Link>

@@ -27,10 +27,11 @@ function Login() {
     }
 
     return (
-        <div className="fill-window fullPageContainer">
+        <div className="fill-window fullPageContainer fontWrap shadowedBox">
             <div className="loginRegPageHeader">
-                <div className="homePageHeaderItem">
-                    <img alt="PetRecs Logo" src={require('../pet-recs-logo_low-qual.png')} width='48' height='55' />
+                <div className="loginRegHeaderItem">
+                    <span className="box"> </span>
+                    <img alt="PetRecs Logo" src={require('../icon_lg.png')} width='50' height='55' />
                     PetRecs
                 </div>
             </div>

@@ -19,7 +19,7 @@ import MaterialTable, {MTableToolbar} from "material-table";
 // MT Icons
 import tableIcons from '../../utils/TableIcons.js'
 import AddRounded from '@material-ui/icons/AddRounded';
-import UpdateRounded from '@material-ui/icons/UpdateRounded';
+import UpdateRounded from '@material-ui/icons/EditRounded';
 import DeleteRounded from '@material-ui/icons/DeleteRounded';
 
 export default class PetMedicationsComponent extends Component {
@@ -93,13 +93,13 @@ export default class PetMedicationsComponent extends Component {
 
   render(){
     return (
-      <div id="PetMedTableId" className="petProfileBody nopadding FadeIn" hidden="true" style={{height: "100%"}}>
+      <div id="PetMedTableId" className="petProfileBody nopadding FadeIn" hidden={true} style={{height: "100%"}}>
         <div style={{ maxWidth: '100%'}}>
         <MaterialTable
             columns={[
               { title: 'Dosage', field: 'DosageAmount' },
               { title: 'Unit of Measurement', field: 'DosageUnit' },
-              { title: 'Notes', field: 'Notes' },
+              { title: 'Notes', field: 'Notes', render: row => <span className="tableWordBreak"> { row["Notes"] }</span>},
               { title: 'Start', field: 'StartDate', render: row => <span>{ moment(row["StartDate"]).format("MM/DD/YYYY") }</span> },
               { title: 'End', field: 'EndDate', render: row => this.checkNullDate( row["EndDate"])}
             ]}
@@ -250,8 +250,8 @@ class AddMedicationComponent extends Component {
               <Col>
                 <Form.Group controlId="formDosageAmount">
                 <Form.Label>Dosage amount</Form.Label>
-                <Form.Control name="DosageAmount" type="number" min={0}
-                              defaultValue={1}
+                <Form.Control name="DosageAmount" type="number" min={0} precision={2} step={0.01}
+                              placeholder="Dosage amount"
                               onChange={this.handleDosageAmountChange}
                               required/>
                 </Form.Group>
@@ -270,7 +270,7 @@ class AddMedicationComponent extends Component {
               <Col>
                 <Form.Group controlId="formStartDate">
                 <Form.Label>Start Date</Form.Label>
-                <Form.Control name="startDate" type="date" max={moment().format("YYYY-MM-DD")}
+                <Form.Control name="startDate" type="date"
                               onChange={this.handleStartDateChange}
                               required/>
                 </Form.Group>
@@ -364,6 +364,7 @@ class UpdateMedicationComponent extends Component {
 
     axios.put(`/api/medications/` + this.state.MedId, data, {withCredentials: true} )
         .then(response=>{
+          console.log(response);
           console.log("Medication added successfully.");
           Swal.fire('Success!', 'The medication has been updated', 'success').then(function() {
             window.location.reload();
@@ -426,7 +427,7 @@ class UpdateMedicationComponent extends Component {
               <Col>
                 <Form.Group controlId="formDosageAmount">
                 <Form.Label>Dosage amount</Form.Label>
-                <Form.Control name="DosageAmount" type="number" min={0}
+                <Form.Control name="DosageAmount" type="number" min={0} precision={2} step={0.01}
                               value={this.state.DosageAmount}
                               onChange={this.handleDosageAmountChange}
                               required/>
@@ -446,7 +447,7 @@ class UpdateMedicationComponent extends Component {
               <Col>
                 <Form.Group controlId="formStartDate">
                 <Form.Label>Start Date</Form.Label>
-                <Form.Control name="startDate" type="date" max={moment().format("YYYY-MM-DD")}
+                <Form.Control name="startDate" type="date"
                               defaultValue={this.state.StartDate}
                               onChange={this.handleStartDateChange}
                               required/>

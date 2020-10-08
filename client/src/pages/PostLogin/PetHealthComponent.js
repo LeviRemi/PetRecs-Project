@@ -19,7 +19,7 @@ import MaterialTable, {MTableToolbar} from "material-table";
 // MT Icons
 import tableIcons from '../../utils/TableIcons.js'
 import AddRounded from '@material-ui/icons/AddRounded';
-import UpdateRounded from '@material-ui/icons/UpdateRounded';
+import UpdateRounded from '@material-ui/icons/EditRounded';
 import DeleteRounded from '@material-ui/icons/DeleteRounded';
 
 export default class PetHealthComponent extends Component {
@@ -34,7 +34,7 @@ export default class PetHealthComponent extends Component {
     
     return (
 
-      <div id="petHealthBodyId" hidden='true'>
+      <div id="petHealthBodyId" hidden={true}>
           <ViewWeightComponent petid={this.state.PetId}/>
       </div>
     )
@@ -142,7 +142,7 @@ class ViewWeightComponent extends Component {
         </Col>
           <div className="currentWeightBox shadowedBox FadeIn">
             Current Weight: <br />
-            <div className="bigFont"> { sortedData.length > 0 && sortedData[sortedData.length - 1].Weight } lb</div> 
+            <div className="bigFont"> { sortedData.length > 0 && sortedData[sortedData.length - 1].Weight } <span className="lbsFont">lbs</span></div> 
             <div className="smallFont"> { sortedData.length > 0 && moment.utc(sortedData[sortedData.length - 1].Date).format("M/D/YY") } </div>
           </div>
         <Col>
@@ -187,15 +187,12 @@ class ViewWeightComponent extends Component {
                     <Button variant="primary" type="submit" form="UpdateWeightForm">Update Weight</Button>
             </Modal.Footer>
           </Modal>
-        <div>
-          
-        </div>
 
         <div className="FadeIn">
           <MaterialTable
             columns={[
               { title: 'Date', field: 'Date', defaultSort: 'desc', type: 'date' },
-              { title: 'Weight', field: 'Weight' },
+              { title: 'Weight', field: 'Weight', render: row => <span>{ row["Weight"] } lbs </span> },
             ]}
             data={this.state.data}
             title="Pet Weights"
@@ -300,7 +297,7 @@ class AddWeightComponent extends Component {
               <Col>
                 <Form.Group controlId="formWeight">
                 <Form.Label>Pet weight</Form.Label>
-                <Form.Control name="weight" type="number" min={1}
+                <Form.Control name="weight" type="number" min={0} precision={2} step={0.01}
                               placeholder="Weight"
                               onChange={this.handleWeightChange}
                               required/>
@@ -405,7 +402,7 @@ class UpdateWeightComponent extends Component {
               <Col>
                 <Form.Group controlId="formWeight">
                 <Form.Label>Pet weight</Form.Label>
-                <Form.Control name="weight" type="number" min={1}
+                <Form.Control name="weight" type="number" min={0} precision={2} step={0.01}
                               placeholder="Weight"
                               defaultValue={this.state.Weight}
                               onChange={this.handleWeightChange}
