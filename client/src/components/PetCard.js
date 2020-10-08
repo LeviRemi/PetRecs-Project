@@ -65,17 +65,17 @@ function PetCard(props) {
                 <Col md="auto">
                     {cardAcquired && <PetCardImage {...{PetId: petprofile.PetId, ProfileUrl: petprofile.ProfileUrl}}/>}
                 </Col>
-                <Col md="auto">
+                <Col md="auto" style={{paddingLeft: "0px"}}>
                     {cardAcquired && <div className="petCardInfo FadeIn">
                         <Container fluid>
                             <Row>
-                                <Col sm={{ span: 1 }}> &#128062; </Col>
+                                <Col sm={{ span: 1 }} style={{right: "-5px"}}> &#128062; </Col>
                                 <Col > {petprofile.PetName}</Col>
                             </Row>
                             <Row>
-                                <Col sm={{ span: 1 }}> &#9892; </Col>
-                                <Col sm={{ span: 3 }}> {petprofile.PetGender}</Col>
-                                <Col sm={{ span: 2 }}> &#128197; </Col>
+                                <Col sm={{ span: 1 }} style={{right: "-8px"}}> &#9892; </Col>
+                                <Col sm={{ span: 1 }}> {petprofile.PetGender}</Col>
+                                <Col sm={{ span: 1 }} style={{right: "-5px"}}> &#128197; </Col>
                                 <Col sm="auto"> {ageYears} </Col>
                             </Row>
                         </Container>
