@@ -56,7 +56,6 @@ function Account() {
         <div>
             <div className="fontWrap">
                 <Header />
-                <div className="petsAccentBar"></div>
             </div>
             <div className="petsAccentBar"></div>
             <Container fluid>
