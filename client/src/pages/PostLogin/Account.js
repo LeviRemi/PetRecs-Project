@@ -57,6 +57,7 @@ function Account() {
             <div className="fontWrap">
                 <Header />
             </div>
+            <div className="petsAccentBar"></div>
             <Container fluid>
                 <div className="mainPageBody">
                     <div className="mainPageContents fullPageContainer">
