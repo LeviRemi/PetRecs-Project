@@ -1,6 +1,6 @@
 // PetScene.js
 
-import React, {useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { useParams } from 'react-router';
 import {Route, Switch} from 'react-router-dom';
 
@@ -32,19 +32,19 @@ function PetScene() {
   return (
 
     <div className="fontWrap">
-      <div><Header /></div>
+      <div><Header/></div>
 
-      <div className="navProfBar">
+      <div className={"navProfBar slider"}>
         <div className="navProf">
-        <Row>
-          <Col>
-            <PetCard value={urlpetid} />
-          </Col>
-          <Col>
-            <PetNavBar value={urlpetid} />
-          </Col>
-        </Row>
-      </div>
+          <Row>
+            <Col>
+              <PetCard value={urlpetid} />
+            </Col>
+            <Col>
+              <PetNavBar value={urlpetid} />
+            </Col>
+          </Row>
+        </div>
       </div>
     <LoadingIndicator></LoadingIndicator>
     <div className="fullPageContainer">

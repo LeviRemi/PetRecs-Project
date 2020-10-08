@@ -125,7 +125,7 @@ class ViewWeightComponent extends Component {
       <div>
       <Row>
         <Col md="auto">
-          <div className="weightTableBox shadowedBox">
+          <div className="weightTableBox shadowedBox FadeIn">
           <h5> Weight </h5>
           <LineChart
               width={660} height={280}
@@ -140,7 +140,7 @@ class ViewWeightComponent extends Component {
             </LineChart>
           </div>
         </Col>
-          <div className="currentWeightBox shadowedBox">
+          <div className="currentWeightBox shadowedBox FadeIn">
             Current Weight: <br />
             <div className="bigFont"> { sortedData.length > 0 && sortedData[sortedData.length - 1].Weight } lb</div> 
             <div className="smallFont"> { sortedData.length > 0 && moment.utc(sortedData[sortedData.length - 1].Date).format("M/D/YY") } </div>
@@ -191,7 +191,7 @@ class ViewWeightComponent extends Component {
           
         </div>
 
-        <div>
+        <div className="FadeIn">
           <MaterialTable
             columns={[
               { title: 'Date', field: 'Date', defaultSort: 'desc', type: 'date' },

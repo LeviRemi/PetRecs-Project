@@ -154,12 +154,12 @@ function PetRecordsComponent(props) {
   };
   
   return (
-      <div id="petRecordsBodyId" className="petProfileBody nopadding" hidden='true' style={{height: "100%"}}>
+      <div id="petRecordsBodyId" className="petProfileBody nopadding FadeIn" hidden='true' style={{height: "100%"}}>
         <div style={{ maxWidth: '100%' }}>
           <MaterialTable
             columns={[
               { title: 'Name', field: 'RecordName' },
-              { title: 'Date Uploaded', field: 'UploadDate', type: 'datetime'}
+              { title: 'Date Uploaded', field: 'UploadDate', type: 'datetime', defaultSort: "desc"}
             ]}
             data={records}
             title="Pet Records"

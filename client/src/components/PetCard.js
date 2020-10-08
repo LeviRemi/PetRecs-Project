@@ -12,7 +12,6 @@ import Row from 'react-bootstrap/Row';
 
 import PetImage, { PetCardImage } from './PetImage.js'
 import {useHistory} from "react-router";
-import Swal from "sweetalert2";
 
 function PetCard(props) {
 
@@ -20,10 +19,12 @@ function PetCard(props) {
 
     const history = useHistory();
     const [petprofile, setPetprofile] = useState('');
+    const [cardAcquired, setCardAcquired] = useState(false);
 
     function fetchPetProfile() {
         axios.get(`/api/pets/${props.value.PetId}`, {withCredentials: true} )
             .then(response=>{
+                setCardAcquired(true);
                 setPetprofile(response.data);
             })
             .catch(err=> {
@@ -54,22 +55,21 @@ function PetCard(props) {
         <div className="petProfileCard">
             <Row>
                 <Col md="1">
-                <Link to="/Pets">
+                <Link to={{pathname: '/pets', state: {prevPage: "petScene"}}}>
                         <button className="back-btn-petprofile-nav">
                         &#x2b9c;
                         </button>
                     </Link>
                 </Col>
                 <Col md="auto">
-                    
-                    <PetCardImage {...{PetId: petprofile.PetId, ProfileUrl: petprofile.ProfileUrl}}/>
+                    {cardAcquired && <PetCardImage {...{PetId: petprofile.PetId, ProfileUrl: petprofile.ProfileUrl}}/>}
                 </Col>
                 <Col md="auto">
-                    <div className="petCardInfo">
+                    {cardAcquired && <div className="petCardInfo FadeIn">
                                 &#128062; {petprofile.PetName} <br/>
                                 &#9892; {petprofile.PetGender} &nbsp;&nbsp;&nbsp;
                                 &#128197; {ageYears} &nbsp;&nbsp;&nbsp;
-                    </div>
+                    </div>}
                 </Col>
             </Row>
         </div>

@@ -32,6 +32,7 @@ code {
 }
 
 .fullPageContainer{
+  min-height: 100px;
   height: 100%;
   margin: auto;
   width: 1024px;
@@ -204,8 +205,11 @@ these styles are post-login */
 
 .mainPageHeaderTitle {
   justify-content: left;
-  color: white;
-  background-color: rgba(0, 150, 40, 0);
+  margin-left: 15px;
+}
+
+.mainPageHeaderTitle a {
+  text-decoration: none !important;
 }
 
 .petTitle {
@@ -252,6 +256,13 @@ these styles are post-login */
   background: var(--COLOR_BLUE);
   vertical-align: middle;
   /*height: 56px; removed because of weird artifact under pet card when loading new component*/
+
+  /*Below is for slider animation*/
+  overflow-y: hidden;
+
+  transition-property: all;
+  transition-duration: .5s;
+  transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
 }
 
 .navProf {
@@ -267,6 +278,12 @@ these styles are post-login */
   background: var(--COLOR_BLUE);
   vertical-align: middle;
   height: 6px;
+  /*Below is for slider animation*/
+  overflow-y: hidden;
+
+  transition-property: all;
+  transition-duration: .5s;
+  transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
 }
 
 .petProfileCard {
@@ -294,6 +311,39 @@ these styles are post-login */
   font-size: 14px;
   font-weight: 400;
   margin-top: 9px;
+}
+
+.FadeIn {
+  animation: fadeIn ease 0.5s;
+  -webkit-animation: fadeIn ease 0.5s;
+  -moz-animation: fadeIn ease 0.5s;
+  -o-animation: fadeIn ease 0.5s;
+  -ms-animation: fadeIn ease 0.5s;
+}
+
+@keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
+}
+
+@-moz-keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
+}
+
+@-webkit-keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
+}
+
+@-o-keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
+}
+
+@-ms-keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
 }
 
 .mainPageHeaderBar {
@@ -435,4 +485,103 @@ these styles are post-login */
   background-color: var(--COLOR_WHITE) !important;
   border-bottom-color: var(--COLOR_WHITE) !important;
   color: var(--COLOR_DARK);
+}
+
+.Icon {
+  position: relative;
+  top: -3px;
+}
+
+.Icon path {
+  fill: var(--COLOR_DARK);
+  transition: fill .15s ease-in-out !important;
+}
+
+.ProfileBtn {
+  background-color: var(--COLOR_WHITE) !important;
+  color: var(--COLOR_DARK) !important;
+  border-color: var(--COLOR_DARK) !important;
+}
+
+.ProfileBtn:hover {
+  background-color: var(--COLOR_DARK) !important;
+  color: var(--COLOR_WHITE) !important;
+  border-color: var(--COLOR_DARK) !important;
+}
+
+.ProfileBtn:hover svg path {
+  fill: var(--COLOR_WHITE) !important;
+}
+
+.slider-close {
+  max-height: 6px;
+}
+
+.slider-open {
+  max-height: 60px;
+}
+
+.slider {
+  animation: slideIn ease 0.5s;
+  -webkit-animation: slideIn ease 0.5s;
+  -moz-animation: slideIn ease 0.5s;
+  -o-animation: slideIn ease 0.5s;
+  -ms-animation: slideIn ease 0.5s;
+}
+
+@keyframes slideIn {
+  0% {max-height: 6px;}
+  100% {max-height: 60px;}
+}
+
+@-moz-keyframes slideIn {
+  0% {max-height: 6px;}
+  100% {max-height: 60px;}
+}
+
+@-webkit-keyframes slideIn {
+  0% {max-height: 6px;}
+  100% {max-height: 60px;}
+}
+
+@-o-keyframes slideIn {
+  0% {max-height: 6px;}
+  100% {max-height: 60px;}
+}
+
+@-ms-keyframes slideIn {
+  0% {max-height: 6px;}
+  100% {max-height: 60px;}
+}
+
+.slide-out {
+  animation: slideOut ease 0.5s;
+  -webkit-animation: slideOut ease 0.5s;
+  -moz-animation: slideOut ease 0.5s;
+  -o-animation: slideOut ease 0.5s;
+}
+
+@keyframes slideOut {
+  0% {height: 60px;}
+  100% {height: 6px;}
+}
+
+@-moz-keyframes slideOut {
+  0% {height: 60px;}
+  100% {height: 6px;}
+}
+
+@-webkit-keyframes slideOut {
+  0% {height: 60px;}
+  100% {height: 6px;}
+}
+
+@-o-keyframes slideOut {
+  0% {height: 60px;}
+  100% {height: 6px;}
+}
+
+@-ms-keyframes slideOut {
+  0% {height: 60px;}
+  100% {height: 6px;}
 }

@@ -19,12 +19,15 @@ import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 export default class Pets extends Component {
 
+
+
     state = { pets: [],
               sharedPets: [],
               petImages: [] }
 
 
     componentDidMount() {
+        console.log(this.props.location.state);
       // Get owned pets
       manuallyIncrementPromiseCounter();
         axios.get("/api/pets/", { withCredentials: true })
@@ -58,13 +61,13 @@ export default class Pets extends Component {
           <Header />
         </div>
 
-        <div className="petsAccentBar"></div>
+          {this.props.location.state !== undefined ? <div className="petsAccentBar slide-out"></div> : <div className="petsAccentBar"></div>}
     
         <div className="fullPageContainer">
 
           <LoadingIndicator></LoadingIndicator>
             <Container fluid>
-              <div id="petsPage" className="mainPageBody" hidden={true}>
+              <div id="petsPage" className="mainPageBody FadeIn" hidden={true}>
                   <Tabs defaultActiveKey="myPets" id="petsViewTab">
                       <Tab eventKey="myPets" title="My Pets">
                           <div style={{display: "flex", flexWrap: "wrap", justifyContent: "start", alignItems: "baseline"}}

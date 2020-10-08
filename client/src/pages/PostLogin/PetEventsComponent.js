@@ -84,7 +84,7 @@ export default class PetEventsComponent extends Component {
 
   render() {
   return (
-      <div id="PetEventBodyId" className="petProfileBody nopadding" hidden={true} style={{height: "100%"}}>
+      <div id="PetEventBodyId" className="petProfileBody nopadding FadeIn" hidden={true} style={{height: "100%"}}>
         <div className="tableContainer">
           <MaterialTable
             columns={[
