@@ -65,6 +65,22 @@ export default class Pets extends Component {
 
 
     render() {
+
+        let sharedPetsList;
+        if (this.state.sharedPets.length == 0) {
+            sharedPetsList = <h4>No Shared Pets</h4>
+        } else {
+            sharedPetsList = this.state.sharedPets.map(pet =>
+                <div className="PetContainer" key={pet.PetId}>
+                    <Link id="PetLink" to={"/Pets/" + pet.PetId} key={pet.PetId}>
+                        <PetImage {...{PetId: pet.PetId, ProfileUrl: pet.ProfileUrl}}/>
+                    </Link>
+                    <div className="text-center">
+                        <p style={{width: "129px", margin: "auto"}} className="NameText">{pet.PetName}</p>
+                    </div>
+                </div>
+            )
+        }
     return (
 
       <div className="fontWrap">
@@ -107,16 +123,8 @@ export default class Pets extends Component {
                       <Tab eventKey="sharedWithMe" title="Shared With Me">
                           <div style={{display: "flex", flexWrap: "wrap", justifyContent: "start", alignItems: "baseline"}}
                                className="mainPageContents shadowedBoxPets">
-                              {this.state.sharedPets.map(pet =>
-                                  <div className="PetContainer" key={pet.PetId}>
-                                      <Link id="PetLink" to={"/Pets/" + pet.PetId} key={pet.PetId}>
-                                          <PetImage {...{PetId: pet.PetId, ProfileUrl: pet.ProfileUrl}}/>
-                                      </Link>
-                                      <div className="text-center">
-                                          <p style={{width: "129px", margin: "auto"}} className="NameText">{pet.PetName}</p>
-                                      </div>
-                                  </div>
-                              )}
+
+                              {sharedPetsList}
                           </div>
                       </Tab>
                   </Tabs>

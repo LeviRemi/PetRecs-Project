@@ -296,21 +296,19 @@ class AddWeightComponent extends Component {
             <Row>
               <Col>
                 <Form.Group controlId="formWeight">
-                <Form.Label>Pet weight</Form.Label>
-                <Form.Control name="weight" type="number" min={0} precision={2} step={0.01}
+                  <Form.Label>Pet weight</Form.Label>
+                  <Form.Control name="weight" type="number" min={0} precision={2} step={0.01}
                               placeholder="Weight"
                               onChange={this.handleWeightChange}
                               required/>
                 </Form.Group>
               </Col>
-              <Col>
-              <Form.Group controlId="formTodayCheckbox">
-                <Form.Label>Date</Form.Label>
-                <Form.Check inline name="noEndCheckbox" type="checkbox" label="Today"
-                            onChange={ () => this.checkBoxDisableDate() }/>
-                </Form.Group>
-                <Form.Group controlId="formDate">
-                <Form.Control name="date" type="date" max={moment().format("YYYY-MM-DD")}
+              <Col > 
+                <Form.Group>
+                    <Form.Label >Date</Form.Label>
+                    <Form.Check Id="formTodayCheckbox" style={{float: 'right'}}inline name="noEndCheckbox" type="checkbox" label="Today"
+                                onChange={ () => this.checkBoxDisableDate() }/>
+                    <Form.Control Id="formDate" name="date" type="date" max={moment().format("YYYY-MM-DD")}
                               onChange={this.handleDateChange}
                               required/>
                 </Form.Group>
@@ -409,15 +407,12 @@ class UpdateWeightComponent extends Component {
                               required/>
                 </Form.Group>
               </Col>
-              <Col>
-              <Form.Group controlId="formTodayCheckbox">
-                <Form.Label>Date</Form.Label>
-                <Form.Check inline name="noEndCheckbox" type="checkbox" label="Today"
-                            onChange={ () => this.checkBoxDisableDate() }/>
-                </Form.Group>
-                <Form.Group controlId="formDate">
-                <Form.Control name="date" type="date" max={moment.utc().format("YYYY-MM-DD")}
-                              defaultValue={this.state.Date.substr(0,10)}
+              <Col > 
+                <Form.Group>
+                    <Form.Label >Date</Form.Label>
+                    <Form.Check Id="formTodayCheckbox" style={{float: 'right'}}inline name="noEndCheckbox" type="checkbox" label="Today"
+                                onChange={ () => this.checkBoxDisableDate() }/>
+                    <Form.Control Id="formDate" name="date" type="date" max={moment().format("YYYY-MM-DD")}
                               onChange={this.handleDateChange}
                               required/>
                 </Form.Group>
