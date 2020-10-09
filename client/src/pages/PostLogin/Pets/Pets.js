@@ -27,13 +27,14 @@ export default class Pets extends Component {
 
 
     componentDidMount() {
-        console.log(this.props.location.state);
       // Get owned pets
       manuallyIncrementPromiseCounter();
+      
         axios.get("/api/pets/", { withCredentials: true })
             .then((petResponse) => {
               const pets = petResponse.data;
               this.setState({ pets });
+              this.sortArray('name');
               manuallyDecrementPromiseCounter();
               document.getElementById('petsPage').hidden = false;
             })
@@ -51,6 +52,16 @@ export default class Pets extends Component {
                 console.log(error);
             })
     }
+
+    sortArray(type) {
+        const types = {
+          name: 'PetName',
+          id: 'PetId'
+        };
+        const sortProperty = types[type];
+        const sorted = [].concat(this.state.pets).sort((a, b) => b[sortProperty] < a[sortProperty] ? 1 : -1);
+        this.setState({ pets: sorted });
+      };
 
 
     render() {
@@ -71,7 +82,7 @@ export default class Pets extends Component {
                   <Tabs defaultActiveKey="myPets" id="petsViewTab">
                       <Tab eventKey="myPets" title="My Pets">
                           <div style={{display: "flex", flexWrap: "wrap", justifyContent: "start", alignItems: "baseline"}}
-                               className="mainPageContents shadowedBoxPets">
+                               className="mainPageContents shadowedBoxPets">                         
                               {this.state.pets.map(pet =>
                                   <div className="PetContainer" key={pet.PetId}>
                                       <Link id="PetLink" to={"/Pets/" + pet.PetId} key={pet.PetId}>
