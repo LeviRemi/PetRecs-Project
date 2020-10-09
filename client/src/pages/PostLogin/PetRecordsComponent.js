@@ -80,11 +80,13 @@ function PetRecordsComponent(props) {
           console.log(response.data);
         })
         .catch((error) => {
+          Swal.fire('Oops...', `Record could not be deleted`, 'error');
             console.log("Firebase Response: " + response);
             console.log(error);
         })
       })
       .catch((error) => {
+        Swal.fire('Oops...', `Record could not be deleted`, 'error');
         console.log(error);
       })
       
