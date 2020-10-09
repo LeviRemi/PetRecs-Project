@@ -22,18 +22,19 @@ import '../../utils/FileUpload/FileUpload.css'
 
 function PetAboutComponent(props) {
     const history = useHistory();
-    const [petprofile, setPetprofile] = useState('');
-    const [profilepreview, setProfilePreview] = useState('');
-    const [petSpecies, setPetSpecies] = useState('');
-    const [petBreed, setPetBreed] = useState('');
+    const petprofile = props.profile.pet;
+    const [profilepreview, setProfilePreview] = useState(props.profile.pet.ProfileUrl);
+    const petSpecies = props.profile.species;
+    const petBreed = props.profile.breed;
     const [show, setShow] = useState(false);
     const [showShare, setShowShare] = useState(false);
     const [showUpload, setShowUpload] = useState(false);
-    const [speciesList, setSpeciesList] = useState([]);
-    const [dogBreedList, setDogBreedList] = useState([]);
-    const [catBreedList, setCatBreedList] = useState([]);
+    const speciesList = props.speciesList;
+    const dogBreedList = props.dogList;
+    const catBreedList = props.catList;
     const { register, handleSubmit, errors, watch } = useForm();
     const [isLoading, setLoading] = useState({display: "none"});
+    const acquired = props.acquired === undefined? false : props.acquired;
 
     const [selectedFile, setSelectedFile] = useState(null);
     const [fileName, setFileName] = useState("");
@@ -44,72 +45,41 @@ function PetAboutComponent(props) {
     // Create a reference to the hidden file input element
     const hiddenFileInput = React.useRef(null);
 
-    function fetchPetProfile() {
-        document.getElementById("petProfileBodyId").hidden = true;
-        manuallyIncrementPromiseCounter();
-        axios.get(`/api/pets/${props.match.params.PetId}`, {withCredentials: true} )
-            .then(response=>{
-                setPetprofile(response.data);
-                setProfilePreview(response.data.ProfileUrl);
-
-                const requestSpecies = axios.get(`/api/species/${response.data.SpeciesId}`, {withCredentials: true});
-                const requestBreed = (response.data.SpeciesId === 1 || response.data.SpeciesId === 2)? axios.get(`/api/breeds/${response.data.BreedId}`, {withCredentials: true}) : "";
-
-                axios.all([requestSpecies, requestBreed]).then(axios.spread((...responses) => {
-                    const responseSpecies = responses[0];
-                    const responseBreed = responses[1];
-
-                    setPetSpecies(responseSpecies.data);
-                    setPetBreed(responseBreed.data);
-                    document.getElementById("petProfileBodyId").hidden = false;
-                    manuallyDecrementPromiseCounter();
-                })).catch(err =>{
-                    console.log(err);
-                    manuallyDecrementPromiseCounter();
-                })
-            })
-            .catch(err=> {
-                Swal.fire('Oops...', "A pet with this ID does not exist", 'error');
-                manuallyDecrementPromiseCounter();
-                history.push('/pets');
-            })
-    }
-
-    function fetchSpeciesList() {
-        axios.get(`/api/species`, {withCredentials: true} )
-            .then(response=>{
-                setSpeciesList(response.data);
-            })
-            .catch(err=> {
-                console.log(err);
-            })
-    }
-
-    function fetchDogBreedList() {
-        axios.get(`/api/breeds/dog`, {withCredentials: true} )
-            .then(response=>{
-                setDogBreedList(response.data);
-            })
-            .catch(err=> {
-                console.log(err);
-            })
-    }
-
-    function fetchCatBreedList() {
-        axios.get(`/api/breeds/cat`, {withCredentials: true} )
-            .then(response=>{
-                setCatBreedList(response.data);
-            })
-            .catch(err=> {
-                console.log(err);
-            })
-    }
+    // function fetchPetProfile() {
+    //     document.getElementById("petProfileBodyId").hidden = true;
+    //     manuallyIncrementPromiseCounter();
+    //     axios.get(`/api/pets/${props.match.params.PetId}`, {withCredentials: true} )
+    //         .then(response=>{
+    //             setPetprofile(response.data);
+    //             setProfilePreview(response.data.ProfileUrl);
+    //
+    //             const requestSpecies = axios.get(`/api/species/${response.data.SpeciesId}`, {withCredentials: true});
+    //             const requestBreed = (response.data.SpeciesId === 1 || response.data.SpeciesId === 2)? axios.get(`/api/breeds/${response.data.BreedId}`, {withCredentials: true}) : "";
+    //
+    //             axios.all([requestSpecies, requestBreed]).then(axios.spread((...responses) => {
+    //                 const responseSpecies = responses[0];
+    //                 const responseBreed = responses[1];
+    //
+    //                 setPetSpecies(responseSpecies.data);
+    //                 setPetBreed(responseBreed.data);
+    //                 document.getElementById("petProfileBodyId").hidden = false;
+    //                 manuallyDecrementPromiseCounter();
+    //             })).catch(err =>{
+    //                 console.log(err);
+    //                 manuallyDecrementPromiseCounter();
+    //             })
+    //         })
+    //         .catch(err=> {
+    //             Swal.fire('Oops...', "A pet with this ID does not exist", 'error');
+    //             manuallyDecrementPromiseCounter();
+    //             history.push('/pets');
+    //         })
+    // }
 
     useEffect(() => {
-        fetchPetProfile();
-        fetchSpeciesList();
-        fetchDogBreedList();
-        fetchCatBreedList();
+        if(props.acquired === true) {
+            document.getElementById("petProfileBodyId").hidden = false;
+        }
     }, [])
 
     const handleClose = () => setShow(false);
@@ -138,11 +108,12 @@ function PetAboutComponent(props) {
     const onSubmit = (data) => {
         setLoading({display: "initial"});
         let bod = data.petBirthdate;
+        console.log("petdogbreed", data.petDogBreed)
 
         axios.put(`/api/pets/${petprofile.PetId}`, {
             PetName: data.petName,
             SpeciesId: data.petSpecies,
-            BreedId: data.petSpecies == 1? data.petDogBreed : data.petSpecies == 2? data.petCatBreed : 599,
+            BreedId: data.petSpecies == 1 && data.petDogBreed !== "Select..."? data.petDogBreed : data.petSpecies == 2 && data.petCatBreed !== "Select..." ? data.petCatBreed : 599,
             PetGender: data.petGender,
             PetAgeYear: bod.substring(0, 4),
             PetAgeMonth: bod.substring(5, 7),
@@ -155,10 +126,9 @@ function PetAboutComponent(props) {
                 setLoading({display: "none"});
                 console.log(res);
                 handleClose();
-                Swal.fire('Congratulations!', "This pet profile has been updated", 'success').then(function() {
-                    //fetchPetProfile();
-                    window.location.reload();
-                  });
+                Swal.fire('Congratulations!', "This pet profile has been updated", 'success');
+                props.fetch();
+
             }, (err) => {
                 setLoading({display: "none"});
                 console.log(err.response.status)
@@ -259,9 +229,8 @@ function PetAboutComponent(props) {
                                             setLoading({display: "none"});
                                             console.log(res);
                                             handleCloseUpload();
-                                            Swal.fire("Congratulations!", "Profile picture updated", "success").then(function() {
-                                                window.location.reload();
-                                              });
+                                            Swal.fire("Congratulations!", "Profile picture updated", "success");
+                                            props.fetch();
                                         })
                                 }, (error) => {
                                     setLoading({display: "none"});

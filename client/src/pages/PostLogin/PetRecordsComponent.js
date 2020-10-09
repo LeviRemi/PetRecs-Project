@@ -20,36 +20,30 @@ import Button from 'react-bootstrap/Button';
 function PetRecordsComponent(props) {
 
   const PetId = props.match.params.PetId;
-  const [records, setRecords] = useState([]);
+  const records = props.records;
   const [urlpetid, setUrlpetid] = useState(useParams());
 
   // Create a reference to the hidden file input element
   const hiddenFileInput = React.useRef(null)
 
-  function getRecords() {
-    manuallyIncrementPromiseCounter();
-    axios.get(`/api/pet-records/pet/` + PetId, {withCredentials: true} )
-      .then(response=>{
-        setRecords(response.data);
-        console.log(response.data);
-        document.getElementById("petRecordsBodyId").hidden=false;
-
-        manuallyDecrementPromiseCounter();
-      })
-      .catch((error) => {
-          console.log(error);
-          manuallyDecrementPromiseCounter();
-      })
-  };
+  // function getRecords() {
+  //   manuallyIncrementPromiseCounter();
+  //   axios.get(`/api/pet-records/pet/` + PetId, {withCredentials: true} )
+  //     .then(response=>{
+  //       setRecords(response.data);
+  //       console.log(response.data);
+  //       document.getElementById("petRecordsBodyId").hidden=false;
+  //
+  //       manuallyDecrementPromiseCounter();
+  //     })
+  //     .catch((error) => {
+  //         console.log(error);
+  //         manuallyDecrementPromiseCounter();
+  //     })
+  // };
 
   function UpdateRecords() {
-    axios.get(`/api/pet-records/pet/` + PetId, {withCredentials: true} )
-      .then(response=>{
-        setRecords(response.data);
-      })
-      .catch((error) => {
-          console.log(error);
-      })
+    props.fetch();
   };
 
   function DeleteRecord(RecordName, PetRecordId, FireReference) {
@@ -100,7 +94,10 @@ function PetRecordsComponent(props) {
   }
 
   useEffect(() => {
-      getRecords()
+      //getRecords()
+    if(props.acquired === true) {
+      document.getElementById("petRecordsBodyId").hidden = false;
+    }
   }, [])
 
   const handleClick = (event) => {

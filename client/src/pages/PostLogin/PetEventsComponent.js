@@ -55,9 +55,8 @@ export default class PetEventsComponent extends Component {
             axios.delete(`/api/pet-events/` + EventId, {withCredentials: true} )
             .then(response=>{
               console.log("EventId " + EventId + " deleted sucessfully.");
-              Swal.fire('Success!', 'This event has been deleted', 'success').then(function() {
-                window.location.reload();
-              });
+              Swal.fire('Success!', 'This event has been deleted', 'success');
+              this.props.fetch();
             })
             .catch((error) => {
               console.log(error);
@@ -68,18 +67,10 @@ export default class PetEventsComponent extends Component {
   };
 
   componentDidMount() {
-    manuallyIncrementPromiseCounter();
-    axios.get(`/api/pet-events/pet/` + this.state.PetId, {withCredentials: true} )
-      .then(response=>{
-        this.setState({events: response.data});
-        document.getElementById("PetEventBodyId").hidden = false;
-        manuallyDecrementPromiseCounter();
-        //console.log(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-        manuallyDecrementPromiseCounter();
-      })
+      this.setState({events: this.props.events});
+      if(this.props.acquired) {
+          document.getElementById("PetEventBodyId").hidden = false;
+      }
   };
 
   render() {
@@ -146,7 +137,7 @@ export default class PetEventsComponent extends Component {
             <Modal.Title>Add Event</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <AddEventComponent petid={this.state.PetId}/>
+                <AddEventComponent petid={this.state.PetId} fetch={this.props.fetch}/>
             </Modal.Body>
             <Modal.Footer>
                     <Button variant="secondary" onClick={this.handleCloseAdd}>Close</Button>
@@ -164,7 +155,7 @@ export default class PetEventsComponent extends Component {
             <Modal.Title>Update Event</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <UpdateEventComponent eventid={this.state.EventId}/>
+                <UpdateEventComponent eventid={this.state.EventId} fetch={this.props.fetch}/>
             </Modal.Body>
             <Modal.Footer>
                     <Button variant="secondary" onClick={this.handleCloseUpdate}>Close</Button>
@@ -214,9 +205,8 @@ class AddEventComponent extends Component {
         .then(response=>{
           console.log(response);
           console.log("Event added successfully.");
-              Swal.fire('Success!', 'This event has been added', 'success').then(function() {
-                window.location.reload();
-              });
+              Swal.fire('Success!', 'This event has been added', 'success');
+              this.props.fetch();
             })
             .catch((error) => {
               console.log(error);
@@ -324,9 +314,8 @@ class UpdateEventComponent extends Component {
     axios.put(`/api/pet-events/` + this.state.EventId, data, {withCredentials: true} )
           .then(response=>{
             console.log("Event added successfully.");
-                Swal.fire('Success!', 'This event has been updated', 'success').then(function() {
-                  window.location.reload();
-                });
+                Swal.fire('Success!', 'This event has been updated', 'success');
+                this.props.fetch();
               })
               .catch((error) => {
                 console.log(error);

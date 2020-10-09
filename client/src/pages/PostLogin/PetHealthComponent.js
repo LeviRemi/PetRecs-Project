@@ -35,7 +35,7 @@ export default class PetHealthComponent extends Component {
     return (
 
       <div id="petHealthBodyId" hidden={true}>
-          <ViewWeightComponent petid={this.state.PetId}/>
+          <ViewWeightComponent petid={this.state.PetId} acquired={this.props.acquired} weights={this.props.weights} fetch={this.props.fetch}/>
       </div>
     )
   }
@@ -78,8 +78,10 @@ class ViewWeightComponent extends Component {
   }
 
   componentDidMount() {
-    manuallyIncrementPromiseCounter();
-    this.fetchWeights();
+    this.setState({data: this.props.weights});
+      if(this.props.acquired) {
+          document.getElementById("petHealthBodyId").hidden = false;
+      }
   }
 
   deleteWeight = async (WeightId) => {
@@ -97,7 +99,7 @@ class ViewWeightComponent extends Component {
             //console.log(response);
             console.log("WeightId " + WeightId + " deleted sucessfully.");
             Swal.fire('Success!', 'This weight has been deleted', 'success');
-            this.fetchWeights();
+            this.props.fetch();
           })
           .catch((error) => {
             console.log(error);
@@ -165,7 +167,7 @@ class ViewWeightComponent extends Component {
             <Modal.Title>Add Weight</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <AddWeightComponent petid={this.state.PetId}/>
+              <AddWeightComponent petid={this.state.PetId} fetch={this.props.fetch}/>
             </Modal.Body>
             <Modal.Footer>
                     <Button variant="secondary" onClick={this.handleCloseAddWeight}>Close</Button>
@@ -183,7 +185,7 @@ class ViewWeightComponent extends Component {
             <Modal.Title>Update Weight</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <UpdateWeightComponent weightid={this.state.WeightId} />
+              <UpdateWeightComponent weightid={this.state.WeightId} fetch={this.props.fetch} />
             </Modal.Body>
             <Modal.Footer>
                     <Button variant="secondary" onClick={this.handleCloseUpdateWeight}>Close</Button>
@@ -268,9 +270,8 @@ class AddWeightComponent extends Component {
         .then(response=>{
             console.log(response);
             console.log("Event added successfully.");
-            Swal.fire('Success!', 'The weight has been added', 'success').then(function() {
-            window.location.reload();
-        });
+            Swal.fire('Success!', 'The weight has been added', 'success');
+            this.props.fetch();
       })
       .catch((error) => {
         console.log(error);
@@ -370,9 +371,8 @@ class UpdateWeightComponent extends Component {
         .then(response=>{
             console.log(response);
             console.log("Event added successfully.");
-            Swal.fire('Success!', 'The weight has been updated', 'success').then(function() {
-            window.location.reload();
-        });
+            Swal.fire('Success!', 'The weight has been updated', 'success');
+            this.props.fetch();
       })
       .catch((error) => {
         console.log(error);
@@ -421,7 +421,7 @@ class UpdateWeightComponent extends Component {
                     {/*<Form.Check Id="formTodayCheckbox" style={{float: 'right'}}inline name="noEndCheckbox" type="checkbox" label="Today"*/}
                     {/*            onChange={ () => this.checkBoxDisableDate() }/>*/}
                     <Form.Control Id="formDate" name="date" type="date" max={moment().format("YYYY-MM-DD")}
-                              onChange={this.handleDateChange}
+                              onChange={this.handleDateChange} defaultValue={this.state.Date.substr(0, 10)}
                               required/>
                 </Form.Group>
               </Col>

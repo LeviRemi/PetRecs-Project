@@ -60,8 +60,10 @@ export default class PetMedicationsComponent extends Component {
   }
 
   componentDidMount() {
-    manuallyIncrementPromiseCounter();
-    this.fetchMeds();
+    this.setState({medications: this.props.meds});
+      if(this.props.acquired) {
+          document.getElementById("PetMedTableId").hidden = false;
+      }
   };
 
   deleteMedication = async (MedicationId) => {
@@ -79,7 +81,7 @@ export default class PetMedicationsComponent extends Component {
             //console.log(response);
             console.log("Medication " + MedicationId + " deleted sucessfully.");
             Swal.fire('Success!', 'This medication has been deleted', 'success');
-            this.fetchMeds();
+            this.props.fetch();
           })
           .catch((error) => {
             console.log(error);
@@ -155,7 +157,7 @@ export default class PetMedicationsComponent extends Component {
               <Modal.Title>Add Medication</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-                <AddMedicationComponent petid={this.state.PetId}/>
+                <AddMedicationComponent petid={this.state.PetId} fetch={this.props.fetch}/>
               </Modal.Body>
               <Modal.Footer>
                       <Button variant="secondary" onClick={this.handleCloseAddMed}>Close</Button>
@@ -173,7 +175,7 @@ export default class PetMedicationsComponent extends Component {
             <Modal.Title>Update Medication</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <UpdateMedicationComponent medicationid={this.state.MedicationId} />
+              <UpdateMedicationComponent medicationid={this.state.MedicationId} fetch={this.props.fetch} />
             </Modal.Body>
             <Modal.Footer>
                     <Button variant="secondary" onClick={this.handleCloseUpdateMed}>Close</Button>
@@ -222,9 +224,8 @@ class AddMedicationComponent extends Component {
         .then(response=>{
             console.log(response);
             console.log("Medication added successfully.");
-            Swal.fire('Success!', 'The medication has been added', 'success').then(function() {
-                window.location.reload();
-            });
+            Swal.fire('Success!', 'The medication has been added', 'success');
+            this.props.fetch();
           })
         .catch((error) => {
             console.log(error);
@@ -373,9 +374,8 @@ class UpdateMedicationComponent extends Component {
         .then(response=>{
           console.log(response);
           console.log("Medication added successfully.");
-          Swal.fire('Success!', 'The medication has been updated', 'success').then(function() {
-            window.location.reload();
-          });
+          Swal.fire('Success!', 'The medication has been updated', 'success');
+          this.props.fetch();
         })
         .catch((error) => {
             console.log(error);
