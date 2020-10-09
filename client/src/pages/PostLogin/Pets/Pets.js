@@ -59,7 +59,7 @@ export default class Pets extends Component {
           id: 'PetId'
         };
         const sortProperty = types[type];
-        const sorted = [].concat(this.state.pets).sort((a, b) => b[sortProperty] < a[sortProperty] ? 1 : -1);
+        const sorted = [].concat(this.state.pets).sort((a, b) => b[sortProperty].toLowerCase() < a[sortProperty].toLowerCase() ? 1 : -1);
         this.setState({ pets: sorted });
       };
 
@@ -70,6 +70,7 @@ export default class Pets extends Component {
         if (this.state.sharedPets.length == 0) {
             sharedPetsList = <h4>No Shared Pets</h4>
         } else {
+            console.log("shared pets list")
             sharedPetsList = this.state.sharedPets.map(pet =>
                 <div className="PetContainer" key={pet.PetId}>
                     <Link id="PetLink" to={"/Pets/" + pet.PetId} key={pet.PetId}>
