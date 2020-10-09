@@ -64,18 +64,22 @@ class ViewWeightComponent extends Component {
 
   handleShowUpdateWeight() { this.setState({ showUpdateWeight: true }); }
 
+  fetchWeights() {
+      axios.get(`/api/pet-weights/pet/` + this.props.petid, {withCredentials: true} )
+          .then(response=>{
+              this.setState({data: response.data});
+              document.getElementById("petHealthBodyId").hidden = false;
+              manuallyDecrementPromiseCounter();
+          })
+          .catch((error) => {
+              console.log(error);
+              manuallyDecrementPromiseCounter();
+          })
+  }
+
   componentDidMount() {
     manuallyIncrementPromiseCounter();
-    axios.get(`/api/pet-weights/pet/` + this.props.petid, {withCredentials: true} )
-      .then(response=>{
-        this.setState({data: response.data});
-        document.getElementById("petHealthBodyId").hidden = false;
-        manuallyDecrementPromiseCounter();
-      })
-      .catch((error) => {
-          console.log(error);
-          manuallyDecrementPromiseCounter();
-      })
+    this.fetchWeights();
   }
 
   deleteWeight = async (WeightId) => {
@@ -92,9 +96,8 @@ class ViewWeightComponent extends Component {
           .then(response=>{
             //console.log(response);
             console.log("WeightId " + WeightId + " deleted sucessfully.");
-            Swal.fire('Success!', 'This weight has been deleted', 'success').then(function() {
-              window.location.reload();
-            });
+            Swal.fire('Success!', 'This weight has been deleted', 'success');
+            this.fetchWeights();
           })
           .catch((error) => {
             console.log(error);
@@ -219,12 +222,17 @@ class ViewWeightComponent extends Component {
             }}
             components={{
               Toolbar: props => (
-                <div>
-                  <MTableToolbar {...props} />
-                  <div style={{padding: '0px 10px'}}>
-                    <Button onClick={this.handleShowAddWeight} variant="secondary">Add Weight</Button>
+                  <div>
+                      <MTableToolbar {...props}></MTableToolbar>
+                      <div style={{padding: '0px 10px'}}>
+                          <div id="WeightButtons">
+                              <div className="FormSelect">
+                                  <Button className="FormAddButton" onClick={this.handleShowAddWeight} variant="secondary">Add Weight</Button>
+                                  <br/>
+                              </div>
+                          </div>
+                      </div>
                   </div>
-                </div>
               ),
             }}
             />
@@ -270,24 +278,24 @@ class AddWeightComponent extends Component {
       })
   }
 
-  checkBoxDisableDate() {
-    var checkbox = document.getElementById("formTodayCheckbox");
-    var dateElement = document.getElementById("formDate");
-
-    if (checkbox.checked) {
-      //console.log("noEndCheckBox is checked");
-      let dateNow = moment.utc().format();
-      dateElement.setAttribute("value", dateNow.substr(0,10) );
-      dateElement.setAttribute("disabled", "true");
-      this.setState( {Date: dateNow } );
-      
-    }
-    else {
-      //console.log("noEndCheckBox is unchecked");
-      dateElement.removeAttribute("disabled");
-      dateElement.removeAttribute("value");
-    }
-  }
+  // checkBoxDisableDate() {
+  //   var checkbox = document.getElementById("formTodayCheckbox");
+  //   var dateElement = document.getElementById("formDate");
+  //
+  //   if (checkbox.checked) {
+  //     //console.log("noEndCheckBox is checked");
+  //     let dateNow = moment.utc().format();
+  //     dateElement.setAttribute("value", dateNow.substr(0,10) );
+  //     dateElement.setAttribute("disabled", "true");
+  //     this.setState( {Date: dateNow } );
+  //
+  //   }
+  //   else {
+  //     //console.log("noEndCheckBox is unchecked");
+  //     dateElement.removeAttribute("disabled");
+  //     dateElement.removeAttribute("value");
+  //   }
+  // }
 
   render() {
     return (
@@ -296,9 +304,9 @@ class AddWeightComponent extends Component {
             <Row>
               <Col>
                 <Form.Group controlId="formWeight">
-                  <Form.Label>Pet weight</Form.Label>
+                  <Form.Label>Weight</Form.Label>
                   <Form.Control name="weight" type="number" min={0} precision={2} step={0.01}
-                              placeholder="Weight"
+                              placeholder="Weight in lbs"
                               onChange={this.handleWeightChange}
                               required/>
                 </Form.Group>
@@ -306,8 +314,8 @@ class AddWeightComponent extends Component {
               <Col > 
                 <Form.Group>
                     <Form.Label >Date</Form.Label>
-                    <Form.Check Id="formTodayCheckbox" style={{float: 'right'}}inline name="noEndCheckbox" type="checkbox" label="Today"
-                                onChange={ () => this.checkBoxDisableDate() }/>
+                    {/*<Form.Check Id="formTodayCheckbox" style={{float: 'right'}}inline name="noEndCheckbox" type="checkbox" label="Today"*/}
+                    {/*            onChange={ () => this.checkBoxDisableDate() }/>*/}
                     <Form.Control Id="formDate" name="date" type="date" max={moment().format("YYYY-MM-DD")}
                               onChange={this.handleDateChange}
                               required/>
@@ -373,24 +381,24 @@ class UpdateWeightComponent extends Component {
       })
   }
 
-  checkBoxDisableDate() {
-    var checkbox = document.getElementById("formTodayCheckbox");
-    var dateElement = document.getElementById("formDate");
-
-    if (checkbox.checked) {
-      //console.log("noEndCheckBox is checked");
-      let dateNow = moment.utc().format();
-      dateElement.setAttribute("value", dateNow.substr(0,10) );
-      dateElement.setAttribute("disabled", "true");
-      this.setState( {Date: dateNow } );
-      
-    }
-    else {
-      //console.log("noEndCheckBox is unchecked");
-      dateElement.removeAttribute("disabled");
-      dateElement.removeAttribute("value");
-    }
-  }
+  // checkBoxDisableDate() {
+  //   var checkbox = document.getElementById("formTodayCheckbox");
+  //   var dateElement = document.getElementById("formDate");
+  //
+  //   if (checkbox.checked) {
+  //     //console.log("noEndCheckBox is checked");
+  //     let dateNow = moment.utc().format();
+  //     dateElement.setAttribute("value", dateNow.substr(0,10) );
+  //     dateElement.setAttribute("disabled", "true");
+  //     this.setState( {Date: dateNow } );
+  //
+  //   }
+  //   else {
+  //     //console.log("noEndCheckBox is unchecked");
+  //     dateElement.removeAttribute("disabled");
+  //     dateElement.removeAttribute("value");
+  //   }
+  // }
 
   render() {
     return (
@@ -410,8 +418,8 @@ class UpdateWeightComponent extends Component {
               <Col > 
                 <Form.Group>
                     <Form.Label >Date</Form.Label>
-                    <Form.Check Id="formTodayCheckbox" style={{float: 'right'}}inline name="noEndCheckbox" type="checkbox" label="Today"
-                                onChange={ () => this.checkBoxDisableDate() }/>
+                    {/*<Form.Check Id="formTodayCheckbox" style={{float: 'right'}}inline name="noEndCheckbox" type="checkbox" label="Today"*/}
+                    {/*            onChange={ () => this.checkBoxDisableDate() }/>*/}
                     <Form.Control Id="formDate" name="date" type="date" max={moment().format("YYYY-MM-DD")}
                               onChange={this.handleDateChange}
                               required/>

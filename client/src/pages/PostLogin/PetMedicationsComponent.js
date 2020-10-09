@@ -44,20 +44,24 @@ export default class PetMedicationsComponent extends Component {
   handleShowUpdateMed() { this.setState({ showUpdateMed: true }); }
   updateStateMedicationId(buttonMedicationId) { this.setState({ MedicationId: buttonMedicationId }); }
 
+  fetchMeds() {
+      axios.get(`/api/medications/pet/` + this.state.PetId, {withCredentials: true} )
+          .then(response=>{
+              this.setState({medications: response.data});
+              //console.log(this.state.medications);
+              document.getElementById("PetMedTableId").hidden=false;
+              manuallyDecrementPromiseCounter();
+              //console.log(response.data);
+          })
+          .catch((error) => {
+              console.log(error);
+              manuallyDecrementPromiseCounter();
+          })
+  }
+
   componentDidMount() {
     manuallyIncrementPromiseCounter();
-    axios.get(`/api/medications/pet/` + this.state.PetId, {withCredentials: true} )
-      .then(response=>{
-        this.setState({medications: response.data});
-        //console.log(this.state.medications);
-        document.getElementById("PetMedTableId").hidden=false;
-        manuallyDecrementPromiseCounter();
-        //console.log(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-        manuallyDecrementPromiseCounter();
-      })
+    this.fetchMeds();
   };
 
   deleteMedication = async (MedicationId) => {
@@ -74,9 +78,8 @@ export default class PetMedicationsComponent extends Component {
           .then(response=>{
             //console.log(response);
             console.log("Medication " + MedicationId + " deleted sucessfully.");
-            Swal.fire('Success!', 'This medication has been deleted', 'success').then(function() {
-              window.location.reload();
-            });
+            Swal.fire('Success!', 'This medication has been deleted', 'success');
+            this.fetchMeds();
           })
           .catch((error) => {
             console.log(error);
@@ -87,7 +90,7 @@ export default class PetMedicationsComponent extends Component {
   };
 
   checkNullDate(date) {
-    if (date === null) { return (<span> No end date</span>) } 
+    if (date === null) { return (<span>NA</span>) }
     else { return ( <span> { moment(date).format("MM/DD/YYYY") } </span>) };
   }
 
@@ -128,13 +131,17 @@ export default class PetMedicationsComponent extends Component {
             }}
             components={{
               Toolbar: props => (
-                <div>
-                  <MTableToolbar {...props}></MTableToolbar>
-                  <div style={{padding: '0px 10px'}}>
-                  <Button onClick={this.handleShowAddMed} variant="secondary">Add Medication</Button>
-
+                  <div>
+                      <MTableToolbar {...props}></MTableToolbar>
+                      <div style={{padding: '0px 10px'}}>
+                          <div id="MedButtons">
+                              <div className="FormSelect">
+                                  <Button className="FormAddButton" onClick={this.handleShowAddMed} variant="secondary">Add Medication</Button>
+                                  <br/>
+                              </div>
+                          </div>
+                      </div>
                   </div>
-                </div>
               ),
             }}
             />
@@ -216,7 +223,7 @@ class AddMedicationComponent extends Component {
             console.log(response);
             console.log("Medication added successfully.");
             Swal.fire('Success!', 'The medication has been added', 'success').then(function() {
-              window.location.reload();
+                window.location.reload();
             });
           })
         .catch((error) => {
@@ -249,9 +256,9 @@ class AddMedicationComponent extends Component {
             <Row>
               <Col>
                 <Form.Group controlId="formDosageAmount">
-                <Form.Label>Dosage amount</Form.Label>
+                <Form.Label>Dosage Amount</Form.Label>
                 <Form.Control name="DosageAmount" type="number" min={0} precision={2} step={0.01}
-                              placeholder="Dosage amount"
+                              placeholder="Dosage Amount"
                               onChange={this.handleDosageAmountChange}
                               required/>
                 </Form.Group>
@@ -426,7 +433,7 @@ class UpdateMedicationComponent extends Component {
             <Row>
               <Col>
                 <Form.Group controlId="formDosageAmount">
-                <Form.Label>Dosage amount</Form.Label>
+                <Form.Label>Dosage Amount</Form.Label>
                 <Form.Control name="DosageAmount" type="number" min={0} precision={2} step={0.01}
                               value={this.state.DosageAmount}
                               onChange={this.handleDosageAmountChange}

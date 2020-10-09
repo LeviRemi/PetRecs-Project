@@ -121,13 +121,18 @@ export default class PetEventsComponent extends Component {
             }}
             components={{
               Toolbar: props => (
-                <div>
-                  <MTableToolbar {...props}></MTableToolbar>
-                  <div style={{padding: '0px 10px'}}>
-                  <Button onClick={this.handleShowAdd} variant="secondary">Add Event</Button>
-
+                  <div>
+                      <MTableToolbar {...props}></MTableToolbar>
+                      <div style={{padding: '0px 10px'}}>
+                          <div id="EventButtons">
+                              <div className="FormSelect">
+                                  <Button className="FormAddButton" onClick={this.handleShowAdd} variant="secondary">Add Event</Button>
+                                  <br/>
+                              </div>
+                          </div>
+                      </div>
                   </div>
-                </div>
+
               ),
             }}
             />

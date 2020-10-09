@@ -231,8 +231,8 @@ function PetRecordsComponent(props) {
                   <MTableToolbar {...props}></MTableToolbar>
                   <div style={{padding: '0px 10px'}}>
                     <div id="RecordButtons"> 
-                      <div id="RecordSelect">      
-                        <Button onClick={handleClick} variant="secondary">Upload Record</Button> 
+                      <div className="FormSelect">
+                        <Button className="FormAddButton" onClick={handleClick} variant="secondary">Upload Record</Button>
                         <input type="file" ref={hiddenFileInput} className="custom-file-input" onChange={onFileSelected} />  
                       </div>
                     </div>
