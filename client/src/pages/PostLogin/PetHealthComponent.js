@@ -18,7 +18,6 @@ import MaterialTable, {MTableToolbar} from "material-table";
 
 // MT Icons
 import tableIcons from '../../utils/TableIcons.js'
-import AddRounded from '@material-ui/icons/AddRounded';
 import UpdateRounded from '@material-ui/icons/EditRounded';
 import DeleteRounded from '@material-ui/icons/DeleteRounded';
 
@@ -147,8 +146,8 @@ class ViewWeightComponent extends Component {
         </Col>
           <div className="currentWeightBox shadowedBox FadeIn">
             Current Weight: <br />
-            <div className="bigFont"> { sortedData.length > 0 && sortedData[sortedData.length - 1].Weight } <span className="lbsFont">lbs</span></div> 
-            <div className="smallFont"> { sortedData.length > 0 && moment.utc(sortedData[sortedData.length - 1].Date).format("M/D/YY") } </div>
+            <div className="bigFont"> { sortedData.length > 0 && sortedData[sortedData.length - 1].Weight } <span className="lbsFont">lbs</span> </div> 
+            <div className="smallFont"> { sortedData.length > 0 && moment(sortedData[sortedData.length - 1].Date).format("M/D/YY") } </div>
           </div>
         <Col>
         </Col>
