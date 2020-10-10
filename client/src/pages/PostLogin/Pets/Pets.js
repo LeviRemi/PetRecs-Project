@@ -19,6 +19,8 @@ import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 export default class Pets extends Component {
 
+
+
     state = { pets: [],
               sharedPets: [],
               petImages: [] }
@@ -27,10 +29,12 @@ export default class Pets extends Component {
     componentDidMount() {
       // Get owned pets
       manuallyIncrementPromiseCounter();
+      
         axios.get("/api/pets/", { withCredentials: true })
             .then((petResponse) => {
               const pets = petResponse.data;
               this.setState({ pets });
+              this.sortArray('name');
               manuallyDecrementPromiseCounter();
               document.getElementById('petsPage').hidden = false;
             })
@@ -49,8 +53,35 @@ export default class Pets extends Component {
             })
     }
 
+    sortArray(type) {
+        const types = {
+          name: 'PetName',
+          id: 'PetId'
+        };
+        const sortProperty = types[type];
+        const sorted = [].concat(this.state.pets).sort((a, b) => b[sortProperty].toLowerCase() < a[sortProperty].toLowerCase() ? 1 : -1);
+        this.setState({ pets: sorted });
+      };
+
 
     render() {
+
+        let sharedPetsList;
+        if (this.state.sharedPets.length == 0) {
+            sharedPetsList = <h4>No Shared Pets</h4>
+        } else {
+            console.log("shared pets list")
+            sharedPetsList = this.state.sharedPets.map(pet =>
+                <div className="PetContainer" key={pet.PetId}>
+                    <Link id="PetLink" to={"/Pets/" + pet.PetId} key={pet.PetId}>
+                        <PetImage {...{PetId: pet.PetId, ProfileUrl: pet.ProfileUrl}}/>
+                    </Link>
+                    <div className="text-center">
+                        <p style={{width: "129px", margin: "auto"}} className="NameText">{pet.PetName}</p>
+                    </div>
+                </div>
+            )
+        }
     return (
 
       <div className="fontWrap">
@@ -58,19 +89,19 @@ export default class Pets extends Component {
           <Header />
         </div>
 
-        <div className="petsAccentBar"></div>
+          {this.props.location.state !== undefined ? <div className="petsAccentBar slide-out"></div> : <div className="petsAccentBar"></div>}
     
         <div className="fullPageContainer">
 
           <LoadingIndicator></LoadingIndicator>
             <Container fluid>
-              <div id="petsPage" className="mainPageBody" hidden={true}>
+              <div id="petsPage" className="mainPageBody FadeIn" hidden={true}>
                   <Tabs defaultActiveKey="myPets" id="petsViewTab">
                       <Tab eventKey="myPets" title="My Pets">
                           <div style={{display: "flex", flexWrap: "wrap", justifyContent: "start", alignItems: "baseline"}}
-                               className="mainPageContents shadowedBoxPets">
+                               className="mainPageContents shadowedBoxPets">                         
                               {this.state.pets.map(pet =>
-                                  <div className="PetContainer">
+                                  <div className="PetContainer" key={pet.PetId}>
                                       <Link id="PetLink" to={"/Pets/" + pet.PetId} key={pet.PetId}>
                                           <PetImage {...{PetId: pet.PetId, ProfileUrl: pet.ProfileUrl}}/>
                                       </Link>
@@ -93,16 +124,8 @@ export default class Pets extends Component {
                       <Tab eventKey="sharedWithMe" title="Shared With Me">
                           <div style={{display: "flex", flexWrap: "wrap", justifyContent: "start", alignItems: "baseline"}}
                                className="mainPageContents shadowedBoxPets">
-                              {this.state.sharedPets.map(pet =>
-                                  <div className="PetContainer">
-                                      <Link id="PetLink" to={"/Pets/" + pet.PetId} key={pet.PetId}>
-                                          <PetImage {...{PetId: pet.PetId, ProfileUrl: pet.ProfileUrl}}/>
-                                      </Link>
-                                      <div className="text-center">
-                                          <p style={{width: "129px", margin: "auto"}} className="NameText">{pet.PetName}</p>
-                                      </div>
-                                  </div>
-                              )}
+
+                              {sharedPetsList}
                           </div>
                       </Tab>
                   </Tabs>

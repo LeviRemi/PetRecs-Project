@@ -18,9 +18,7 @@ function PetImage(props) {
 export function PetCardImage(props) {
     return (
         <div id="PetCardProfileContainer">
-            <div id="PetCardCircle">
-                <img id={"ImageId" + props.PetId} src={props.ProfileUrl} className="PetCardImage"></img>
-            </div>
+            <img id={"ImageId" + props.PetId} src={props.ProfileUrl} className="PetCardImage FadeIn"></img>
         </div>
     ) 
 }

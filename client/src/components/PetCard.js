@@ -7,12 +7,12 @@ import axios from 'axios';
 
 import moment from 'moment';
 
+import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 
 import PetImage, { PetCardImage } from './PetImage.js'
 import {useHistory} from "react-router";
-import Swal from "sweetalert2";
 
 function PetCard(props) {
 
@@ -20,10 +20,12 @@ function PetCard(props) {
 
     const history = useHistory();
     const [petprofile, setPetprofile] = useState('');
+    const [cardAcquired, setCardAcquired] = useState(false);
 
     function fetchPetProfile() {
         axios.get(`/api/pets/${props.value.PetId}`, {withCredentials: true} )
             .then(response=>{
+                setCardAcquired(true);
                 setPetprofile(response.data);
             })
             .catch(err=> {
@@ -54,22 +56,30 @@ function PetCard(props) {
         <div className="petProfileCard">
             <Row>
                 <Col md="1">
-                <Link to="/Pets">
+                <Link to={{pathname: '/pets', state: {prevPage: "petScene"}}}>
                         <button className="back-btn-petprofile-nav">
                         &#x2b9c;
                         </button>
                     </Link>
                 </Col>
                 <Col md="auto">
-                    
-                    <PetCardImage {...{PetId: petprofile.PetId, ProfileUrl: petprofile.ProfileUrl}}/>
+                    {cardAcquired && <PetCardImage {...{PetId: petprofile.PetId, ProfileUrl: petprofile.ProfileUrl}}/>}
                 </Col>
-                <Col md="auto">
-                    <div className="petCardInfo">
-                                &#128062; {petprofile.PetName} <br/>
-                                &#9892; {petprofile.PetGender} &nbsp;&nbsp;&nbsp;
-                                &#128197; {ageYears} &nbsp;&nbsp;&nbsp;
-                    </div>
+                <Col md="auto" style={{paddingLeft: "0px"}}>
+                    {cardAcquired && <div className="petCardInfo FadeIn">
+                        <Container fluid>
+                            <Row>
+                                <Col sm={{ span: 1 }} style={{right: "-5px"}}> &#128062; </Col>
+                                <Col > {petprofile.PetName}</Col>
+                            </Row>
+                            <Row>
+                                <Col sm={{ span: 1 }} style={{right: "-8px"}}> &#9892; </Col>
+                                <Col sm={{ span: 1 }}> {petprofile.PetGender}</Col>
+                                <Col sm={{ span: 1 }} style={{right: "-5px"}}> &#128197; </Col>
+                                <Col sm="auto"> {ageYears} </Col>
+                            </Row>
+                        </Container>
+                    </div>}
                 </Col>
             </Row>
         </div>

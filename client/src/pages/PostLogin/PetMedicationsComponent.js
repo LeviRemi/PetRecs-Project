@@ -19,7 +19,7 @@ import MaterialTable, {MTableToolbar} from "material-table";
 // MT Icons
 import tableIcons from '../../utils/TableIcons.js'
 import AddRounded from '@material-ui/icons/AddRounded';
-import UpdateRounded from '@material-ui/icons/UpdateRounded';
+import UpdateRounded from '@material-ui/icons/EditRounded';
 import DeleteRounded from '@material-ui/icons/DeleteRounded';
 
 export default class PetMedicationsComponent extends Component {
@@ -44,20 +44,26 @@ export default class PetMedicationsComponent extends Component {
   handleShowUpdateMed() { this.setState({ showUpdateMed: true }); }
   updateStateMedicationId(buttonMedicationId) { this.setState({ MedicationId: buttonMedicationId }); }
 
+  fetchMeds() {
+      axios.get(`/api/medications/pet/` + this.state.PetId, {withCredentials: true} )
+          .then(response=>{
+              this.setState({medications: response.data});
+              //console.log(this.state.medications);
+              document.getElementById("PetMedTableId").hidden=false;
+              manuallyDecrementPromiseCounter();
+              //console.log(response.data);
+          })
+          .catch((error) => {
+              console.log(error);
+              manuallyDecrementPromiseCounter();
+          })
+  }
+
   componentDidMount() {
-    manuallyIncrementPromiseCounter();
-    axios.get(`/api/medications/pet/` + this.state.PetId, {withCredentials: true} )
-      .then(response=>{
-        this.setState({medications: response.data});
-        //console.log(this.state.medications);
-        document.getElementById("PetMedTableId").hidden=false;
-        manuallyDecrementPromiseCounter();
-        //console.log(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-        manuallyDecrementPromiseCounter();
-      })
+    this.setState({medications: this.props.meds});
+      if(this.props.acquired) {
+          document.getElementById("PetMedTableId").hidden = false;
+      }
   };
 
   deleteMedication = async (MedicationId) => {
@@ -74,9 +80,8 @@ export default class PetMedicationsComponent extends Component {
           .then(response=>{
             //console.log(response);
             console.log("Medication " + MedicationId + " deleted sucessfully.");
-            Swal.fire('Success!', 'This medication has been deleted', 'success').then(function() {
-              window.location.reload();
-            });
+            Swal.fire('Success!', 'This medication has been deleted', 'success');
+            this.props.fetch();
           })
           .catch((error) => {
             console.log(error);
@@ -87,19 +92,19 @@ export default class PetMedicationsComponent extends Component {
   };
 
   checkNullDate(date) {
-    if (date === null) { return (<span> No end date</span>) } 
+    if (date === null) { return (<span>NA</span>) }
     else { return ( <span> { moment(date).format("MM/DD/YYYY") } </span>) };
   }
 
   render(){
     return (
-      <div id="PetMedTableId" className="petProfileBody nopadding" hidden="true" style={{height: "100%"}}>
+      <div id="PetMedTableId" className="petProfileBody nopadding FadeIn" hidden={true} style={{height: "100%"}}>
         <div style={{ maxWidth: '100%'}}>
         <MaterialTable
             columns={[
               { title: 'Dosage', field: 'DosageAmount' },
               { title: 'Unit of Measurement', field: 'DosageUnit' },
-              { title: 'Notes', field: 'Notes' },
+              { title: 'Notes', field: 'Notes', render: row => <span className="tableWordBreak"> { row["Notes"] }</span>},
               { title: 'Start', field: 'StartDate', render: row => <span>{ moment(row["StartDate"]).format("MM/DD/YYYY") }</span> },
               { title: 'End', field: 'EndDate', render: row => this.checkNullDate( row["EndDate"])}
             ]}
@@ -128,13 +133,17 @@ export default class PetMedicationsComponent extends Component {
             }}
             components={{
               Toolbar: props => (
-                <div>
-                  <MTableToolbar {...props}></MTableToolbar>
-                  <div style={{padding: '0px 10px'}}>
-                  <Button onClick={this.handleShowAddMed} variant="secondary">Add Medication</Button>
-
+                  <div>
+                      <MTableToolbar {...props}></MTableToolbar>
+                      <div style={{padding: '0px 10px'}}>
+                          <div id="MedButtons">
+                              <div className="FormSelect">
+                                  <Button className="FormAddButton" onClick={this.handleShowAddMed} variant="secondary">Add Medication</Button>
+                                  <br/>
+                              </div>
+                          </div>
+                      </div>
                   </div>
-                </div>
               ),
             }}
             />
@@ -148,7 +157,7 @@ export default class PetMedicationsComponent extends Component {
               <Modal.Title>Add Medication</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-                <AddMedicationComponent petid={this.state.PetId}/>
+                <AddMedicationComponent petid={this.state.PetId} fetch={this.props.fetch}/>
               </Modal.Body>
               <Modal.Footer>
                       <Button variant="secondary" onClick={this.handleCloseAddMed}>Close</Button>
@@ -166,7 +175,7 @@ export default class PetMedicationsComponent extends Component {
             <Modal.Title>Update Medication</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <UpdateMedicationComponent medicationid={this.state.MedicationId} />
+              <UpdateMedicationComponent medicationid={this.state.MedicationId} fetch={this.props.fetch} />
             </Modal.Body>
             <Modal.Footer>
                     <Button variant="secondary" onClick={this.handleCloseUpdateMed}>Close</Button>
@@ -215,9 +224,8 @@ class AddMedicationComponent extends Component {
         .then(response=>{
             console.log(response);
             console.log("Medication added successfully.");
-            Swal.fire('Success!', 'The medication has been added', 'success').then(function() {
-              window.location.reload();
-            });
+            Swal.fire('Success!', 'The medication has been added', 'success');
+            this.props.fetch();
           })
         .catch((error) => {
             console.log(error);
@@ -249,9 +257,9 @@ class AddMedicationComponent extends Component {
             <Row>
               <Col>
                 <Form.Group controlId="formDosageAmount">
-                <Form.Label>Dosage amount</Form.Label>
-                <Form.Control name="DosageAmount" type="number" min={0}
-                              defaultValue={1}
+                <Form.Label>Dosage Amount</Form.Label>
+                <Form.Control name="DosageAmount" type="number" min={0} precision={2} step={0.01}
+                              placeholder="Dosage Amount"
                               onChange={this.handleDosageAmountChange}
                               required/>
                 </Form.Group>
@@ -270,7 +278,7 @@ class AddMedicationComponent extends Component {
               <Col>
                 <Form.Group controlId="formStartDate">
                 <Form.Label>Start Date</Form.Label>
-                <Form.Control name="startDate" type="date" max={moment().format("YYYY-MM-DD")}
+                <Form.Control name="startDate" type="date"
                               onChange={this.handleStartDateChange}
                               required/>
                 </Form.Group>
@@ -364,10 +372,10 @@ class UpdateMedicationComponent extends Component {
 
     axios.put(`/api/medications/` + this.state.MedId, data, {withCredentials: true} )
         .then(response=>{
+          console.log(response);
           console.log("Medication added successfully.");
-          Swal.fire('Success!', 'The medication has been updated', 'success').then(function() {
-            window.location.reload();
-          });
+          Swal.fire('Success!', 'The medication has been updated', 'success');
+          this.props.fetch();
         })
         .catch((error) => {
             console.log(error);
@@ -425,8 +433,8 @@ class UpdateMedicationComponent extends Component {
             <Row>
               <Col>
                 <Form.Group controlId="formDosageAmount">
-                <Form.Label>Dosage amount</Form.Label>
-                <Form.Control name="DosageAmount" type="number" min={0}
+                <Form.Label>Dosage Amount</Form.Label>
+                <Form.Control name="DosageAmount" type="number" min={0} precision={2} step={0.01}
                               value={this.state.DosageAmount}
                               onChange={this.handleDosageAmountChange}
                               required/>
@@ -446,7 +454,7 @@ class UpdateMedicationComponent extends Component {
               <Col>
                 <Form.Group controlId="formStartDate">
                 <Form.Label>Start Date</Form.Label>
-                <Form.Control name="startDate" type="date" max={moment().format("YYYY-MM-DD")}
+                <Form.Control name="startDate" type="date"
                               defaultValue={this.state.StartDate}
                               onChange={this.handleStartDateChange}
                               required/>

@@ -26,7 +26,7 @@ library.add(faPlus)
 
 function App(){
   return (
-    <div id="container" style={{background: '#DADBE6'}}>
+    <div id="container">
       <Router>
         <Switch>
           <Route path="/" exact component={()=>isUserLoggedIn()?<Redirect to={"/pets"}/> : <HomePage/> } />
@@ -34,7 +34,7 @@ function App(){
           <Route path="/register" exact component={()=>isUserLoggedIn()?<Redirect to={"/pets"}/> : <Register/>} />
           <Route path="/logout" exact component={()=>isUserLoggedIn()?<Logout/> : <Redirect to={"/"}/>} />
           <Route path="/about" exact component={()=>isUserLoggedIn()?<About/> : <Redirect to={"/"}/>} />
-          <Route path="/pets" exact component={()=>isUserLoggedIn()?<Pets/> : <Redirect to={"/"}/>} />
+          <Route path="/pets" exact component={(props)=>isUserLoggedIn()?<Pets {...props}/> : <Redirect to={"/"}/>} />
           <Route path="/pets/test/health" exact component={()=><TestHealth/>} />    {/* Erik's test route while unable to connect to DB */}
           <Route path="/pets/test/pets" exact component={()=><PetTestProfile/>} />    {/* Erik's test route while unable to connect to DB */}
           <Route path="/pets/new" exact component={()=>isUserLoggedIn()?<PetCreation/> : <Redirect to={"/"}/>} />{/*Keep this component above "pets/:PetId"*/}

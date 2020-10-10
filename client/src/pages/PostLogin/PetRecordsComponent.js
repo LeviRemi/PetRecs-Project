@@ -20,40 +20,49 @@ import Button from 'react-bootstrap/Button';
 function PetRecordsComponent(props) {
 
   const PetId = props.match.params.PetId;
-  const [records, setRecords] = useState([]);
+  const records = props.records;
   const [urlpetid, setUrlpetid] = useState(useParams());
 
   // Create a reference to the hidden file input element
   const hiddenFileInput = React.useRef(null)
 
-  function getRecords() {
-    manuallyIncrementPromiseCounter();
-    axios.get(`/api/pet-records/pet/` + PetId, {withCredentials: true} )
-      .then(response=>{
-        setRecords(response.data);
-        console.log(response.data);
-        document.getElementById("petRecordsBodyId").hidden=false;
-
-        manuallyDecrementPromiseCounter();
-      })
-      .catch((error) => {
-          console.log(error);
-          manuallyDecrementPromiseCounter();
-      })
-  };
+  // function getRecords() {
+  //   manuallyIncrementPromiseCounter();
+  //   axios.get(`/api/pet-records/pet/` + PetId, {withCredentials: true} )
+  //     .then(response=>{
+  //       setRecords(response.data);
+  //       console.log(response.data);
+  //       document.getElementById("petRecordsBodyId").hidden=false;
+  //
+  //       manuallyDecrementPromiseCounter();
+  //     })
+  //     .catch((error) => {
+  //         console.log(error);
+  //         manuallyDecrementPromiseCounter();
+  //     })
+  // };
 
   function UpdateRecords() {
-    axios.get(`/api/pet-records/pet/` + PetId, {withCredentials: true} )
-      .then(response=>{
-        setRecords(response.data);
-      })
-      .catch((error) => {
-          console.log(error);
-      })
+    props.fetch();
   };
 
   function DeleteRecord(RecordName, PetRecordId, FireReference) {
-    if (window.confirm("You want to delete " + RecordName)) {
+    Swal.fire({
+      title: 'Delete ' + RecordName + ' record?',
+      //text: "You won't be able to revert this!",
+      //icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#DD6B55',
+      cancelButtonColor: 'light-gray',
+      confirmButtonText: 'Delete'
+    }).then((result) => {
+    if (result.isConfirmed) {
+
+      Swal.fire({
+        title: 'Loading'
+      });
+
+      Swal.showLoading();
 
       axios.post(`/api/upload/delete`, {data: FireReference}, {withCredentials: true})
       .then(response => {
@@ -65,15 +74,18 @@ function PetRecordsComponent(props) {
           console.log(response.data);
         })
         .catch((error) => {
+          Swal.fire('Oops...', `Record could not be deleted`, 'error');
             console.log("Firebase Response: " + response);
             console.log(error);
         })
       })
       .catch((error) => {
+        Swal.fire('Oops...', `Record could not be deleted`, 'error');
         console.log(error);
       })
       
     }
+  })
   };
 
   function openInNewTab(url) {
@@ -82,10 +94,14 @@ function PetRecordsComponent(props) {
   }
 
   useEffect(() => {
-      getRecords()
+      //getRecords()
+    if(props.acquired === true) {
+      document.getElementById("petRecordsBodyId").hidden = false;
+    }
   }, [])
 
   const handleClick = (event) => {
+    hiddenFileInput.current.value = null;
     hiddenFileInput.current.click();
   };
 
@@ -119,13 +135,34 @@ function PetRecordsComponent(props) {
           uniqueFileName,
         );
 
-        const enteredFileName = prompt('Please enter file name', `${fileUploaded.name}`);
+        //const enteredFileName = prompt('Please enter file name', `${fileUploaded.name}`);
+
+        const { value: enteredFileName } = await Swal.fire({
+          title: 'Enter a file name',
+          input: 'text',
+          inputValue: `${fileUploaded.name}`,
+          showCancelButton: true,
+          reverseButtons: true,
+          inputValidator: (value) => {
+            if (!value) {
+              return 'You need to write something!'
+            }
+          }
+        })
+
+        console.log(enteredFileName);
 
         if (enteredFileName != null) {
+          Swal.fire({
+            title: 'Loading'
+          });
+
+          Swal.showLoading();
 
           axios.post("/api/upload/record", fileData, {withCredentials: true})
           .then((response) => {
             console.log("upload success");
+
 
 
             const data = {
@@ -146,20 +183,22 @@ function PetRecordsComponent(props) {
           }, (error) => {
             console.log(error);
           });
-        } else {console.log("Cancelled");}
-      } else {console.log(e.target.files[0]);}
+        } else {
+          console.log("Cancelled");}
+      } else {
+        console.log(e.target.files[0]);}
     } catch (error) {
       console.log(error);
     }
   };
   
   return (
-      <div id="petRecordsBodyId" className="petProfileBody nopadding" hidden='true' style={{height: "100%"}}>
+      <div id="petRecordsBodyId" className="petProfileBody nopadding FadeIn" hidden={true} style={{height: "100%"}}>
         <div style={{ maxWidth: '100%' }}>
           <MaterialTable
             columns={[
               { title: 'Name', field: 'RecordName' },
-              { title: 'Date Uploaded', field: 'UploadDate', type: 'datetime'}
+              { title: 'Date Uploaded', field: 'UploadDate', type: 'datetime', defaultSort: 'desc'}
             ]}
             data={records}
             title="Pet Records"
@@ -189,8 +228,8 @@ function PetRecordsComponent(props) {
                   <MTableToolbar {...props}></MTableToolbar>
                   <div style={{padding: '0px 10px'}}>
                     <div id="RecordButtons"> 
-                      <div id="RecordSelect">      
-                        <Button onClick={handleClick} variant="secondary">Upload Record</Button> 
+                      <div className="FormSelect">
+                        <Button className="FormAddButton" onClick={handleClick} variant="secondary">Upload Record</Button>
                         <input type="file" ref={hiddenFileInput} className="custom-file-input" onChange={onFileSelected} />  
                       </div>
                     </div>

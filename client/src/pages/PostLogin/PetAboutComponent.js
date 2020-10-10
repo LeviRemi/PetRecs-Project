@@ -22,18 +22,19 @@ import '../../utils/FileUpload/FileUpload.css'
 
 function PetAboutComponent(props) {
     const history = useHistory();
-    const [petprofile, setPetprofile] = useState('');
-    const [profilepreview, setProfilePreview] = useState('');
-    const [petSpecies, setPetSpecies] = useState('');
-    const [petBreed, setPetBreed] = useState('');
+    const petprofile = props.profile.pet;
+    const [profilepreview, setProfilePreview] = useState(props.profile.pet.ProfileUrl);
+    const petSpecies = props.profile.species;
+    const petBreed = props.profile.breed;
     const [show, setShow] = useState(false);
     const [showShare, setShowShare] = useState(false);
     const [showUpload, setShowUpload] = useState(false);
-    const [speciesList, setSpeciesList] = useState([]);
-    const [dogBreedList, setDogBreedList] = useState([]);
-    const [catBreedList, setCatBreedList] = useState([]);
+    const speciesList = props.speciesList;
+    const dogBreedList = props.dogList;
+    const catBreedList = props.catList;
     const { register, handleSubmit, errors, watch } = useForm();
     const [isLoading, setLoading] = useState({display: "none"});
+    const acquired = props.acquired === undefined? false : props.acquired;
 
     const [selectedFile, setSelectedFile] = useState(null);
     const [fileName, setFileName] = useState("");
@@ -44,72 +45,41 @@ function PetAboutComponent(props) {
     // Create a reference to the hidden file input element
     const hiddenFileInput = React.useRef(null);
 
-    function fetchPetProfile() {
-        document.getElementById("petProfileBodyId").hidden = true;
-        manuallyIncrementPromiseCounter();
-        axios.get(`/api/pets/${props.match.params.PetId}`, {withCredentials: true} )
-            .then(response=>{
-                setPetprofile(response.data);
-                setProfilePreview(response.data.ProfileUrl);
-
-                const requestSpecies = axios.get(`/api/species/${response.data.SpeciesId}`, {withCredentials: true});
-                const requestBreed = (response.data.SpeciesId === 1 || response.data.SpeciesId === 2)? axios.get(`/api/breeds/${response.data.BreedId}`, {withCredentials: true}) : "";
-
-                axios.all([requestSpecies, requestBreed]).then(axios.spread((...responses) => {
-                    const responseSpecies = responses[0];
-                    const responseBreed = responses[1];
-
-                    setPetSpecies(responseSpecies.data);
-                    setPetBreed(responseBreed.data);
-                    document.getElementById("petProfileBodyId").hidden = false;
-                    manuallyDecrementPromiseCounter();
-                })).catch(err =>{
-                    console.log(err);
-                    manuallyDecrementPromiseCounter();
-                })
-            })
-            .catch(err=> {
-                Swal.fire('Oops...', "A pet with this ID does not exist", 'error');
-                manuallyDecrementPromiseCounter();
-                history.push('/pets');
-            })
-    }
-
-    function fetchSpeciesList() {
-        axios.get(`/api/species`, {withCredentials: true} )
-            .then(response=>{
-                setSpeciesList(response.data);
-            })
-            .catch(err=> {
-                console.log(err);
-            })
-    }
-
-    function fetchDogBreedList() {
-        axios.get(`/api/breeds/dog`, {withCredentials: true} )
-            .then(response=>{
-                setDogBreedList(response.data);
-            })
-            .catch(err=> {
-                console.log(err);
-            })
-    }
-
-    function fetchCatBreedList() {
-        axios.get(`/api/breeds/cat`, {withCredentials: true} )
-            .then(response=>{
-                setCatBreedList(response.data);
-            })
-            .catch(err=> {
-                console.log(err);
-            })
-    }
+    // function fetchPetProfile() {
+    //     document.getElementById("petProfileBodyId").hidden = true;
+    //     manuallyIncrementPromiseCounter();
+    //     axios.get(`/api/pets/${props.match.params.PetId}`, {withCredentials: true} )
+    //         .then(response=>{
+    //             setPetprofile(response.data);
+    //             setProfilePreview(response.data.ProfileUrl);
+    //
+    //             const requestSpecies = axios.get(`/api/species/${response.data.SpeciesId}`, {withCredentials: true});
+    //             const requestBreed = (response.data.SpeciesId === 1 || response.data.SpeciesId === 2)? axios.get(`/api/breeds/${response.data.BreedId}`, {withCredentials: true}) : "";
+    //
+    //             axios.all([requestSpecies, requestBreed]).then(axios.spread((...responses) => {
+    //                 const responseSpecies = responses[0];
+    //                 const responseBreed = responses[1];
+    //
+    //                 setPetSpecies(responseSpecies.data);
+    //                 setPetBreed(responseBreed.data);
+    //                 document.getElementById("petProfileBodyId").hidden = false;
+    //                 manuallyDecrementPromiseCounter();
+    //             })).catch(err =>{
+    //                 console.log(err);
+    //                 manuallyDecrementPromiseCounter();
+    //             })
+    //         })
+    //         .catch(err=> {
+    //             Swal.fire('Oops...', "A pet with this ID does not exist", 'error');
+    //             manuallyDecrementPromiseCounter();
+    //             history.push('/pets');
+    //         })
+    // }
 
     useEffect(() => {
-        fetchPetProfile();
-        fetchSpeciesList();
-        fetchDogBreedList();
-        fetchCatBreedList();
+        if(props.acquired === true) {
+            document.getElementById("petProfileBodyId").hidden = false;
+        }
     }, [])
 
     const handleClose = () => setShow(false);
@@ -138,11 +108,12 @@ function PetAboutComponent(props) {
     const onSubmit = (data) => {
         setLoading({display: "initial"});
         let bod = data.petBirthdate;
+        console.log("petdogbreed", data.petDogBreed)
 
         axios.put(`/api/pets/${petprofile.PetId}`, {
             PetName: data.petName,
             SpeciesId: data.petSpecies,
-            BreedId: data.petSpecies == 1? data.petDogBreed : data.petSpecies == 2? data.petCatBreed : 599,
+            BreedId: data.petSpecies == 1 && data.petDogBreed !== "Select..."? data.petDogBreed : data.petSpecies == 2 && data.petCatBreed !== "Select..." ? data.petCatBreed : 599,
             PetGender: data.petGender,
             PetAgeYear: bod.substring(0, 4),
             PetAgeMonth: bod.substring(5, 7),
@@ -154,9 +125,10 @@ function PetAboutComponent(props) {
             .then((res) => {
                 setLoading({display: "none"});
                 console.log(res);
-                Swal.fire('Congratulations!', "This pet profile has been updated", 'success');
-                fetchPetProfile();
                 handleClose();
+                Swal.fire('Congratulations!', "This pet profile has been updated", 'success');
+                props.fetch();
+
             }, (err) => {
                 setLoading({display: "none"});
                 console.log(err.response.status)
@@ -254,11 +226,11 @@ function PetAboutComponent(props) {
                                     axios.put('/api/pets/' + urlpetid.PetId, {"ProfileUrl": response.data.fileLocation},
                                         {Params: {id: urlpetid.PetId}, withCredentials: true })
                                         .then((res) => {
-                                            Swal.fire("Congratulations!", "Profile picture updated", "success");
                                             setLoading({display: "none"});
-                                            handleCloseUpload();
-                                            fetchPetProfile()
                                             console.log(res);
+                                            handleCloseUpload();
+                                            Swal.fire("Congratulations!", "Profile picture updated", "success");
+                                            props.fetch();
                                         })
                                 }, (error) => {
                                     setLoading({display: "none"});
@@ -281,7 +253,7 @@ function PetAboutComponent(props) {
     };
 
     return (
-        <Container id="petProfileBodyId" className="petProfileBody shadowedBox" style={{textAlign: "center"}} hidden={true}>
+        <Container id="petProfileBodyId" className="petProfileBody shadowedBox FadeIn" style={{textAlign: "center"}} hidden={true}>
 
             <Modal
                 show={show}
@@ -327,7 +299,7 @@ function PetAboutComponent(props) {
                                 <option>Select...</option>
                                 {
                                     dogBreedList.map((option, label) => {
-                                        return (<option value={option.BreedId}>{option.BreedName}</option>)
+                                        return (<option value={option.BreedId} key={option.BreedId}>{option.BreedName}</option>)
                                     })
                                 }
                             </Form.Control>
@@ -342,7 +314,7 @@ function PetAboutComponent(props) {
                                 <option>Select...</option>
                                 {
                                     catBreedList.map((option, label) => {
-                                        return (<option value={option.BreedId}>{option.BreedName}</option>)
+                                        return (<option value={option.BreedId} key={option.BreedId}>{option.BreedName}</option>)
                                     })
                                 }
                             </Form.Control>
@@ -515,12 +487,16 @@ function PetAboutComponent(props) {
 
                 </Col>
                 <Col style={{textAlign: "right"}}>
-                    <Button onClick={handleShowShare} variant="" style={{top: "0%"}} >
-                        <svg fill="none" viewBox="0 0 24 24" height="24" width="24" xmlns="http://www.w3.org/2000/svg">
-                            <path xmlns="http://www.w3.org/2000/svg" fillRule="evenodd" clipRule="evenodd" d="M11.2929 2.29289C11.6834 1.90237 12.3166 1.90237 12.7071 2.29289L15.7071 5.29289C16.0976 5.68342 16.0976 6.31658 15.7071 6.70711C15.3166 7.09763 14.6834 7.09763 14.2929 6.70711L13 5.41421V15C13 15.5523 12.5523 16 12 16C11.4477 16 11 15.5523 11 15V5.41421L9.70711 6.70711C9.31658 7.09763 8.68342 7.09763 8.29289 6.70711C7.90237 6.31658 7.90237 5.68342 8.29289 5.29289L11.2929 2.29289ZM4 11C4 9.89543 4.89543 9 6 9H8C8.55228 9 9 9.44772 9 10C9 10.5523 8.55228 11 8 11H6V20H18V11H16C15.4477 11 15 10.5523 15 10C15 9.44772 15.4477 9 16 9H18C19.1046 9 20 9.89543 20 11V20C20 21.1046 19.1046 22 18 22H6C4.89543 22 4 21.1046 4 20V11Z" fill="#282828"></path>
+                    <Button className="ProfileBtn" onClick={handleShow} variant="outline-dark">
+                        Edit Profile <svg className="Icon" viewBox="0 0 24 24" height="20" width="20" xmlns="http://www.w3.org/2000/svg">
+                            <path xmlns="http://www.w3.org/2000/svg" fillRule="evenodd" clipRule="evenodd" d="M16.2929 2.29289C16.6834 1.90237 17.3166 1.90237 17.7071 2.29289L21.7071 6.29289C22.0976 6.68342 22.0976 7.31658 21.7071 7.70711L8.70711 20.7071C8.51957 20.8946 8.26522 21 8 21H4C3.44772 21 3 20.5523 3 20V16C3 15.7348 3.10536 15.4804 3.29289 15.2929L13.2927 5.2931L16.2929 2.29289ZM14 7.41421L5 16.4142V19H7.58579L16.5858 10L14 7.41421ZM18 8.58579L15.4142 6L17 4.41421L19.5858 7L18 8.58579Z" fill="#282828"></path>
                         </svg>
+                    </Button> <br/>
+                    <Button className="ProfileBtn" id="ShareBtn" onClick={handleShowShare} variant="outline-dark" style={{marginTop: "10px"}}>
+                        Share <svg className="Icon" viewBox="0 0 24 24" height="20" width="20" xmlns="http://www.w3.org/2000/svg">
+                        <path xmlns="http://www.w3.org/2000/svg" fillRule="evenodd" clipRule="evenodd" d="M11.2929 2.29289C11.6834 1.90237 12.3166 1.90237 12.7071 2.29289L15.7071 5.29289C16.0976 5.68342 16.0976 6.31658 15.7071 6.70711C15.3166 7.09763 14.6834 7.09763 14.2929 6.70711L13 5.41421V15C13 15.5523 12.5523 16 12 16C11.4477 16 11 15.5523 11 15V5.41421L9.70711 6.70711C9.31658 7.09763 8.68342 7.09763 8.29289 6.70711C7.90237 6.31658 7.90237 5.68342 8.29289 5.29289L11.2929 2.29289ZM4 11C4 9.89543 4.89543 9 6 9H8C8.55228 9 9 9.44772 9 10C9 10.5523 8.55228 11 8 11H6V20H18V11H16C15.4477 11 15 10.5523 15 10C15 9.44772 15.4477 9 16 9H18C19.1046 9 20 9.89543 20 11V20C20 21.1046 19.1046 22 18 22H6C4.89543 22 4 21.1046 4 20V11Z" fill="#282828"></path>
+                    </svg>
                     </Button>
-                    <Button onClick={handleShow} variant="outline-dark">Edit Profile</Button>
                 </Col>
             </Row>
             <Row>
@@ -535,17 +511,18 @@ function PetAboutComponent(props) {
             </Row>
             <Row>
                 <Col></Col>
-                {petSpecies.SpeciesName === "Dog"? <Col><h6>Breed: {petBreed.BreedName}</h6></Col> : ""}
+                {petSpecies.SpeciesName === "Dog" || petSpecies.SpeciesName === "Cat" ? <Col><h6>Breed: {petBreed.BreedName}</h6></Col> : ""}
                 <Col></Col>
             </Row>
             <Row>
                 <Col></Col>
-                <Col><h6>Gender: {petprofile.PetGender==="M"? "Male" : petprofile.PetGender==="F"? "Female" : "Not Applicable"}</h6></Col>
+                <Col><h6>Gender: {petprofile.PetGender==="M"? "Male" : petprofile.PetGender==="F"? "Female" : "Unknown"}</h6></Col>
                 <Col></Col>
             </Row>
             <Row>
                 <Col></Col>
-                <Col><h6>Birthdate: {petprofile.PetAgeMonth}/{petprofile.PetAgeDay}/{petprofile.PetAgeYear}</h6></Col>
+                {petprofile.PetAgeMonth === 0 || petprofile.PetAgeDay === 0 || petprofile.PetAgeYear === 0? ""
+                    : <Col><h6>Birthdate: {petprofile.PetAgeMonth}/{petprofile.PetAgeDay}/{petprofile.PetAgeYear}</h6></Col>}
                 <Col></Col>
             </Row>
             <br/>

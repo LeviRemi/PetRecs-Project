@@ -19,7 +19,7 @@ import MaterialTable, {MTableToolbar} from "material-table";
 // MT Icons
 import tableIcons from '../../utils/TableIcons.js'
 import AddRounded from '@material-ui/icons/AddRounded';
-import UpdateRounded from '@material-ui/icons/UpdateRounded';
+import UpdateRounded from '@material-ui/icons/EditRounded';
 import DeleteRounded from '@material-ui/icons/DeleteRounded';
 
 export default class PetHealthComponent extends Component {
@@ -34,8 +34,8 @@ export default class PetHealthComponent extends Component {
     
     return (
 
-      <div id="petHealthBodyId" hidden='true'>
-          <ViewWeightComponent petid={this.state.PetId}/>
+      <div id="petHealthBodyId" hidden={true}>
+          <ViewWeightComponent petid={this.state.PetId} acquired={this.props.acquired} weights={this.props.weights} fetch={this.props.fetch}/>
       </div>
     )
   }
@@ -64,18 +64,24 @@ class ViewWeightComponent extends Component {
 
   handleShowUpdateWeight() { this.setState({ showUpdateWeight: true }); }
 
+  fetchWeights() {
+      axios.get(`/api/pet-weights/pet/` + this.props.petid, {withCredentials: true} )
+          .then(response=>{
+              this.setState({data: response.data});
+              document.getElementById("petHealthBodyId").hidden = false;
+              manuallyDecrementPromiseCounter();
+          })
+          .catch((error) => {
+              console.log(error);
+              manuallyDecrementPromiseCounter();
+          })
+  }
+
   componentDidMount() {
-    manuallyIncrementPromiseCounter();
-    axios.get(`/api/pet-weights/pet/` + this.props.petid, {withCredentials: true} )
-      .then(response=>{
-        this.setState({data: response.data});
-        document.getElementById("petHealthBodyId").hidden = false;
-        manuallyDecrementPromiseCounter();
-      })
-      .catch((error) => {
-          console.log(error);
-          manuallyDecrementPromiseCounter();
-      })
+    this.setState({data: this.props.weights});
+      if(this.props.acquired) {
+          document.getElementById("petHealthBodyId").hidden = false;
+      }
   }
 
   deleteWeight = async (WeightId) => {
@@ -92,9 +98,8 @@ class ViewWeightComponent extends Component {
           .then(response=>{
             //console.log(response);
             console.log("WeightId " + WeightId + " deleted sucessfully.");
-            Swal.fire('Success!', 'This weight has been deleted', 'success').then(function() {
-              window.location.reload();
-            });
+            Swal.fire('Success!', 'This weight has been deleted', 'success');
+            this.props.fetch();
           })
           .catch((error) => {
             console.log(error);
@@ -125,7 +130,7 @@ class ViewWeightComponent extends Component {
       <div>
       <Row>
         <Col md="auto">
-          <div className="weightTableBox shadowedBox">
+          <div className="weightTableBox shadowedBox FadeIn">
           <h5> Weight </h5>
           <LineChart
               width={660} height={280}
@@ -140,9 +145,9 @@ class ViewWeightComponent extends Component {
             </LineChart>
           </div>
         </Col>
-          <div className="currentWeightBox shadowedBox">
+          <div className="currentWeightBox shadowedBox FadeIn">
             Current Weight: <br />
-            <div className="bigFont"> { sortedData.length > 0 && sortedData[sortedData.length - 1].Weight } lb</div> 
+            <div className="bigFont"> { sortedData.length > 0 && sortedData[sortedData.length - 1].Weight } <span className="lbsFont">lbs</span></div> 
             <div className="smallFont"> { sortedData.length > 0 && moment.utc(sortedData[sortedData.length - 1].Date).format("M/D/YY") } </div>
           </div>
         <Col>
@@ -162,7 +167,7 @@ class ViewWeightComponent extends Component {
             <Modal.Title>Add Weight</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <AddWeightComponent petid={this.state.PetId}/>
+              <AddWeightComponent petid={this.state.PetId} fetch={this.props.fetch}/>
             </Modal.Body>
             <Modal.Footer>
                     <Button variant="secondary" onClick={this.handleCloseAddWeight}>Close</Button>
@@ -180,22 +185,19 @@ class ViewWeightComponent extends Component {
             <Modal.Title>Update Weight</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <UpdateWeightComponent weightid={this.state.WeightId} />
+              <UpdateWeightComponent weightid={this.state.WeightId} fetch={this.props.fetch} />
             </Modal.Body>
             <Modal.Footer>
                     <Button variant="secondary" onClick={this.handleCloseUpdateWeight}>Close</Button>
                     <Button variant="primary" type="submit" form="UpdateWeightForm">Update Weight</Button>
             </Modal.Footer>
           </Modal>
-        <div>
-          
-        </div>
 
-        <div>
+        <div className="FadeIn">
           <MaterialTable
             columns={[
               { title: 'Date', field: 'Date', defaultSort: 'desc', type: 'date' },
-              { title: 'Weight', field: 'Weight' },
+              { title: 'Weight', field: 'Weight', render: row => <span>{ row["Weight"] } lbs </span> },
             ]}
             data={this.state.data}
             title="Pet Weights"
@@ -222,12 +224,17 @@ class ViewWeightComponent extends Component {
             }}
             components={{
               Toolbar: props => (
-                <div>
-                  <MTableToolbar {...props} />
-                  <div style={{padding: '0px 10px'}}>
-                    <Button onClick={this.handleShowAddWeight} variant="secondary">Add Weight</Button>
+                  <div>
+                      <MTableToolbar {...props}></MTableToolbar>
+                      <div style={{padding: '0px 10px'}}>
+                          <div id="WeightButtons">
+                              <div className="FormSelect">
+                                  <Button className="FormAddButton" onClick={this.handleShowAddWeight} variant="secondary">Add Weight</Button>
+                                  <br/>
+                              </div>
+                          </div>
+                      </div>
                   </div>
-                </div>
               ),
             }}
             />
@@ -263,9 +270,8 @@ class AddWeightComponent extends Component {
         .then(response=>{
             console.log(response);
             console.log("Event added successfully.");
-            Swal.fire('Success!', 'The weight has been added', 'success').then(function() {
-            window.location.reload();
-        });
+            Swal.fire('Success!', 'The weight has been added', 'success');
+            this.props.fetch();
       })
       .catch((error) => {
         console.log(error);
@@ -273,24 +279,24 @@ class AddWeightComponent extends Component {
       })
   }
 
-  checkBoxDisableDate() {
-    var checkbox = document.getElementById("formTodayCheckbox");
-    var dateElement = document.getElementById("formDate");
-
-    if (checkbox.checked) {
-      //console.log("noEndCheckBox is checked");
-      let dateNow = moment.utc().format();
-      dateElement.setAttribute("value", dateNow.substr(0,10) );
-      dateElement.setAttribute("disabled", "true");
-      this.setState( {Date: dateNow } );
-      
-    }
-    else {
-      //console.log("noEndCheckBox is unchecked");
-      dateElement.removeAttribute("disabled");
-      dateElement.removeAttribute("value");
-    }
-  }
+  // checkBoxDisableDate() {
+  //   var checkbox = document.getElementById("formTodayCheckbox");
+  //   var dateElement = document.getElementById("formDate");
+  //
+  //   if (checkbox.checked) {
+  //     //console.log("noEndCheckBox is checked");
+  //     let dateNow = moment.utc().format();
+  //     dateElement.setAttribute("value", dateNow.substr(0,10) );
+  //     dateElement.setAttribute("disabled", "true");
+  //     this.setState( {Date: dateNow } );
+  //
+  //   }
+  //   else {
+  //     //console.log("noEndCheckBox is unchecked");
+  //     dateElement.removeAttribute("disabled");
+  //     dateElement.removeAttribute("value");
+  //   }
+  // }
 
   render() {
     return (
@@ -299,21 +305,19 @@ class AddWeightComponent extends Component {
             <Row>
               <Col>
                 <Form.Group controlId="formWeight">
-                <Form.Label>Pet weight</Form.Label>
-                <Form.Control name="weight" type="number" min={1}
-                              placeholder="Weight"
+                  <Form.Label>Weight</Form.Label>
+                  <Form.Control name="weight" type="number" min={0} precision={2} step={0.01}
+                              placeholder="Weight in lbs"
                               onChange={this.handleWeightChange}
                               required/>
                 </Form.Group>
               </Col>
-              <Col>
-              <Form.Group controlId="formTodayCheckbox">
-                <Form.Label>Date</Form.Label>
-                <Form.Check inline name="noEndCheckbox" type="checkbox" label="Today"
-                            onChange={ () => this.checkBoxDisableDate() }/>
-                </Form.Group>
-                <Form.Group controlId="formDate">
-                <Form.Control name="date" type="date" max={moment().format("YYYY-MM-DD")}
+              <Col > 
+                <Form.Group>
+                    <Form.Label >Date</Form.Label>
+                    {/*<Form.Check Id="formTodayCheckbox" style={{float: 'right'}}inline name="noEndCheckbox" type="checkbox" label="Today"*/}
+                    {/*            onChange={ () => this.checkBoxDisableDate() }/>*/}
+                    <Form.Control Id="formDate" name="date" type="date" max={moment().format("YYYY-MM-DD")}
                               onChange={this.handleDateChange}
                               required/>
                 </Form.Group>
@@ -367,9 +371,8 @@ class UpdateWeightComponent extends Component {
         .then(response=>{
             console.log(response);
             console.log("Event added successfully.");
-            Swal.fire('Success!', 'The weight has been updated', 'success').then(function() {
-            window.location.reload();
-        });
+            Swal.fire('Success!', 'The weight has been updated', 'success');
+            this.props.fetch();
       })
       .catch((error) => {
         console.log(error);
@@ -378,24 +381,24 @@ class UpdateWeightComponent extends Component {
       })
   }
 
-  checkBoxDisableDate() {
-    var checkbox = document.getElementById("formTodayCheckbox");
-    var dateElement = document.getElementById("formDate");
-
-    if (checkbox.checked) {
-      //console.log("noEndCheckBox is checked");
-      let dateNow = moment.utc().format();
-      dateElement.setAttribute("value", dateNow.substr(0,10) );
-      dateElement.setAttribute("disabled", "true");
-      this.setState( {Date: dateNow } );
-      
-    }
-    else {
-      //console.log("noEndCheckBox is unchecked");
-      dateElement.removeAttribute("disabled");
-      dateElement.removeAttribute("value");
-    }
-  }
+  // checkBoxDisableDate() {
+  //   var checkbox = document.getElementById("formTodayCheckbox");
+  //   var dateElement = document.getElementById("formDate");
+  //
+  //   if (checkbox.checked) {
+  //     //console.log("noEndCheckBox is checked");
+  //     let dateNow = moment.utc().format();
+  //     dateElement.setAttribute("value", dateNow.substr(0,10) );
+  //     dateElement.setAttribute("disabled", "true");
+  //     this.setState( {Date: dateNow } );
+  //
+  //   }
+  //   else {
+  //     //console.log("noEndCheckBox is unchecked");
+  //     dateElement.removeAttribute("disabled");
+  //     dateElement.removeAttribute("value");
+  //   }
+  // }
 
   render() {
     return (
@@ -405,23 +408,20 @@ class UpdateWeightComponent extends Component {
               <Col>
                 <Form.Group controlId="formWeight">
                 <Form.Label>Pet weight</Form.Label>
-                <Form.Control name="weight" type="number" min={1}
+                <Form.Control name="weight" type="number" min={0} precision={2} step={0.01}
                               placeholder="Weight"
                               defaultValue={this.state.Weight}
                               onChange={this.handleWeightChange}
                               required/>
                 </Form.Group>
               </Col>
-              <Col>
-              <Form.Group controlId="formTodayCheckbox">
-                <Form.Label>Date</Form.Label>
-                <Form.Check inline name="noEndCheckbox" type="checkbox" label="Today"
-                            onChange={ () => this.checkBoxDisableDate() }/>
-                </Form.Group>
-                <Form.Group controlId="formDate">
-                <Form.Control name="date" type="date" max={moment.utc().format("YYYY-MM-DD")}
-                              defaultValue={this.state.Date.substr(0,10)}
-                              onChange={this.handleDateChange}
+              <Col > 
+                <Form.Group>
+                    <Form.Label >Date</Form.Label>
+                    {/*<Form.Check Id="formTodayCheckbox" style={{float: 'right'}}inline name="noEndCheckbox" type="checkbox" label="Today"*/}
+                    {/*            onChange={ () => this.checkBoxDisableDate() }/>*/}
+                    <Form.Control Id="formDate" name="date" type="date" max={moment().format("YYYY-MM-DD")}
+                              onChange={this.handleDateChange} defaultValue={this.state.Date.substr(0, 10)}
                               required/>
                 </Form.Group>
               </Col>

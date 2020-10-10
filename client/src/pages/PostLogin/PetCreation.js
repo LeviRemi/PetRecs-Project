@@ -8,6 +8,7 @@ import {useHistory} from "react-router";
 import {useForm} from "react-hook-form";
 import Swal from 'sweetalert2'
 import Header from "../../components/Header";
+import moment from "moment";
 
 function PetCreation() {
     const history = useHistory();
@@ -80,10 +81,11 @@ function PetCreation() {
     }
 
     return (
-        <div className="fullPageContainer">
+        <div className="fontWrap">
             <div>
                 <Header />
             </div>
+            <div className="petsAccentBar"></div>
             <div className="formBox">
                 <div className="formTitle">
                     Add Pet
@@ -146,7 +148,7 @@ function PetCreation() {
 
                     <Form.Group controlId="formPetBirthdate">
                         <Form.Label>Birthdate</Form.Label>
-                        <Form.Control name="petBirthdate" type="date" ref={register({ required: true})}/>
+                        <Form.Control name="petBirthdate" type="date" max={moment().format("YYYY-MM-DD")} ref={register()}/>
                     </Form.Group>
 
                     <Form.Group controlId="formPetGender">
