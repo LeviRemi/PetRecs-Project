@@ -19,6 +19,11 @@ import {useHistory} from "react-router";
 import Alert from "react-bootstrap/Alert";
 
 import '../../utils/FileUpload/FileUpload.css'
+import tableIcons from "../../utils/TableIcons";
+import DownloadRounded from "@material-ui/icons/GetAppRounded";
+import DeleteRounded from "@material-ui/icons/DeleteRounded";
+import MaterialTable, {MTableToolbar} from "material-table";
+import {HighlightOff} from "@material-ui/icons";
 
 function PetAboutComponent(props) {
     const history = useHistory();
@@ -45,37 +50,6 @@ function PetAboutComponent(props) {
     // Create a reference to the hidden file input element
     const hiddenFileInput = React.useRef(null);
 
-    // function fetchPetProfile() {
-    //     document.getElementById("petProfileBodyId").hidden = true;
-    //     manuallyIncrementPromiseCounter();
-    //     axios.get(`/api/pets/${props.match.params.PetId}`, {withCredentials: true} )
-    //         .then(response=>{
-    //             setPetprofile(response.data);
-    //             setProfilePreview(response.data.ProfileUrl);
-    //
-    //             const requestSpecies = axios.get(`/api/species/${response.data.SpeciesId}`, {withCredentials: true});
-    //             const requestBreed = (response.data.SpeciesId === 1 || response.data.SpeciesId === 2)? axios.get(`/api/breeds/${response.data.BreedId}`, {withCredentials: true}) : "";
-    //
-    //             axios.all([requestSpecies, requestBreed]).then(axios.spread((...responses) => {
-    //                 const responseSpecies = responses[0];
-    //                 const responseBreed = responses[1];
-    //
-    //                 setPetSpecies(responseSpecies.data);
-    //                 setPetBreed(responseBreed.data);
-    //                 document.getElementById("petProfileBodyId").hidden = false;
-    //                 manuallyDecrementPromiseCounter();
-    //             })).catch(err =>{
-    //                 console.log(err);
-    //                 manuallyDecrementPromiseCounter();
-    //             })
-    //         })
-    //         .catch(err=> {
-    //             Swal.fire('Oops...', "A pet with this ID does not exist", 'error');
-    //             manuallyDecrementPromiseCounter();
-    //             history.push('/pets');
-    //         })
-    // }
-
     useEffect(() => {
         if(props.acquired === true) {
             document.getElementById("petProfileBodyId").hidden = false;
@@ -89,7 +63,7 @@ function PetAboutComponent(props) {
     const handleCloseUpload = () => setShowUpload(false);
     const handleShowUpload = () => setShowUpload(true);
 
-    // Programatically click the hidden file input element
+    // Programmatically click the hidden file input element
     // when the Button component is clicked
     const handleClick = event => {
         hiddenFileInput.current.click();
@@ -149,7 +123,7 @@ function PetAboutComponent(props) {
                 setLoading({display: "none"});
                 console.log(res);
                 Swal.fire('Congratulations!', "This pet profile has been shared with " + data.email, 'success');
-                handleCloseShare();
+                props.refreshShares();
             }, (err) => {
                 setLoading({display: "none"});
                 console.log(err.response)
@@ -167,23 +141,27 @@ function PetAboutComponent(props) {
 
     const handleDelete = (data) => {
         Swal.fire({
-            title: 'Are you sure you want to delete this pet profile?',
+            title: `Delete ${petprofile.PetName}${petprofile.PetName[petprofile.PetName.length - 1] === "s"? "'" : "'s"} pet profile?`,
             showDenyButton: true,
             showCancelButton: true,
             showConfirmButton: false,
             denyButtonText: `Delete`,
         }).then((result) => {
+
             // User selects "delete"
             if (result.isDenied) {
-                setLoading({display: "initial"});
+
+                Swal.fire({
+                    title: 'Loading'
+                });
+
+                Swal.showLoading();
                 axios.delete(`/api/pets/${petprofile.PetId}`, {withCredentials: true})
                     .then((res) => {
-                        setLoading({display: "none"});
                         console.log(res);
-                        Swal.fire('Success!', 'This pet profile has been deleted', 'success');
+                        Swal.fire('Pet Profile Deleted', '', 'success');
                         history.push("/pets");
                     }, (err) => {
-                        setLoading({display: "none"});
                         console.log(err.response.status)
                         Swal.fire('Oops...', "You do not have permission to delete this pet profile", 'error');
                     })
@@ -251,6 +229,43 @@ function PetAboutComponent(props) {
                 return;
             })
     };
+
+    function RemoveShare(AccountId, AccountEmail, PetId) {
+        Swal.fire({
+            title: 'Remove ' + AccountEmail + " from this pet's share list?",
+            //text: "You won't be able to revert this!",
+            //icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#DD6B55',
+            cancelButtonColor: 'light-gray',
+            confirmButtonText: 'Remove'
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                Swal.fire({
+                    title: 'Loading'
+                });
+
+                Swal.showLoading();
+
+                axios.delete(`/api/pets/${PetId}/share/${AccountId}`, {withCredentials: true})
+                    .then(response => {
+                        Swal.fire('Account Removed', ``, 'success');
+                        props.refreshShares();
+                    })
+                    .catch(err=>{
+                        Swal.fire('Oops...', 'Account could not be removed from share list', 'error');
+                        console.log(err);
+                    })
+            }
+        })
+            .catch(err=>{
+                Swal.fire('Oops...', 'Account could not be removed from share list', 'error');
+                console.log(err);
+            })
+    }
+
+
 
     return (
         <Container id="petProfileBodyId" className="petProfileBody shadowedBox FadeIn" style={{textAlign: "center"}} hidden={true}>
@@ -400,13 +415,55 @@ function PetAboutComponent(props) {
                     <Modal.Title>Share Pet Profile</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Alert key="ShareAlert" variant="warning">
-                        Share {petprofile.PetName} with another PetRecs user?
-                    </Alert>
-                    <Form id="SharePetForm" onSubmit={handleSubmit(onShare)} className="loginRegForm">
+
+                    <div style={{ width: '100%' }}>
+                        <h5 style={{paddingBottom: "5px"}}>Current share list:</h5>
+                        <MaterialTable
+                            columns={[
+                                { title: 'First', field: 'FirstName' },
+                                { title: 'Last', field: 'LastName' },
+                                { title: 'Email', field: 'Email' }
+                            ]}
+                            data={props.sharedAccts}
+                            title="Shared Pets"
+                            icons={tableIcons}
+                            actions={[
+                                rowData => ({
+                                    icon: HighlightOff,
+                                    tooltip: 'Remove Share',
+                                    onClick: (event, rowData) => RemoveShare(rowData.AccountId, rowData.Email, petprofile.PetId)
+                                })
+                            ]}
+                            options={{
+                                actionsColumnIndex: -1,
+                                pageSize: props.sharedAccts.length < 5 && props.sharedAccts.length > 0? props.sharedAccts.length : 5,
+                                pageSizeOptions: [ 10 ],
+                                showTitle: false,
+                                toolbar: false,
+                                headerStyle: {
+                                    backgroundColor: "var(--COLOR_GRAY)",
+                                    fontWeight: "600",
+                                    textAlign: "center"
+                                },
+                                rowStyle: {
+                                    backgroundColor: "var(--COLOR_WHITE)"
+                                },
+                                showFirstLastPageButtons: false
+                            }}
+                            components={{
+                                Toolbar: props => (
+                                    <div>
+                                        <MTableToolbar {...props}></MTableToolbar>
+                                    </div>
+                                ),
+                            }}
+                        />
+                    </div>
+
+                    <h5 style={{paddingTop: "20px", paddingBottom: "5px"}}>Add to share list?</h5>
+                    <Form id="SharePetForm" onSubmit={handleSubmit(onShare)}>
 
                         <Form.Group controlId="formBasicEmail">
-                            <Form.Label>Email Address</Form.Label>
                             <Form.Control name="email" type="email" placeholder="example@mail.com"
                                           ref={register(
                                               { required: true,
