@@ -68,7 +68,7 @@ export default class PetMedicationsComponent extends Component {
 
   deleteMedication = async (MedicationId) => {
     Swal.fire({
-      title: 'Are you sure you want to delete this medication?',
+      title: 'Delete medication?',
       showDenyButton: true,
       showCancelButton: true,
       showConfirmButton: false,
@@ -76,11 +76,16 @@ export default class PetMedicationsComponent extends Component {
   }).then((result) => {
       // User selects "delete"
       if (result.isDenied) {
+          Swal.fire({
+              title: 'Loading'
+          });
+
+          Swal.showLoading();
         axios.delete(`/api/medications/` + MedicationId, {withCredentials: true} )
           .then(response=>{
             //console.log(response);
             console.log("Medication " + MedicationId + " deleted sucessfully.");
-            Swal.fire('Success!', 'This medication has been deleted', 'success');
+            Swal.fire('Medication Deleted', '', 'success');
             this.props.fetch();
           })
           .catch((error) => {
@@ -130,6 +135,7 @@ export default class PetMedicationsComponent extends Component {
               actionsColumnIndex: -1,
               pageSize: 5,
               pageSizeOptions: [ 5 ],
+              exportButton: true,
             }}
             components={{
               Toolbar: props => (
@@ -220,11 +226,17 @@ class AddMedicationComponent extends Component {
       Notes: this.state.Notes
     };
 
+      Swal.fire({
+          title: 'Loading'
+      });
+
+      Swal.showLoading();
+
     axios.post(`/api/medications/`, data, {withCredentials: true} )
         .then(response=>{
             console.log(response);
             console.log("Medication added successfully.");
-            Swal.fire('Success!', 'The medication has been added', 'success');
+            Swal.fire('Medication Added', '', 'success');
             this.props.fetch();
           })
         .catch((error) => {
@@ -370,11 +382,17 @@ class UpdateMedicationComponent extends Component {
       Notes: this.state.Notes,
     };
 
+      Swal.fire({
+          title: 'Loading'
+      });
+
+      Swal.showLoading();
+
     axios.put(`/api/medications/` + this.state.MedId, data, {withCredentials: true} )
         .then(response=>{
           console.log(response);
-          console.log("Medication added successfully.");
-          Swal.fire('Success!', 'The medication has been updated', 'success');
+          console.log("Medication updated successfully.");
+          Swal.fire('Medication Updated', '', 'success');
           this.props.fetch();
         })
         .catch((error) => {

@@ -42,9 +42,13 @@ export default class PetEventsComponent extends Component {
   handleShowUpdate() { this.setState({ showUpdate: true }); }
   updateStateEventId(buttonEventId) { this.setState({ EventId: buttonEventId }); }
   
-  deleteEvent = async (EventId) => {
+  deleteEvent = async (EventId, EventType) => {
+      const types = { 1: 'medical', 2: 'grooming',
+          3: 'fitness', 4: 'food',
+          5: 'potty',   6: 'behavior',
+          7: 'other' };
       Swal.fire({
-        title: 'Are you sure you want to delete this event?',
+        title: `Delete ${types[EventType]} event?`,
         showDenyButton: true,
         showCancelButton: true,
         showConfirmButton: false,
@@ -52,10 +56,17 @@ export default class PetEventsComponent extends Component {
     }).then((result) => {
         // User selects "delete"
         if (result.isDenied) {
+
+            Swal.fire({
+                title: 'Loading'
+            });
+
+            Swal.showLoading();
+
             axios.delete(`/api/pet-events/` + EventId, {withCredentials: true} )
             .then(response=>{
               console.log("EventId " + EventId + " deleted sucessfully.");
-              Swal.fire('Success!', 'This event has been deleted', 'success');
+              Swal.fire('Event Deleted', '', 'success');
               this.props.fetch();
             })
             .catch((error) => {
@@ -76,7 +87,7 @@ export default class PetEventsComponent extends Component {
   render() {
   return (
       <div id="PetEventBodyId" className="petProfileBody nopadding FadeIn" hidden={true} style={{height: "100%"}}>
-        <div className="tableContainer">
+        <div style={{ maxWidth: '100%' }}>
           <MaterialTable
             columns={[
               { title: 'Type', field: 'EventTypeId',
@@ -102,13 +113,14 @@ export default class PetEventsComponent extends Component {
               {
                 icon: DeleteRounded,
                 tooltip: 'Delete Event',
-                onClick: (event, rowData) => this.deleteEvent(rowData.EventId)
+                onClick: (event, rowData) => this.deleteEvent(rowData.EventId, rowData.EventTypeId)
               }
             ]}
             options={{
               actionsColumnIndex: -1,
               pageSize: 10,
               pageSizeOptions: [ 10 ],
+              exportButton: true
             }}
             components={{
               Toolbar: props => (
@@ -194,6 +206,12 @@ class AddEventComponent extends Component {
   handleSubmit = event => {
     event.preventDefault();
 
+      Swal.fire({
+          title: 'Loading'
+      });
+
+      Swal.showLoading();
+
     const data = {
       EventTypeId: this.state.EventTypeId,
       PetId: this.state.PetId,
@@ -205,7 +223,7 @@ class AddEventComponent extends Component {
         .then(response=>{
           console.log(response);
           console.log("Event added successfully.");
-              Swal.fire('Success!', 'This event has been added', 'success');
+              Swal.fire('Event Added', '', 'success');
               this.props.fetch();
             })
             .catch((error) => {
@@ -303,6 +321,12 @@ class UpdateEventComponent extends Component {
   handleUpdate = event => {
     
     event.preventDefault();
+
+      Swal.fire({
+          title: 'Loading'
+      });
+
+      Swal.showLoading();
 
     const data = {
         EventTypeId: this.state.EventTypeId,

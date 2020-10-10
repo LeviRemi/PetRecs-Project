@@ -84,9 +84,9 @@ class ViewWeightComponent extends Component {
       }
   }
 
-  deleteWeight = async (WeightId) => {
+  deleteWeight = async (WeightId, weight) => {
     Swal.fire({
-      title: 'Are you sure you want to delete this event?',
+      title: `Delete weight of ${weight} lbs?`,
       showDenyButton: true,
       showCancelButton: true,
       showConfirmButton: false,
@@ -94,11 +94,17 @@ class ViewWeightComponent extends Component {
   }).then((result) => {
       // User selects "delete"
       if (result.isDenied) {
+          Swal.fire({
+              title: 'Loading'
+          });
+
+          Swal.showLoading();
+
           axios.delete(`/api/pet-weights/` + WeightId, {withCredentials: true} )
           .then(response=>{
             //console.log(response);
             console.log("WeightId " + WeightId + " deleted sucessfully.");
-            Swal.fire('Success!', 'This weight has been deleted', 'success');
+            Swal.fire('Weight Deleted', '', 'success');
             this.props.fetch();
           })
           .catch((error) => {
@@ -214,13 +220,14 @@ class ViewWeightComponent extends Component {
               {
                 icon: DeleteRounded,
                 tooltip: 'Delete Weight',
-                onClick: (event, rowData) => this.deleteWeight(rowData.PetWeightId)
+                onClick: (event, rowData) => this.deleteWeight(rowData.PetWeightId, rowData.Weight)
               }
             ]}
             options={{
               actionsColumnIndex: -1,
               pageSize: 5,
               pageSizeOptions: [ 5 ],
+              exportButton: true,
             }}
             components={{
               Toolbar: props => (
@@ -266,11 +273,17 @@ class AddWeightComponent extends Component {
       Date: this.state.Date,
     };
 
+      Swal.fire({
+          title: 'Loading'
+      });
+
+      Swal.showLoading();
+
     axios.post(`/api/pet-weights/`, data, {withCredentials: true} )
         .then(response=>{
             console.log(response);
             console.log("Event added successfully.");
-            Swal.fire('Success!', 'The weight has been added', 'success');
+            Swal.fire('Weight Added', '', 'success');
             this.props.fetch();
       })
       .catch((error) => {
@@ -366,12 +379,16 @@ class UpdateWeightComponent extends Component {
       Weight: this.state.Weight,
       Date: this.state.Date,
     };
+      Swal.fire({
+          title: 'Loading'
+      });
 
+      Swal.showLoading();
     axios.put(`/api/pet-weights/` + this.state.WeightId, data, {withCredentials: true} )
         .then(response=>{
             console.log(response);
-            console.log("Event added successfully.");
-            Swal.fire('Success!', 'The weight has been updated', 'success');
+            console.log("Event updated successfully.");
+            Swal.fire('Weight Updated', '', 'success');
             this.props.fetch();
       })
       .catch((error) => {
