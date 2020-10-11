@@ -210,8 +210,8 @@ class AddMedicationComponent extends Component {
 
   handleDosageAmountChange = event => { this.setState({DosageAmount: event.target.value}); }
   handleDosageUnitChange = event => { this.setState({DosageUnit: event.target.value}); }
-  handleStartDateChange = event => { this.setState({StartDate: event.target.value}); }
-  handleEndDateChange = event => { this.setState({EndDate: event.target.value}); }
+  handleStartDateChange = event => { this.setState({StartDate: moment(event.target.value).local().format()}); }
+  handleEndDateChange = event => { this.setState({EndDate: moment(event.target.value).local().format()}); }
   handleNotesChange = event => { this.setState({Notes: event.target.value}); }
 
   handleSubmit = event => {
@@ -315,7 +315,7 @@ class AddMedicationComponent extends Component {
               <Col>
                 <Form.Group controlId="formNotes">
                     <Form.Label>Notes</Form.Label>
-                    <Form.Control name="Notes" type="textarea" as="textarea" rows="5"
+                    <Form.Control name="Notes" type="textarea" as="textarea" rows="5" maxLength={300}
                                   placeholder="Enter notes about the medication here..."
                                   onChange={this.handleNotesChange}
                                   required/>
@@ -366,8 +366,8 @@ class UpdateMedicationComponent extends Component {
 
   handleDosageAmountChange = event => { this.setState({DosageAmount: event.target.value}); }
   handleDosageUnitChange = event => { this.setState({DosageUnit: event.target.value}); }
-  handleStartDateChange = event => { this.setState({StartDate: event.target.value}); }
-  handleEndDateChange = event => { this.setState({EndDate: event.target.value}); }
+  handleStartDateChange = event => { this.setState({StartDate: moment(event.target.value).local().format()}); }
+  handleEndDateChange = event => { this.setState({EndDate: moment(event.target.value).local().format()}); }
   handleNotesChange = event => { this.setState({Notes: event.target.value}); }
 
   handleUpdate = event => {
@@ -498,7 +498,7 @@ class UpdateMedicationComponent extends Component {
               <Col>
                 <Form.Group controlId="formNotes">
                     <Form.Label>Notes</Form.Label>
-                    <Form.Control name="Notes" type="textarea" as="textarea" rows={5}
+                    <Form.Control name="Notes" type="textarea" as="textarea" rows={5} maxLength={300}
                                   defaultValue={this.state.Notes}
                                   onChange={this.handleNotesChange}
                                   required/>

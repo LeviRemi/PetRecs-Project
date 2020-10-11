@@ -395,7 +395,7 @@ function PetRecordsComponent(props) {
                 <Col>
                   <Form.Group controlId="formRecordNotes">
                       <Form.Label>Record Notes</Form.Label>
-                      <Form.Control name="recordNotes" type="textarea" as="textarea" rows={5}
+                      <Form.Control name="recordNotes" type="textarea" as="textarea" rows={5} maxLength={300}
                                   defaultValue={this.state.RecordNotes}
                                   onChange={this.handleRecordNotesChange}
                                   required/>

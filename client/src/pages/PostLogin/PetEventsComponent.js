@@ -200,7 +200,7 @@ class AddEventComponent extends Component {
   }
 
   handleDateChange = event => {
-    this.setState({Date: event.target.value});
+    this.setState({Date: moment(event.target.value).local().format()});
   }
 
   handleSubmit = event => {
@@ -268,7 +268,7 @@ class AddEventComponent extends Component {
               <Col>
                 <Form.Group controlId="formEventDescription">
                     <Form.Label>Description</Form.Label>
-                    <Form.Control name="eventDescription" type="textarea" as="textarea" rows="5"
+                    <Form.Control name="eventDescription" type="textarea" as="textarea" rows="5" maxLength={300}
                                   placeholder="Enter a description of the event here..."
                                   onChange={this.handleEventDescriptionChange}
                                   required/>
@@ -315,7 +315,7 @@ class UpdateEventComponent extends Component {
   }
 
   handleDateChange = event => {
-    this.setState({Date: event.target.value});
+    this.setState({Date: moment(event.target.value).local().format()});
   }
 
   handleUpdate = event => {
@@ -385,7 +385,7 @@ class UpdateEventComponent extends Component {
               <Col>
                 <Form.Group controlId="formEventDescription">
                     <Form.Label>Description</Form.Label>
-                    <Form.Control name="eventDescription" type="textarea" as="textarea" rows={5}
+                    <Form.Control name="eventDescription" type="textarea" as="textarea" rows={5} maxLength={300}
                                   defaultValue={this.state.EventDescription}
                                   onChange={this.handleEventDescriptionChange}
                                   required/>

@@ -118,18 +118,18 @@ class ViewWeightComponent extends Component {
     let petData = this.state.data;
 
     let sortedData = petData.sort(function (a, b) {
-      let formattedA = moment(a.Date);
-      let formattedB = moment(b.Date);
+      let formattedA = moment(a.Date).local();
+      let formattedB = moment(b.Date).local();
       return ( formattedA - formattedB );
     });
     
     let formattedData = [];
     
     sortedData.forEach(function (weightEntry) {
-      formattedData.push({Date: moment.utc(weightEntry.Date).format("M/D/YY"), Weight: weightEntry.Weight, WeightId: weightEntry.PetWeightId});
+      formattedData.push({Date: moment(weightEntry.Date).local().format("M/D/YY"), Weight: weightEntry.Weight, WeightId: weightEntry.PetWeightId});
     });
     
-    const dateFormatter = tickItem => moment(tickItem).format("M/D");
+    const dateFormatter = tickItem => moment(tickItem).local().format("M/D");
     
     return (
       <div>
@@ -201,7 +201,7 @@ class ViewWeightComponent extends Component {
         <div className="FadeIn">
           <MaterialTable
             columns={[
-              { title: 'Date', field: 'Date', defaultSort: 'desc', type: 'date' },
+              { title: 'Date', field: 'Date', defaultSort: 'desc', render: row => <span>{ moment(row["Date"]).format("MM/DD/YYYY") }</span> },
               { title: 'Weight', field: 'Weight', render: row => <span>{ row["Weight"] } lbs </span> },
             ]}
             data={this.state.data}
@@ -261,7 +261,7 @@ class AddWeightComponent extends Component {
     this.setState({Weight: event.target.value});
   }
   handleDateChange = event => {
-    this.setState({Date: event.target.value});
+    this.setState({Date: moment(event.target.value).local().format()});
   }
   handleSubmit = event => {
     event.preventDefault();
@@ -291,25 +291,6 @@ class AddWeightComponent extends Component {
       })
   }
 
-  // checkBoxDisableDate() {
-  //   var checkbox = document.getElementById("formTodayCheckbox");
-  //   var dateElement = document.getElementById("formDate");
-  //
-  //   if (checkbox.checked) {
-  //     //console.log("noEndCheckBox is checked");
-  //     let dateNow = moment.utc().format();
-  //     dateElement.setAttribute("value", dateNow.substr(0,10) );
-  //     dateElement.setAttribute("disabled", "true");
-  //     this.setState( {Date: dateNow } );
-  //
-  //   }
-  //   else {
-  //     //console.log("noEndCheckBox is unchecked");
-  //     dateElement.removeAttribute("disabled");
-  //     dateElement.removeAttribute("value");
-  //   }
-  // }
-
   render() {
     return (
       <div className="formBoxAddWeight">
@@ -327,9 +308,7 @@ class AddWeightComponent extends Component {
               <Col > 
                 <Form.Group>
                     <Form.Label >Date</Form.Label>
-                    {/*<Form.Check Id="formTodayCheckbox" style={{float: 'right'}}inline name="noEndCheckbox" type="checkbox" label="Today"*/}
-                    {/*            onChange={ () => this.checkBoxDisableDate() }/>*/}
-                    <Form.Control Id="formDate" name="date" type="date" max={moment().format("YYYY-MM-DD")}
+                    <Form.Control Id="formDate" name="date" type="date" max={moment().local().format("YYYY-MM-DD")}
                               onChange={this.handleDateChange}
                               required/>
                 </Form.Group>
@@ -367,7 +346,7 @@ class UpdateWeightComponent extends Component {
     this.setState({Weight: event.target.value});
   }
   handleDateChange = event => {
-    this.setState({Date: event.target.value});
+    this.setState({Date: moment(event.target.value).local().format()});
   }
 
   handleUpdate = event => {
@@ -397,25 +376,6 @@ class UpdateWeightComponent extends Component {
       })
   }
 
-  // checkBoxDisableDate() {
-  //   var checkbox = document.getElementById("formTodayCheckbox");
-  //   var dateElement = document.getElementById("formDate");
-  //
-  //   if (checkbox.checked) {
-  //     //console.log("noEndCheckBox is checked");
-  //     let dateNow = moment.utc().format();
-  //     dateElement.setAttribute("value", dateNow.substr(0,10) );
-  //     dateElement.setAttribute("disabled", "true");
-  //     this.setState( {Date: dateNow } );
-  //
-  //   }
-  //   else {
-  //     //console.log("noEndCheckBox is unchecked");
-  //     dateElement.removeAttribute("disabled");
-  //     dateElement.removeAttribute("value");
-  //   }
-  // }
-
   render() {
     return (
       <div className="formBoxAddWeight">
@@ -433,10 +393,8 @@ class UpdateWeightComponent extends Component {
               </Col>
               <Col > 
                 <Form.Group>
-                    <Form.Label >Date</Form.Label>
-                    {/*<Form.Check Id="formTodayCheckbox" style={{float: 'right'}}inline name="noEndCheckbox" type="checkbox" label="Today"*/}
-                    {/*            onChange={ () => this.checkBoxDisableDate() }/>*/}
-                    <Form.Control Id="formDate" name="date" type="date" max={moment().format("YYYY-MM-DD")}
+                    <Form.Label>Date</Form.Label>
+                    <Form.Control Id="formDate" name="date" type="date" max={moment().local().format("YYYY-MM-DD")}
                               onChange={this.handleDateChange} defaultValue={this.state.Date.substr(0, 10)}
                               required/>
                 </Form.Group>
