@@ -68,31 +68,31 @@ exports.findOne = (req, res) => {
         });
 };
 
-// Update a single Pet Weight identified by the request id
+// Update a single Pet Record identified by the request id
 exports.update = (req, res) => {
     const id = req.params.id;
-    PetWeight.update(req.body, {
-        where: {PetWeightId: id}
+    PetRecord.update(req.body, {
+        where: {PetRecordId: id}
     })
         .then(num => {
             if (num === 1) {
                 res.send({
-                    message: "Pet Weight was updated successfully."
+                    message: "Pet Record was updated successfully."
                 });
             } else {
                 res.send({
-                    message: `Cannot update Pet Weight with id=${id}. Maybe Pet was not found or request body was empty.`
+                    message: `Cannot update Pet Record with id=${id}. Maybe Pet was not found or request body was empty.`
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error updating Pet Weight with id=" + id
+                message: "Error updating Pet Record with id=" + id
             });
         });
 };
 
-// Delete a single Pet Weight with the specified id
+// Delete a single Pet Record with the specified id
 exports.delete = (req, res) => {
     const id = req.params.id;
 

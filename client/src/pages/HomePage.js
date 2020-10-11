@@ -50,7 +50,7 @@ function HomePage() {
             </div>
 
             <div className="homePageBody">
-                PetRecs is the place for you to store all of the information for your furry, or scaly, friend. Store medical records
+                PetRecs is the place for you to store all of the information for your furry, fluffy, or scaly friend. Store medical records
                 digitally, track health data, and keep record of important events all in one place.
                 <Container>
                     <Row>
