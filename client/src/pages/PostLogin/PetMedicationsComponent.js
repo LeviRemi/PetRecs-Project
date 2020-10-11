@@ -51,7 +51,7 @@ export default class PetMedicationsComponent extends Component {
               //console.log(this.state.medications);
               document.getElementById("PetMedTableId").hidden=false;
               manuallyDecrementPromiseCounter();
-              //console.log(response.data);
+              console.log(response.data);
           })
           .catch((error) => {
               console.log(error);
@@ -107,6 +107,7 @@ export default class PetMedicationsComponent extends Component {
         <div style={{ maxWidth: '100%'}}>
         <MaterialTable
             columns={[
+              { title: 'Name', field: 'Name' },
               { title: 'Dosage', field: 'DosageAmount' },
               { title: 'Unit of Measurement', field: 'DosageUnit' },
               { title: 'Notes', field: 'Notes', render: row => <span className="tableWordBreak"> { row["Notes"] }</span>},
@@ -199,7 +200,8 @@ class AddMedicationComponent extends Component {
   constructor(props) {
     super();
     this.state = { PetId: props.petid,
-                   DosageAmount: 1,
+                   Name: "",
+                   DosageAmount: "",
                    DosageUnit: "",
                    StartDate: "",
                    EndDate: "",
@@ -208,6 +210,7 @@ class AddMedicationComponent extends Component {
     console.log("Component: 'AddMedicationComponent' loaded");
   }
 
+  handleNameChange = event => { this.setState({Name: event.target.value}); }
   handleDosageAmountChange = event => { this.setState({DosageAmount: event.target.value}); }
   handleDosageUnitChange = event => { this.setState({DosageUnit: event.target.value}); }
   handleStartDateChange = event => { this.setState({StartDate: moment(event.target.value).local().format()}); }
@@ -219,6 +222,7 @@ class AddMedicationComponent extends Component {
 
     const data = {
       PetId: this.state.PetId,
+      Name: this.state.Name,
       DosageAmount: this.state.DosageAmount,
       DosageUnit: this.state.DosageUnit,
       StartDate: this.state.StartDate,
@@ -267,6 +271,17 @@ class AddMedicationComponent extends Component {
       <div className="formBoxAddWeight">
           <Form id="AddMedForm" onSubmit={this.handleSubmit}>
             <Row>
+            <Col>
+              <Form.Group controlId="formName">
+                <Form.Label>Name of Medication</Form.Label>
+                <Form.Control name="name" type="text" min={0} maxLength={45}
+                              placeholder="Name of Medication"
+                              onChange={this.handleNameChange}
+                              required/>
+              </Form.Group>
+            </Col>
+            </Row>
+            <Row>
               <Col>
                 <Form.Group controlId="formDosageAmount">
                 <Form.Label>Dosage Amount</Form.Label>
@@ -279,7 +294,7 @@ class AddMedicationComponent extends Component {
               <Col>
               <Form.Group controlId="formDosageUnit">
                 <Form.Label>Dosage Unit</Form.Label>
-                <Form.Control name="DosageUnit" type="text" min={0}
+                <Form.Control name="DosageUnit" type="text" min={0} maxLength={45}
                               placeholder="Unit of measurement"
                               onChange={this.handleDosageUnitChange}
                               required/>
@@ -332,6 +347,7 @@ class UpdateMedicationComponent extends Component {
   constructor(props) {
     super();
     this.state = { MedId: props.medicationid,
+                   Name: "",
                    DosageAmount: "",
                    DosageUnit: "",
                    StartDate: "",
@@ -345,7 +361,8 @@ class UpdateMedicationComponent extends Component {
     axios.get(`/api/medications/` + this.state.MedId, {withCredentials: true} )
       .then(response=>{
         console.log(response);
-        this.setState({ DosageAmount: response.data.DosageAmount,
+        this.setState({ Name: response.data.Name,
+                        DosageAmount: response.data.DosageAmount,
                         DosageUnit: response.data.DosageUnit,
                         StartDate: response.data.StartDate,
                         EndDate: response.data.EndDate,
@@ -364,6 +381,7 @@ class UpdateMedicationComponent extends Component {
       })
   }
 
+  handleNameChange = event => { this.setState({Name: event.target.value}); }
   handleDosageAmountChange = event => { this.setState({DosageAmount: event.target.value}); }
   handleDosageUnitChange = event => { this.setState({DosageUnit: event.target.value}); }
   handleStartDateChange = event => { this.setState({StartDate: moment(event.target.value).local().format()}); }
@@ -375,6 +393,7 @@ class UpdateMedicationComponent extends Component {
 
     const data = {
       MedId: this.state.MedId,
+      Name: this.state.Name,
       DosageAmount: this.state.DosageAmount,
       DosageUnit: this.state.DosageUnit,
       StartDate: this.state.StartDate,
@@ -406,13 +425,13 @@ class UpdateMedicationComponent extends Component {
     var endDateElement = document.getElementById("formEndDate");
 
     if (checkbox.checked) {
-      console.log("noEndCheckBox is checked");
+      console.log("initial check: noEndCheckBox is checked");
       endDateElement.setAttribute("disabled", "true")
       this.setState( {EndDate: null} );
       
     }
     else {
-      console.log("noEndCheckBox is unchecked");
+      console.log("initial check: noEndCheckBox is unchecked");
       endDateElement.removeAttribute("disabled")
     };
   }
@@ -448,6 +467,18 @@ class UpdateMedicationComponent extends Component {
     return (
       <div className="formBoxAddWeight">
           <Form id="UpdateMedForm" onSubmit={this.handleUpdate}>
+            <Row>
+              <Col>
+                <Form.Group controlId="formName">
+                  <Form.Label>Name of Medication</Form.Label>
+                  <Form.Control name="name" type="text" min={0} maxLength={45}
+                                defaultValue={this.state.Name}
+                                placeholder="Name of Medication"
+                                onChange={this.handleNameChange}
+                                required/>
+                </Form.Group>
+              </Col>
+            </Row>
             <Row>
               <Col>
                 <Form.Group controlId="formDosageAmount">

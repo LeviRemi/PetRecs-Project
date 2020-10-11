@@ -97,7 +97,7 @@ export default class Pets extends Component {
             <Container fluid>
               <div id="petsPage" className="mainPageBody FadeIn" hidden={true}>
                   <Tabs defaultActiveKey="myPets" id="petsViewTab">
-                      <Tab eventKey="myPets" title="My Pets" className="tab-petpage">
+                      <Tab eventKey="myPets" title="My Pets">
                           <div style={{display: "flex", flexWrap: "wrap", justifyContent: "start", alignItems: "baseline"}}
                                className="mainPageContents shadowedBoxPets">                         
                               {this.state.pets.map(pet =>

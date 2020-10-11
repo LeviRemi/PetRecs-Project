@@ -143,7 +143,7 @@ class ViewWeightComponent extends Component {
               data={formattedData}
             >
               <XAxis tickFormatter={dateFormatter} dataKey="Date"/>
-              <YAxis unit="lb"/>
+              <YAxis unit=" lbs"/>
               <CartesianGrid strokeDasharray="2 5" />
               <Tooltip />
               <Line type="monotone" dataKey="Weight" stroke="#8884d8" activeDot={{r: 4}} />
@@ -280,8 +280,8 @@ class AddWeightComponent extends Component {
 
     axios.post(`/api/pet-weights/`, data, {withCredentials: true} )
         .then(response=>{
-            console.log(response);
-            console.log("Event added successfully.");
+            //console.log(response);
+            console.log("Weight added successfully.");
             Swal.fire('Weight Added', '', 'success');
             this.props.fetch();
       })
@@ -319,7 +319,6 @@ class AddWeightComponent extends Component {
     )
   }
 }
-
 
 class UpdateWeightComponent extends Component {
   constructor(props) {
@@ -364,14 +363,14 @@ class UpdateWeightComponent extends Component {
       Swal.showLoading();
     axios.put(`/api/pet-weights/` + this.state.WeightId, data, {withCredentials: true} )
         .then(response=>{
-            console.log(response);
+            //console.log(response);
             console.log("Event updated successfully.");
             Swal.fire('Weight Updated', '', 'success');
             this.props.fetch();
       })
       .catch((error) => {
         console.log(error);
-        console.log(data);
+        //console.log(data);
         Swal.fire('Oops...', "You do not have permission to update this weight", 'error');
       })
   }
