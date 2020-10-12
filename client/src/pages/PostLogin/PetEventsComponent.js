@@ -48,7 +48,7 @@ export default class PetEventsComponent extends Component {
           5: 'potty',   6: 'behavior',
           7: 'other' };
       Swal.fire({
-        title: `Delete ${types[EventType]} event?`,
+        title: `Delete ${types[EventType]} entry?`,
         showDenyButton: true,
         showCancelButton: true,
         showConfirmButton: false,
@@ -66,12 +66,12 @@ export default class PetEventsComponent extends Component {
             axios.delete(`/api/pet-events/` + EventId, {withCredentials: true} )
             .then(response=>{
               console.log("EventId " + EventId + " deleted sucessfully.");
-              Swal.fire('Event Deleted', '', 'success');
+              Swal.fire('Entry Deleted', '', 'success');
               this.props.fetch();
             })
             .catch((error) => {
               console.log(error);
-              Swal.fire('Oops...', "You do not have permission to delete this event", 'error');
+              Swal.fire('Oops...', "You do not have permission to delete this entry", 'error');
             })
         }
     })
@@ -99,12 +99,12 @@ export default class PetEventsComponent extends Component {
               { title: 'Description', field: 'EventDescription', render: row => <span className="tableWordBreak"> { row["EventDescription"] }</span>}
             ]}
             data={this.state.events}
-            title="Pet Events"
+            title="Pet Journal"
             icons={tableIcons}
             actions={[
               {
                 icon: UpdateRounded,
-                tooltip: 'Update Event',
+                tooltip: 'Update Entry',
                 onClick: (event, rowData) => {
                   this.updateStateEventId(rowData.EventId);
                   this.handleShowUpdate();
@@ -112,7 +112,7 @@ export default class PetEventsComponent extends Component {
               },
               {
                 icon: DeleteRounded,
-                tooltip: 'Delete Event',
+                tooltip: 'Delete Entry',
                 onClick: (event, rowData) => this.deleteEvent(rowData.EventId, rowData.EventTypeId)
               }
             ]}
@@ -130,7 +130,7 @@ export default class PetEventsComponent extends Component {
                           <div id="EventButtons">
                               <div className="AddButtonContainer">
                                   <Button className="FormAddButton" onClick={this.handleShowAdd}>
-                                    <span className="FormAddButtonText"> Add Event </span>
+                                    <span className="FormAddButtonText"> Add Entry </span>
                                     <span className="FormAddButtonIcon">
                                       <svg fill="none" viewBox="0 0 24 24" height="20" width="20" xmlns="http://www.w3.org/2000/svg">
                                       <path xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" d="M12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4ZM2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12ZM12 7C12.5523 7 13 7.44772 13 8V11H16C16.5523 11 17 11.4477 17 12C17 12.5523 16.5523 13 16 13H13V16C13 16.5523 12.5523 17 12 17C11.4477 17 11 16.5523 11 16V13H8C7.44772 13 7 12.5523 7 12C7 11.4477 7.44772 11 8 11H11V8C11 7.44772 11.4477 7 12 7Z" fill="#282828"></path>
@@ -154,14 +154,14 @@ export default class PetEventsComponent extends Component {
                 keyboard={false}
             >
             <Modal.Header closeButton>
-            <Modal.Title>Add Event</Modal.Title>
+            <Modal.Title>Add Entry</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <AddEventComponent petid={this.state.PetId} fetch={this.props.fetch}/>
             </Modal.Body>
             <Modal.Footer>
                     <Button variant="secondary" onClick={this.handleCloseAdd}>Close</Button>
-                    <Button variant="primary" type="submit" form="AddEventForm">Add Event</Button>
+                    <Button variant="primary" type="submit" form="AddEventForm">Add Entry</Button>
             </Modal.Footer>
           </Modal>
 
@@ -172,14 +172,14 @@ export default class PetEventsComponent extends Component {
                 keyboard={false}
             >
             <Modal.Header closeButton>
-            <Modal.Title>Update Event</Modal.Title>
+            <Modal.Title>Update Entry</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <UpdateEventComponent eventid={this.state.EventId} fetch={this.props.fetch}/>
             </Modal.Body>
             <Modal.Footer>
                     <Button variant="secondary" onClick={this.handleCloseUpdate}>Close</Button>
-                    <Button variant="primary" type="submit" form="UpdateEventForm">Update Event</Button>
+                    <Button variant="primary" type="submit" form="UpdateEventForm">Update Entry</Button>
             </Modal.Footer>
           </Modal>
         </div>
@@ -230,13 +230,13 @@ class AddEventComponent extends Component {
     axios.post(`/api/pet-events/`, data, {withCredentials: true} )
         .then(response=>{
           console.log(response);
-          console.log("Event added successfully.");
-              Swal.fire('Event Added', '', 'success');
+          console.log("Entry added successfully.");
+              Swal.fire('Entry Added', '', 'success');
               this.props.fetch();
             })
             .catch((error) => {
               console.log(error);
-              Swal.fire('Oops...', "You do not have permission to create this event", 'error');
+              Swal.fire('Oops...', "You do not have permission to create this entry", 'error');
             })
   }
 
@@ -247,7 +247,7 @@ class AddEventComponent extends Component {
             <Form.Row>
               <Col>
                 <Form.Group controlId="formEventType">
-                <Form.Label>Event Type</Form.Label>
+                <Form.Label>Entry Type</Form.Label>
                 <Form.Control name="eventTypeId" as="select"
                               defaultValue="1"
                               onChange={this.handleEventTypeIdChange}>
@@ -277,7 +277,7 @@ class AddEventComponent extends Component {
                 <Form.Group controlId="formEventDescription">
                     <Form.Label>Description</Form.Label>
                     <Form.Control name="eventDescription" type="textarea" as="textarea" rows="5" maxLength={300}
-                                  placeholder="Enter a description of the event here..."
+                                  placeholder="Enter the details of your entry here..."
                                   onChange={this.handleEventDescriptionChange}
                                   required/>
                 </Form.Group>
@@ -345,13 +345,13 @@ class UpdateEventComponent extends Component {
 
     axios.put(`/api/pet-events/` + this.state.EventId, data, {withCredentials: true} )
           .then(response=>{
-            console.log("Event added successfully.");
-                Swal.fire('Success!', 'This event has been updated', 'success');
+            console.log("Entry added successfully.");
+                Swal.fire('Success!', 'This entry has been updated', 'success');
                 this.props.fetch();
               })
               .catch((error) => {
                 console.log(error);
-                Swal.fire('Oops...', "You do not have permission to update this event", 'error');
+                Swal.fire('Oops...', "You do not have permission to update this entry", 'error');
               })
     }
 
@@ -362,7 +362,7 @@ class UpdateEventComponent extends Component {
             <Form.Row>
               <Col>
                 <Form.Group controlId="formEventType">
-                <Form.Label>Event Type</Form.Label>
+                <Form.Label>Entry Type</Form.Label>
                 <Form.Control name="eventTypeId" as="select"
                               onChange={this.handleEventTypeIdChange}
                               value={this.state.EventTypeId}

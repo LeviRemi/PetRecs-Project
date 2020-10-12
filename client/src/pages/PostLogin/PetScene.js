@@ -330,11 +330,11 @@ function PetScene(props) {
     <LoadingIndicator></LoadingIndicator>
     <div className="fullPageContainer">
       <div className="mainContent">
-        <Route exact path='/Pets/:PetId/Records' component={(props)=>isUserLoggedIn()?<PetRecordsComponent records={records} fetch={refreshRecords} acquired={infoAcquired} {...props} /> : <Redirect to={"/"}/>} />
-        <Route exact path="/Pets/:PetId/Health" component={(props)=>isUserLoggedIn()?<PetHealthComponent weights={weights} fetch={refreshWeights} acquired={infoAcquired} {...props} /> : <Redirect to={"/"}/>} />
-        <Route exact path='/Pets/:PetId/Events' component={(props)=>isUserLoggedIn()?<PetEventsComponent events={events} fetch={refreshEvents} acquired={infoAcquired} {...props} /> : <Redirect to={"/"}/>} />
-        <Route exact path='/Pets/:PetId/Medications' component={(props)=>isUserLoggedIn()?<PetMedicationsComponent meds={meds} fetch={refreshMeds} acquired={infoAcquired} {...props} /> : <Redirect to={"/"}/>} />
-        <Route exact path='/Pets/:PetId/' component={(props)=>isUserLoggedIn()?<PetAboutComponent profile={petprofile} acquired={infoAcquired} speciesList={speciesList} catList={catBreedList} dogList={dogBreedList} sharedAccts={sharedAccts} refreshShares={fetchSharedAccounts} fetch={refreshPetProfile} {...props} /> : <Redirect to={"/"}/>} />
+        <Route exact path='/pets/:PetId/records' component={(props)=>isUserLoggedIn()?<PetRecordsComponent records={records} fetch={refreshRecords} acquired={infoAcquired} {...props} /> : <Redirect to={"/"}/>} />
+        <Route exact path="/pets/:PetId/health" component={(props)=>isUserLoggedIn()?<PetHealthComponent weights={weights} fetch={refreshWeights} acquired={infoAcquired} {...props} /> : <Redirect to={"/"}/>} />
+        <Route exact path='/pets/:PetId/journal' component={(props)=>isUserLoggedIn()?<PetEventsComponent events={events} fetch={refreshEvents} acquired={infoAcquired} {...props} /> : <Redirect to={"/"}/>} />
+        <Route exact path='/pets/:PetId/medications' component={(props)=>isUserLoggedIn()?<PetMedicationsComponent meds={meds} fetch={refreshMeds} acquired={infoAcquired} {...props} /> : <Redirect to={"/"}/>} />
+        <Route exact path='/pets/:PetId/about' component={(props)=>isUserLoggedIn()?<PetAboutComponent profile={petprofile} acquired={infoAcquired} speciesList={speciesList} catList={catBreedList} dogList={dogBreedList} sharedAccts={sharedAccts} refreshShares={fetchSharedAccounts} fetch={refreshPetProfile} {...props} /> : <Redirect to={"/"}/>} />
       </div>
     </div>
       <div className="mainPageFooter">

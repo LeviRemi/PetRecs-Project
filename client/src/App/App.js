@@ -35,8 +35,8 @@ function App(){
           <Route path="/logout" exact component={()=>isUserLoggedIn()?<Logout/> : <Redirect to={"/"}/>} />
           <Route path="/about" exact component={()=>isUserLoggedIn()?<About/> : <Redirect to={"/"}/>} />
           <Route path="/pets" exact component={(props)=>isUserLoggedIn()?<Pets {...props}/> : <Redirect to={"/"}/>} />
-          <Route path="/pets/test/health" exact component={()=><TestHealth/>} />    {/* Erik's test route while unable to connect to DB */}
-          <Route path="/pets/test/pets" exact component={()=><PetTestProfile/>} />    {/* Erik's test route while unable to connect to DB */}
+          {/*<Route path="/pets/test/health" exact component={()=><TestHealth/>} />    /!* Erik's test route while unable to connect to DB *!/*/}
+          {/*<Route path="/pets/test/pets" exact component={()=><PetTestProfile/>} />    /!* Erik's test route while unable to connect to DB *!/*/}
           <Route path="/pets/new" exact component={()=>isUserLoggedIn()?<PetCreation/> : <Redirect to={"/"}/>} />{/*Keep this component above "pets/:PetId"*/}
           <Route path="/pets/:PetId/"  component={(props)=>isUserLoggedIn()?<PetScene {...props} /> : <Redirect to={"/"}/>} />
           <Route path="/account" exact component={()=>isUserLoggedIn()?<Account/> : <Redirect to={"/"}/>} />

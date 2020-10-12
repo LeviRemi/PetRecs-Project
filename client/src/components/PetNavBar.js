@@ -11,27 +11,27 @@ function PetNavBar(props) {
     return (
 
         <div className="petProfileNavBar">
-          <NavLink activeStyle={{color: "black"}} activeClassName="activeNav" exact to={{pathname: `/Pets/${props.value.PetId}/`}}>
+          <NavLink activeStyle={{color: "black"}} activeClassName="activeNav" exact to={{pathname: `/pets/${props.value.PetId}/about`}}>
             <button className="btn-petprofile-nav">
               About
             </button>
           </NavLink>
-          <NavLink activeClassName="activeNav" to={{pathname: `/Pets/${props.value.PetId}/Records`}}>
+          <NavLink activeClassName="activeNav" to={{pathname: `/pets/${props.value.PetId}/records`}}>
             <button className="btn-petprofile-nav">
               Records
             </button>
           </NavLink>
-          <NavLink activeClassName="activeNav" to={{pathname: `/Pets/${props.value.PetId}/Events`}}>
+          <NavLink activeClassName="activeNav" to={{pathname: `/pets/${props.value.PetId}/journal`}}>
             <button className="btn-petprofile-nav">
-              Events
+              Journal
             </button>
           </NavLink>
-          <NavLink activeClassName="activeNav" to={{pathname: `/Pets/${props.value.PetId}/Health`}}>
+          <NavLink activeClassName="activeNav" to={{pathname: `/pets/${props.value.PetId}/health`}}>
             <button className="btn-petprofile-nav">
               Health
             </button>
           </NavLink>
-          <NavLink activeClassName="activeNav" to={{pathname: `/Pets/${props.value.PetId}/Medications`}}>
+          <NavLink activeClassName="activeNav" to={{pathname: `/pets/${props.value.PetId}/medications`}}>
             <button className="btn-petprofile-nav">
               Medications
             </button>
