@@ -670,3 +670,9 @@ these styles are post-login */
   padding-top: 2px;
   padding-right: 8px;
 }
+
+.btn-homepage-header-login {
+  background-color: #e5ded4;
+  color: var(--COLOR_DARK);
+  border-radius: 4px;
+}
