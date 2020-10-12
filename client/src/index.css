@@ -653,6 +653,13 @@ these styles are post-login */
   display: inline-block;
   vertical-align: top;
   padding: 0px 2px 0px 4px;
+  position: relative;
+  top: -1px;
+}
+
+.FormAddButtonIcon svg path {
+  fill: var(--COLOR_DARK);
+  transition: fill .15s ease-in-out !important;
 }
 
 .AddButtonContainer {
