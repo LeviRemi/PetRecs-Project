@@ -265,7 +265,7 @@ class AddEventComponent extends Component {
               <Col>
                 <Form.Group controlId="formDate">
                 <Form.Label>Date</Form.Label>
-                <Form.Control name="date" type="date" max={moment().format("YYYY-MM-DD")}
+                <Form.Control name="date" type="date" max={moment().local().format("YYYY-MM-DD")}
                               onChange={this.handleDateChange}
                               required/>
                 </Form.Group>
@@ -381,7 +381,7 @@ class UpdateEventComponent extends Component {
               <Col>
                 <Form.Group controlId="formDate">
                 <Form.Label>Date</Form.Label>
-                <Form.Control name="date" type="date" max={moment().format("YYYY-MM-DD")}
+                <Form.Control name="date" type="date" max={moment().local().format("YYYY-MM-DD")}
                               defaultValue={this.state.Date.substr(0, 10)}
                               onChange={this.handleDateChange}
                               required/>
