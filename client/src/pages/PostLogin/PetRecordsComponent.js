@@ -231,7 +231,7 @@ function PetRecordsComponent(props) {
               },
               {
                 icon: UpdateRounded,
-                tooltip: 'Update Event',
+                tooltip: 'Update Record',
                 onClick: (event, rowData) => {
                   console.log("From Table Record Id: " + rowData.PetRecordId);
                   updateStateRecordId(rowData.PetRecordId, rowData.RecordName, rowData.RecordNotes);
