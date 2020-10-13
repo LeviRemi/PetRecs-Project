@@ -218,7 +218,7 @@ function PetRecordsComponent(props) {
           <MaterialTable
             columns={[
               { title: 'Name', field: 'RecordName' },
-              { title: 'Date Uploaded', field: 'UploadDate', type: 'datetime', defaultSort: 'desc'}
+              { title: 'Date Uploaded', field: 'UploadDate', type: 'date', defaultSort: 'desc'}
             ]}
             data={records}
             title="Pet Records"
@@ -253,8 +253,8 @@ function PetRecordsComponent(props) {
 
               return (
                 <Form.Group controlId="formRecordNotes" style={{ paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 5}}>
-                    <Form.Label style={{fontSize: 16}}>Notes:</Form.Label>
-                    <hr></hr>
+                    <Form.Label style={{fontSize: 16, marginBottom: "0px"}}>Notes:</Form.Label>
+                    <hr style={{marginTop: "3px"}}></hr>
                     <Form.Text name="recordNotes" style={{padding: 5, fontSize: 15}} >
                       {rowData.RecordNotes}
                     </Form.Text>
