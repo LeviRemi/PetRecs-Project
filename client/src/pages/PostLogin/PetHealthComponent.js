@@ -18,7 +18,6 @@ import MaterialTable, {MTableToolbar} from "material-table";
 
 // MT Icons
 import tableIcons from '../../utils/TableIcons.js'
-import AddRounded from '@material-ui/icons/AddRounded';
 import UpdateRounded from '@material-ui/icons/EditRounded';
 import DeleteRounded from '@material-ui/icons/DeleteRounded';
 
@@ -84,9 +83,9 @@ class ViewWeightComponent extends Component {
       }
   }
 
-  deleteWeight = async (WeightId) => {
+  deleteWeight = async (WeightId, weight) => {
     Swal.fire({
-      title: 'Are you sure you want to delete this event?',
+      title: `Delete weight of ${weight} lbs?`,
       showDenyButton: true,
       showCancelButton: true,
       showConfirmButton: false,
@@ -94,11 +93,17 @@ class ViewWeightComponent extends Component {
   }).then((result) => {
       // User selects "delete"
       if (result.isDenied) {
+          Swal.fire({
+              title: 'Loading'
+          });
+
+          Swal.showLoading();
+
           axios.delete(`/api/pet-weights/` + WeightId, {withCredentials: true} )
           .then(response=>{
             //console.log(response);
             console.log("WeightId " + WeightId + " deleted sucessfully.");
-            Swal.fire('Success!', 'This weight has been deleted', 'success');
+            Swal.fire('Weight Deleted', '', 'success');
             this.props.fetch();
           })
           .catch((error) => {
@@ -113,18 +118,18 @@ class ViewWeightComponent extends Component {
     let petData = this.state.data;
 
     let sortedData = petData.sort(function (a, b) {
-      let formattedA = moment(a.Date);
-      let formattedB = moment(b.Date);
+      let formattedA = moment(a.Date).local();
+      let formattedB = moment(b.Date).local();
       return ( formattedA - formattedB );
     });
     
     let formattedData = [];
     
     sortedData.forEach(function (weightEntry) {
-      formattedData.push({Date: moment.utc(weightEntry.Date).format("M/D/YY"), Weight: weightEntry.Weight, WeightId: weightEntry.PetWeightId});
+      formattedData.push({Date: moment(weightEntry.Date).local().format("M/D/YY"), Weight: weightEntry.Weight, WeightId: weightEntry.PetWeightId});
     });
     
-    const dateFormatter = tickItem => moment(tickItem).format("M/D");
+    const dateFormatter = tickItem => moment(tickItem).local().format("M/D");
     
     return (
       <div>
@@ -138,7 +143,8 @@ class ViewWeightComponent extends Component {
               data={formattedData}
             >
               <XAxis tickFormatter={dateFormatter} dataKey="Date"/>
-              <YAxis unit="lb"/>
+              <YAxis type="number" unit=" lbs"/>
+              
               <CartesianGrid strokeDasharray="2 5" />
               <Tooltip />
               <Line type="monotone" dataKey="Weight" stroke="#8884d8" activeDot={{r: 4}} />
@@ -147,8 +153,8 @@ class ViewWeightComponent extends Component {
         </Col>
           <div className="currentWeightBox shadowedBox FadeIn">
             Current Weight: <br />
-            <div className="bigFont"> { sortedData.length > 0 && sortedData[sortedData.length - 1].Weight } <span className="lbsFont">lbs</span></div> 
-            <div className="smallFont"> { sortedData.length > 0 && moment.utc(sortedData[sortedData.length - 1].Date).format("M/D/YY") } </div>
+            <div className="bigFont"> { sortedData.length > 0 && sortedData[sortedData.length - 1].Weight } <span className="lbsFont">lbs</span> </div> 
+            <div className="smallFont"> { sortedData.length > 0 && moment(sortedData[sortedData.length - 1].Date).format("M/D/YY") } </div>
           </div>
         <Col>
         </Col>
@@ -196,7 +202,7 @@ class ViewWeightComponent extends Component {
         <div className="FadeIn">
           <MaterialTable
             columns={[
-              { title: 'Date', field: 'Date', defaultSort: 'desc', type: 'date' },
+              { title: 'Date', field: 'Date', defaultSort: 'desc', render: row => <span>{ moment(row["Date"]).format("MM/DD/YYYY") }</span> },
               { title: 'Weight', field: 'Weight', render: row => <span>{ row["Weight"] } lbs </span> },
             ]}
             data={this.state.data}
@@ -214,13 +220,14 @@ class ViewWeightComponent extends Component {
               {
                 icon: DeleteRounded,
                 tooltip: 'Delete Weight',
-                onClick: (event, rowData) => this.deleteWeight(rowData.PetWeightId)
+                onClick: (event, rowData) => this.deleteWeight(rowData.PetWeightId, rowData.Weight)
               }
             ]}
             options={{
               actionsColumnIndex: -1,
               pageSize: 5,
               pageSizeOptions: [ 5 ],
+              exportButton: true,
             }}
             components={{
               Toolbar: props => (
@@ -228,9 +235,15 @@ class ViewWeightComponent extends Component {
                       <MTableToolbar {...props}></MTableToolbar>
                       <div style={{padding: '0px 10px'}}>
                           <div id="WeightButtons">
-                              <div className="FormSelect">
-                                  <Button className="FormAddButton" onClick={this.handleShowAddWeight} variant="secondary">Add Weight</Button>
-                                  <br/>
+                              <div className="AddButtonContainer">
+                                  <Button className="FormAddButton" onClick={this.handleShowAddWeight}>
+                                    <span className="FormAddButtonText"> Add Weight </span>
+                                    <span className="FormAddButtonIcon">
+                                      <svg fill="none" viewBox="0 0 24 24" height="20" width="20" xmlns="http://www.w3.org/2000/svg">
+                                      <path xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" d="M12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4ZM2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12ZM12 7C12.5523 7 13 7.44772 13 8V11H16C16.5523 11 17 11.4477 17 12C17 12.5523 16.5523 13 16 13H13V16C13 16.5523 12.5523 17 12 17C11.4477 17 11 16.5523 11 16V13H8C7.44772 13 7 12.5523 7 12C7 11.4477 7.44772 11 8 11H11V8C11 7.44772 11.4477 7 12 7Z" fill="#282828"></path>
+                                      </svg>
+                                    </span>
+                                  </Button> <br/>
                               </div>
                           </div>
                       </div>
@@ -255,7 +268,7 @@ class AddWeightComponent extends Component {
     this.setState({Weight: event.target.value});
   }
   handleDateChange = event => {
-    this.setState({Date: event.target.value});
+    this.setState({Date: moment(event.target.value).local().format()});
   }
   handleSubmit = event => {
     event.preventDefault();
@@ -266,11 +279,17 @@ class AddWeightComponent extends Component {
       Date: this.state.Date,
     };
 
+      Swal.fire({
+          title: 'Loading'
+      });
+
+      Swal.showLoading();
+
     axios.post(`/api/pet-weights/`, data, {withCredentials: true} )
         .then(response=>{
-            console.log(response);
-            console.log("Event added successfully.");
-            Swal.fire('Success!', 'The weight has been added', 'success');
+            //console.log(response);
+            console.log("Weight added successfully.");
+            Swal.fire('Weight Added', '', 'success');
             this.props.fetch();
       })
       .catch((error) => {
@@ -278,25 +297,6 @@ class AddWeightComponent extends Component {
         Swal.fire('Oops...', "You do not have permission to add a weight", 'error');
       })
   }
-
-  // checkBoxDisableDate() {
-  //   var checkbox = document.getElementById("formTodayCheckbox");
-  //   var dateElement = document.getElementById("formDate");
-  //
-  //   if (checkbox.checked) {
-  //     //console.log("noEndCheckBox is checked");
-  //     let dateNow = moment.utc().format();
-  //     dateElement.setAttribute("value", dateNow.substr(0,10) );
-  //     dateElement.setAttribute("disabled", "true");
-  //     this.setState( {Date: dateNow } );
-  //
-  //   }
-  //   else {
-  //     //console.log("noEndCheckBox is unchecked");
-  //     dateElement.removeAttribute("disabled");
-  //     dateElement.removeAttribute("value");
-  //   }
-  // }
 
   render() {
     return (
@@ -315,9 +315,7 @@ class AddWeightComponent extends Component {
               <Col > 
                 <Form.Group>
                     <Form.Label >Date</Form.Label>
-                    {/*<Form.Check Id="formTodayCheckbox" style={{float: 'right'}}inline name="noEndCheckbox" type="checkbox" label="Today"*/}
-                    {/*            onChange={ () => this.checkBoxDisableDate() }/>*/}
-                    <Form.Control Id="formDate" name="date" type="date" max={moment().format("YYYY-MM-DD")}
+                    <Form.Control Id="formDate" name="date" type="date" max={moment().local().format("YYYY-MM-DD")}
                               onChange={this.handleDateChange}
                               required/>
                 </Form.Group>
@@ -328,7 +326,6 @@ class AddWeightComponent extends Component {
     )
   }
 }
-
 
 class UpdateWeightComponent extends Component {
   constructor(props) {
@@ -355,7 +352,7 @@ class UpdateWeightComponent extends Component {
     this.setState({Weight: event.target.value});
   }
   handleDateChange = event => {
-    this.setState({Date: event.target.value});
+    this.setState({Date: moment(event.target.value).local().format()});
   }
 
   handleUpdate = event => {
@@ -366,39 +363,24 @@ class UpdateWeightComponent extends Component {
       Weight: this.state.Weight,
       Date: this.state.Date,
     };
+      Swal.fire({
+          title: 'Loading'
+      });
 
+      Swal.showLoading();
     axios.put(`/api/pet-weights/` + this.state.WeightId, data, {withCredentials: true} )
         .then(response=>{
-            console.log(response);
-            console.log("Event added successfully.");
-            Swal.fire('Success!', 'The weight has been updated', 'success');
+            //console.log(response);
+            console.log("Event updated successfully.");
+            Swal.fire('Weight Updated', '', 'success');
             this.props.fetch();
       })
       .catch((error) => {
         console.log(error);
-        console.log(data);
+        //console.log(data);
         Swal.fire('Oops...', "You do not have permission to update this weight", 'error');
       })
   }
-
-  // checkBoxDisableDate() {
-  //   var checkbox = document.getElementById("formTodayCheckbox");
-  //   var dateElement = document.getElementById("formDate");
-  //
-  //   if (checkbox.checked) {
-  //     //console.log("noEndCheckBox is checked");
-  //     let dateNow = moment.utc().format();
-  //     dateElement.setAttribute("value", dateNow.substr(0,10) );
-  //     dateElement.setAttribute("disabled", "true");
-  //     this.setState( {Date: dateNow } );
-  //
-  //   }
-  //   else {
-  //     //console.log("noEndCheckBox is unchecked");
-  //     dateElement.removeAttribute("disabled");
-  //     dateElement.removeAttribute("value");
-  //   }
-  // }
 
   render() {
     return (
@@ -417,10 +399,8 @@ class UpdateWeightComponent extends Component {
               </Col>
               <Col > 
                 <Form.Group>
-                    <Form.Label >Date</Form.Label>
-                    {/*<Form.Check Id="formTodayCheckbox" style={{float: 'right'}}inline name="noEndCheckbox" type="checkbox" label="Today"*/}
-                    {/*            onChange={ () => this.checkBoxDisableDate() }/>*/}
-                    <Form.Control Id="formDate" name="date" type="date" max={moment().format("YYYY-MM-DD")}
+                    <Form.Label>Date</Form.Label>
+                    <Form.Control Id="formDate" name="date" type="date" max={moment().local().format("YYYY-MM-DD")}
                               onChange={this.handleDateChange} defaultValue={this.state.Date.substr(0, 10)}
                               required/>
                 </Form.Group>

@@ -51,7 +51,7 @@ export default class PetMedicationsComponent extends Component {
               //console.log(this.state.medications);
               document.getElementById("PetMedTableId").hidden=false;
               manuallyDecrementPromiseCounter();
-              //console.log(response.data);
+              console.log(response.data);
           })
           .catch((error) => {
               console.log(error);
@@ -68,7 +68,7 @@ export default class PetMedicationsComponent extends Component {
 
   deleteMedication = async (MedicationId) => {
     Swal.fire({
-      title: 'Are you sure you want to delete this medication?',
+      title: 'Delete medication?',
       showDenyButton: true,
       showCancelButton: true,
       showConfirmButton: false,
@@ -76,11 +76,16 @@ export default class PetMedicationsComponent extends Component {
   }).then((result) => {
       // User selects "delete"
       if (result.isDenied) {
+          Swal.fire({
+              title: 'Loading'
+          });
+
+          Swal.showLoading();
         axios.delete(`/api/medications/` + MedicationId, {withCredentials: true} )
           .then(response=>{
             //console.log(response);
             console.log("Medication " + MedicationId + " deleted sucessfully.");
-            Swal.fire('Success!', 'This medication has been deleted', 'success');
+            Swal.fire('Medication Deleted', '', 'success');
             this.props.fetch();
           })
           .catch((error) => {
@@ -102,6 +107,7 @@ export default class PetMedicationsComponent extends Component {
         <div style={{ maxWidth: '100%'}}>
         <MaterialTable
             columns={[
+              { title: 'Name', field: 'Name' },
               { title: 'Dosage', field: 'DosageAmount' },
               { title: 'Unit of Measurement', field: 'DosageUnit' },
               { title: 'Notes', field: 'Notes', render: row => <span className="tableWordBreak"> { row["Notes"] }</span>},
@@ -130,6 +136,7 @@ export default class PetMedicationsComponent extends Component {
               actionsColumnIndex: -1,
               pageSize: 5,
               pageSizeOptions: [ 5 ],
+              exportButton: true,
             }}
             components={{
               Toolbar: props => (
@@ -137,9 +144,15 @@ export default class PetMedicationsComponent extends Component {
                       <MTableToolbar {...props}></MTableToolbar>
                       <div style={{padding: '0px 10px'}}>
                           <div id="MedButtons">
-                              <div className="FormSelect">
-                                  <Button className="FormAddButton" onClick={this.handleShowAddMed} variant="secondary">Add Medication</Button>
-                                  <br/>
+                              <div className="AddButtonContainer">
+                                  <Button className="FormAddButton" onClick={this.handleShowAddMed}>
+                                    <span className="FormAddButtonText"> Add Medication </span>
+                                    <span className="FormAddButtonIcon">
+                                      <svg fill="none" viewBox="0 0 24 24" height="20" width="20" xmlns="http://www.w3.org/2000/svg">
+                                      <path xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" d="M12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4ZM2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12ZM12 7C12.5523 7 13 7.44772 13 8V11H16C16.5523 11 17 11.4477 17 12C17 12.5523 16.5523 13 16 13H13V16C13 16.5523 12.5523 17 12 17C11.4477 17 11 16.5523 11 16V13H8C7.44772 13 7 12.5523 7 12C7 11.4477 7.44772 11 8 11H11V8C11 7.44772 11.4477 7 12 7Z" fill="#282828"></path>
+                                      </svg>
+                                    </span>
+                                  </Button> <br/>
                               </div>
                           </div>
                       </div>
@@ -193,7 +206,8 @@ class AddMedicationComponent extends Component {
   constructor(props) {
     super();
     this.state = { PetId: props.petid,
-                   DosageAmount: 1,
+                   Name: "",
+                   DosageAmount: "",
                    DosageUnit: "",
                    StartDate: "",
                    EndDate: "",
@@ -202,10 +216,11 @@ class AddMedicationComponent extends Component {
     console.log("Component: 'AddMedicationComponent' loaded");
   }
 
+  handleNameChange = event => { this.setState({Name: event.target.value}); }
   handleDosageAmountChange = event => { this.setState({DosageAmount: event.target.value}); }
   handleDosageUnitChange = event => { this.setState({DosageUnit: event.target.value}); }
-  handleStartDateChange = event => { this.setState({StartDate: event.target.value}); }
-  handleEndDateChange = event => { this.setState({EndDate: event.target.value}); }
+  handleStartDateChange = event => { this.setState({StartDate: moment(event.target.value).local().format()}); }
+  handleEndDateChange = event => { this.setState({EndDate: moment(event.target.value).local().format()}); }
   handleNotesChange = event => { this.setState({Notes: event.target.value}); }
 
   handleSubmit = event => {
@@ -213,6 +228,7 @@ class AddMedicationComponent extends Component {
 
     const data = {
       PetId: this.state.PetId,
+      Name: this.state.Name,
       DosageAmount: this.state.DosageAmount,
       DosageUnit: this.state.DosageUnit,
       StartDate: this.state.StartDate,
@@ -220,11 +236,17 @@ class AddMedicationComponent extends Component {
       Notes: this.state.Notes
     };
 
+      Swal.fire({
+          title: 'Loading'
+      });
+
+      Swal.showLoading();
+
     axios.post(`/api/medications/`, data, {withCredentials: true} )
         .then(response=>{
             console.log(response);
             console.log("Medication added successfully.");
-            Swal.fire('Success!', 'The medication has been added', 'success');
+            Swal.fire('Medication Added', '', 'success');
             this.props.fetch();
           })
         .catch((error) => {
@@ -255,6 +277,17 @@ class AddMedicationComponent extends Component {
       <div className="formBoxAddWeight">
           <Form id="AddMedForm" onSubmit={this.handleSubmit}>
             <Row>
+            <Col>
+              <Form.Group controlId="formName">
+                <Form.Label>Name of Medication</Form.Label>
+                <Form.Control name="name" type="text" min={0} maxLength={45}
+                              placeholder="Name of Medication"
+                              onChange={this.handleNameChange}
+                              required/>
+              </Form.Group>
+            </Col>
+            </Row>
+            <Row>
               <Col>
                 <Form.Group controlId="formDosageAmount">
                 <Form.Label>Dosage Amount</Form.Label>
@@ -267,7 +300,7 @@ class AddMedicationComponent extends Component {
               <Col>
               <Form.Group controlId="formDosageUnit">
                 <Form.Label>Dosage Unit</Form.Label>
-                <Form.Control name="DosageUnit" type="text" min={0}
+                <Form.Control name="DosageUnit" type="text" min={0} maxLength={45}
                               placeholder="Unit of measurement"
                               onChange={this.handleDosageUnitChange}
                               required/>
@@ -303,7 +336,7 @@ class AddMedicationComponent extends Component {
               <Col>
                 <Form.Group controlId="formNotes">
                     <Form.Label>Notes</Form.Label>
-                    <Form.Control name="Notes" type="textarea" as="textarea" rows="5"
+                    <Form.Control name="Notes" type="textarea" as="textarea" rows="5" maxLength={300}
                                   placeholder="Enter notes about the medication here..."
                                   onChange={this.handleNotesChange}
                                   required/>
@@ -320,6 +353,7 @@ class UpdateMedicationComponent extends Component {
   constructor(props) {
     super();
     this.state = { MedId: props.medicationid,
+                   Name: "",
                    DosageAmount: "",
                    DosageUnit: "",
                    StartDate: "",
@@ -333,7 +367,8 @@ class UpdateMedicationComponent extends Component {
     axios.get(`/api/medications/` + this.state.MedId, {withCredentials: true} )
       .then(response=>{
         console.log(response);
-        this.setState({ DosageAmount: response.data.DosageAmount,
+        this.setState({ Name: response.data.Name,
+                        DosageAmount: response.data.DosageAmount,
                         DosageUnit: response.data.DosageUnit,
                         StartDate: response.data.StartDate,
                         EndDate: response.data.EndDate,
@@ -352,10 +387,11 @@ class UpdateMedicationComponent extends Component {
       })
   }
 
+  handleNameChange = event => { this.setState({Name: event.target.value}); }
   handleDosageAmountChange = event => { this.setState({DosageAmount: event.target.value}); }
   handleDosageUnitChange = event => { this.setState({DosageUnit: event.target.value}); }
-  handleStartDateChange = event => { this.setState({StartDate: event.target.value}); }
-  handleEndDateChange = event => { this.setState({EndDate: event.target.value}); }
+  handleStartDateChange = event => { this.setState({StartDate: moment(event.target.value).local().format()}); }
+  handleEndDateChange = event => { this.setState({EndDate: moment(event.target.value).local().format()}); }
   handleNotesChange = event => { this.setState({Notes: event.target.value}); }
 
   handleUpdate = event => {
@@ -363,6 +399,7 @@ class UpdateMedicationComponent extends Component {
 
     const data = {
       MedId: this.state.MedId,
+      Name: this.state.Name,
       DosageAmount: this.state.DosageAmount,
       DosageUnit: this.state.DosageUnit,
       StartDate: this.state.StartDate,
@@ -370,11 +407,17 @@ class UpdateMedicationComponent extends Component {
       Notes: this.state.Notes,
     };
 
+      Swal.fire({
+          title: 'Loading'
+      });
+
+      Swal.showLoading();
+
     axios.put(`/api/medications/` + this.state.MedId, data, {withCredentials: true} )
         .then(response=>{
           console.log(response);
-          console.log("Medication added successfully.");
-          Swal.fire('Success!', 'The medication has been updated', 'success');
+          console.log("Medication updated successfully.");
+          Swal.fire('Medication Updated', '', 'success');
           this.props.fetch();
         })
         .catch((error) => {
@@ -388,13 +431,13 @@ class UpdateMedicationComponent extends Component {
     var endDateElement = document.getElementById("formEndDate");
 
     if (checkbox.checked) {
-      console.log("noEndCheckBox is checked");
+      console.log("initial check: noEndCheckBox is checked");
       endDateElement.setAttribute("disabled", "true")
       this.setState( {EndDate: null} );
       
     }
     else {
-      console.log("noEndCheckBox is unchecked");
+      console.log("initial check: noEndCheckBox is unchecked");
       endDateElement.removeAttribute("disabled")
     };
   }
@@ -430,6 +473,18 @@ class UpdateMedicationComponent extends Component {
     return (
       <div className="formBoxAddWeight">
           <Form id="UpdateMedForm" onSubmit={this.handleUpdate}>
+            <Row>
+              <Col>
+                <Form.Group controlId="formName">
+                  <Form.Label>Name of Medication</Form.Label>
+                  <Form.Control name="name" type="text" min={0} maxLength={45}
+                                defaultValue={this.state.Name}
+                                placeholder="Name of Medication"
+                                onChange={this.handleNameChange}
+                                required/>
+                </Form.Group>
+              </Col>
+            </Row>
             <Row>
               <Col>
                 <Form.Group controlId="formDosageAmount">
@@ -480,7 +535,7 @@ class UpdateMedicationComponent extends Component {
               <Col>
                 <Form.Group controlId="formNotes">
                     <Form.Label>Notes</Form.Label>
-                    <Form.Control name="Notes" type="textarea" as="textarea" rows={5}
+                    <Form.Control name="Notes" type="textarea" as="textarea" rows={5} maxLength={300}
                                   defaultValue={this.state.Notes}
                                   onChange={this.handleNotesChange}
                                   required/>

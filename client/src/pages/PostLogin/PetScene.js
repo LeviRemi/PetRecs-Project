@@ -50,6 +50,7 @@ function PetScene(props) {
   const [weightsAcquired, setWeightsAcquired] = useState(false);
   const [meds, setMeds] = useState([]);
   const [medsAcquired, setMedsAcquired] = useState(false);
+  const [sharedAccts, setSharedAccts] = useState([]);
 
 
   const history = useHistory();
@@ -71,8 +72,8 @@ function PetScene(props) {
                 species: responseSpecies.data,
                 breed: responseBreed.data
             });
-            setInfoAcquired(true);
             manuallyDecrementPromiseCounter();
+            setInfoAcquired(true);
           })).catch(err =>{
             console.log(err);
             manuallyDecrementPromiseCounter();
@@ -162,7 +163,6 @@ function PetScene(props) {
       axios.get(`/api/pet-records/pet/${props.match.params.PetId}`, {withCredentials: true} )
           .then(response=>{
               setRecords(response.data);
-              setRecordsAcquired(true);
               console.log(response.data);
               manuallyDecrementPromiseCounter();
           })
@@ -176,7 +176,6 @@ function PetScene(props) {
       axios.get(`/api/pet-records/pet/${props.match.params.PetId}`, {withCredentials: true} )
           .then(response=>{
               setRecords(response.data);
-              setRecordsAcquired(true);
               console.log(response.data);
           })
           .catch((error) => {
@@ -189,7 +188,6 @@ function PetScene(props) {
       axios.get(`/api/pet-events/pet/${props.match.params.PetId}`, {withCredentials: true} )
           .then(response=>{
               setEvents(response.data);
-              setEventsAcquired(true);
               manuallyDecrementPromiseCounter();
               //console.log(response.data);
           })
@@ -203,7 +201,6 @@ function PetScene(props) {
       axios.get(`/api/pet-events/pet/${props.match.params.PetId}`, {withCredentials: true} )
           .then(response=>{
               setEvents(response.data);
-              setEventsAcquired(true);
               //console.log(response.data);
           })
           .catch((error) => {
@@ -216,7 +213,6 @@ function PetScene(props) {
       axios.get(`/api/pet-weights/pet/${props.match.params.PetId}`, {withCredentials: true} )
           .then(response=>{
               setWeights(response.data);
-              setWeightsAcquired(true);
               manuallyDecrementPromiseCounter();
           })
           .catch((error) => {
@@ -229,7 +225,6 @@ function PetScene(props) {
       axios.get(`/api/pet-weights/pet/${props.match.params.PetId}`, {withCredentials: true} )
           .then(response=>{
               setWeights(response.data);
-              setWeightsAcquired(true);
           })
           .catch((error) => {
               console.log(error);
@@ -241,7 +236,6 @@ function PetScene(props) {
       axios.get(`/api/medications/pet/${props.match.params.PetId}`, {withCredentials: true} )
           .then(response=>{
               setMeds(response.data);
-              setMedsAcquired(true);
               //console.log(this.state.medications);
               manuallyDecrementPromiseCounter();
               //console.log(response.data);
@@ -256,7 +250,6 @@ function PetScene(props) {
         axios.get(`/api/medications/pet/${props.match.params.PetId}`, {withCredentials: true} )
             .then(response=>{
                 setMeds(response.data);
-                setMedsAcquired(true);
                 //console.log(this.state.medications);
                 //console.log(response.data);
             })
@@ -265,8 +258,20 @@ function PetScene(props) {
             })
     }
 
+  function fetchSharedAccounts() {
+      axios.get(`/api/pets/${props.match.params.PetId}/getShared`, {withCredentials: true})
+          .then(response=> {
+              setSharedAccts(response.data);
+              console.log(response.data);
+          })
+          .catch(err => {
+              console.log(err);
+          })
+  }
+
   useEffect(() => {
     fetchPetProfile();
+    fetchSharedAccounts();
     fetchSpeciesList();
     fetchDogBreedList();
     fetchCatBreedList();
@@ -325,11 +330,11 @@ function PetScene(props) {
     <LoadingIndicator></LoadingIndicator>
     <div className="fullPageContainer">
       <div className="mainContent">
-        <Route exact path='/Pets/:PetId/Records' component={(props)=>isUserLoggedIn()?<PetRecordsComponent records={records} fetch={refreshRecords} acquired={recordsAcquired} {...props} /> : <Redirect to={"/"}/>} />
-        <Route exact path="/Pets/:PetId/Health" component={(props)=>isUserLoggedIn()?<PetHealthComponent weights={weights} fetch={refreshWeights} acquired={weightsAcquired} {...props} /> : <Redirect to={"/"}/>} />
-        <Route exact path='/Pets/:PetId/Events' component={(props)=>isUserLoggedIn()?<PetEventsComponent events={events} fetch={refreshEvents} acquired={eventsAcquired} {...props} /> : <Redirect to={"/"}/>} />
-        <Route exact path='/Pets/:PetId/Medications' component={(props)=>isUserLoggedIn()?<PetMedicationsComponent meds={meds} fetch={refreshMeds} acquired={medsAcquired} {...props} /> : <Redirect to={"/"}/>} />
-        <Route exact path='/Pets/:PetId/' component={(props)=>isUserLoggedIn()?<PetAboutComponent profile={petprofile} acquired={infoAcquired} speciesList={speciesList} catList={catBreedList} dogList={dogBreedList} fetch={refreshPetProfile} {...props} /> : <Redirect to={"/"}/>} />
+        <Route exact path='/pets/:PetId/records' component={(props)=>isUserLoggedIn()?<PetRecordsComponent records={records} fetch={refreshRecords} acquired={infoAcquired} {...props} /> : <Redirect to={"/"}/>} />
+        <Route exact path="/pets/:PetId/health" component={(props)=>isUserLoggedIn()?<PetHealthComponent weights={weights} fetch={refreshWeights} acquired={infoAcquired} {...props} /> : <Redirect to={"/"}/>} />
+        <Route exact path='/pets/:PetId/journal' component={(props)=>isUserLoggedIn()?<PetEventsComponent events={events} fetch={refreshEvents} acquired={infoAcquired} {...props} /> : <Redirect to={"/"}/>} />
+        <Route exact path='/pets/:PetId/medications' component={(props)=>isUserLoggedIn()?<PetMedicationsComponent meds={meds} fetch={refreshMeds} acquired={infoAcquired} {...props} /> : <Redirect to={"/"}/>} />
+        <Route exact path='/pets/:PetId/about' component={(props)=>isUserLoggedIn()?<PetAboutComponent profile={petprofile} acquired={infoAcquired} speciesList={speciesList} catList={catBreedList} dogList={dogBreedList} sharedAccts={sharedAccts} refreshShares={fetchSharedAccounts} fetch={refreshPetProfile} {...props} /> : <Redirect to={"/"}/>} />
       </div>
     </div>
       <div className="mainPageFooter">

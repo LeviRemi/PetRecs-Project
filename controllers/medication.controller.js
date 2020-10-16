@@ -4,7 +4,7 @@ const Medication = db.medication;
 // Create and Save a new Medication
 exports.create = (req, res) => {
     // Validate request
-    if (!req.body.DosageAmount || !req.body.DosageUnit || !req.body.PetId) {
+    if (!req.body.DosageAmount || !req.body.Name || !req.body.DosageUnit || !req.body.PetId) {
         res.status(400).send({
             message: "Error. Essential fields are empty."
         });
@@ -14,6 +14,7 @@ exports.create = (req, res) => {
     // Create Medication
     const medication = {
         PetId: req.body.PetId,
+        Name: req.body.Name,
         DosageAmount: req.body.DosageAmount,
         DosageUnit: req.body.DosageUnit,
         StartDate: req.body.StartDate || null,

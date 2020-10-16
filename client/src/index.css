@@ -404,7 +404,7 @@ these styles are post-login */
 }
 
 .activeNav button, .btn-petprofile-nav:hover {
-  color: var(--COLOR_CORAL)
+  color: var(--COLOR_CORAL);
 }
 
 .back-btn-petprofile-nav {
@@ -624,5 +624,55 @@ these styles are post-login */
 }
 
 .FormAddButton {
-  float: right;
+  display: inline-block;
+  vertical-align: middle;
+  padding: 2px 10px !important;
+  text-align: center !important;
+  background-color: var(--COLOR_WHITE) !important;
+  color: var(--COLOR_DARK) !important;
+  border-color: var(--COLOR_DARK) !important;
+}
+
+.FormAddButton:hover {
+  background-color: var(--COLOR_DARK) !important;
+  color: var(--COLOR_WHITE) !important;
+  border-color: var(--COLOR_DARK) !important;
+}
+
+.FormAddButton:hover svg path {
+  fill: var(--COLOR_WHITE) !important;
+}
+
+.FormAddButtonText {
+  display: inline-block;
+  vertical-align: middle;
+  padding: 0px 0px 0px 4px;
+}
+
+.FormAddButtonIcon {
+  display: inline-block;
+  vertical-align: top;
+  padding: 0px 2px 0px 4px;
+  position: relative;
+  top: -1px;
+}
+
+.FormAddButtonIcon svg path {
+  fill: var(--COLOR_DARK);
+  transition: fill .15s ease-in-out !important;
+}
+
+.AddButtonContainer {
+  width: 100%;
+  margin-right: -50%;
+  height: 40px;
+  text-align: right;
+  padding-top: 2px;
+  padding-right: 8px;
+}
+
+.btn-homepage-header-login {
+  background-color: #e5ded4;
+  color: var(--COLOR_DARK);
+  border-radius: 4px;
 }

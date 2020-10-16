@@ -73,7 +73,7 @@ export default class Pets extends Component {
             console.log("shared pets list")
             sharedPetsList = this.state.sharedPets.map(pet =>
                 <div className="PetContainer" key={pet.PetId}>
-                    <Link id="PetLink" to={"/Pets/" + pet.PetId} key={pet.PetId}>
+                    <Link id="PetLink" to={"/pets/" + pet.PetId + "/about"} key={pet.PetId}>
                         <PetImage {...{PetId: pet.PetId, ProfileUrl: pet.ProfileUrl}}/>
                     </Link>
                     <div className="text-center">
@@ -102,7 +102,7 @@ export default class Pets extends Component {
                                className="mainPageContents shadowedBoxPets">                         
                               {this.state.pets.map(pet =>
                                   <div className="PetContainer" key={pet.PetId}>
-                                      <Link id="PetLink" to={"/Pets/" + pet.PetId} key={pet.PetId}>
+                                      <Link id="PetLink" to={"/pets/" + pet.PetId + "/about"} key={pet.PetId}>
                                           <PetImage {...{PetId: pet.PetId, ProfileUrl: pet.ProfileUrl}}/>
                                       </Link>
                                       <div className="text-center">
@@ -111,7 +111,7 @@ export default class Pets extends Component {
                                   </div>
                               )}
                               <div className="PetContainer">
-                                  <Link id="AddPetLink" to={"/Pets/New"}>
+                                  <Link id="AddPetLink" to={"/pets/new"}>
                                       <div id="AddPetCircle">
                                           <img className="AddPetImage"></img>
                                           <p id="AddPetText">Add Pet<br/>< FontAwesomeIcon id="PlusIcon" icon="plus"

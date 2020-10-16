@@ -1,4 +1,5 @@
 const db = require("../models");
+const sequelize = require("sequelize");
 const Pet = db.pet;
 const Contact = db.petContact;
 const Account = db.account;
@@ -411,6 +412,77 @@ exports.validate = (req, res, next) => {
         })
         .catch(err => {
             res.status(500).send("Error retrieving pet contacts for account id=" + req.params.id)
+        });
+}
+
+exports.findSharedAccounts = (req, res) => {
+    const id = req.params.id;
+    // Validate that user is owner of pet
+    Contact.findOne({
+        where: {PetId: id, AccountId: req.session.user.AccountId, Owner: 1}
+    })
+        .then(data => {
+            if (data === null) {
+                res.status(401).send("This user is not owner of this pet, or pet does not exist");
+            } else {
+                // Get list of accounts that have access to this pet that AREN'T the current user
+                Contact.findAll({
+                    where: {PetId: req.params.id, AccountId: {[sequelize.Op.not]: req.session.user.AccountId}},
+                    attributes: ["AccountId"]
+                })
+                    .then(data => {
+                        return Account.findAll({
+                            where: {AccountId: data.map(account => account.AccountId)},
+                            attributes: ['AccountId', 'FirstName', 'LastName', 'Email']
+                        })
+                            .then(accounts => {
+                                res.send(accounts);
+                            })
+                            .catch(err => {
+                                res.status(500).send("error retrieving list of accounts");
+                            })
+                    })
+                    .catch(err => {
+                        res.status(500).send("Error retrieving pet contacts that have access to pet id=" + id)
+                    })
+            }
+        })
+        .catch(err => {
+            res.status(500).send("Error retrieving pet contacts for pet id=" + req.params.id)
+        });
+}
+
+exports.deleteSharedAccount = (req, res) => {
+    const petId = req.params.id;
+    const accountId = req.params.acct;
+    // Validate that user is owner of pet
+    Contact.findOne({
+        where: {PetId: petId, AccountId: req.session.user.AccountId, Owner: 1}
+    })
+        .then(data => {
+            if (data === null) {
+                res.status(401).send("This user is not owner of this pet, or pet does not exist");
+            } else {
+                // Remove account from share privileges
+                Contact.destroy({
+                    where: {PetId: petId, AccountId: accountId}
+                })
+                    .then(data => {
+                        console.log(data);
+                        if (data === 0) {
+                            res.status(401).send("This account already does not have share access to this pet, or the account does not exist");
+                        } else {
+                            res.status(200).send("Account share privileges have been revoked")
+                        }
+
+                    })
+                    .catch(err => {
+                        res.status(500).send("Error deleting pet contact where pet id="+petId+" and account id="+accountId);
+                    })
+            }
+        })
+        .catch(err => {
+            res.status(500).send("Error retrieving pet contacts for pet id=" + req.params.id+" and account id="+req.params.acct)
         });
 }
 

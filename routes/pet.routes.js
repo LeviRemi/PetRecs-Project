@@ -28,4 +28,10 @@ router.post("/:id/share", pets.share);
 // Check if current user is owner of pet
 router.get("/:id/validate", pets.validate);
 
+// Get all accounts that this pet is currently being shared with
+router.get("/:id/getShared", pets.findSharedAccounts);
+
+// Remove pet share from account
+router.delete("/:id/share/:acct", pets.deleteSharedAccount);
+
 module.exports = router;
