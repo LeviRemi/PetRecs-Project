@@ -129,7 +129,8 @@ class ViewWeightComponent extends Component {
               data={formattedData}
             >
               <XAxis tickFormatter={dateFormatter} dataKey="Date"/>
-              <YAxis unit=" lbs"/>
+              <YAxis type="number" unit=" lbs"/>
+              
               <CartesianGrid strokeDasharray="2 5" />
               <Tooltip />
               <Line type="monotone" dataKey="Weight" stroke="#8884d8" activeDot={{r: 4}} />
