@@ -21,7 +21,7 @@ function Register() {
             AccountTypeId: data.accountType
         }, { withCredentials: true })
             .then((res) => {
-                console.log(res);
+                //console.log(res);
                 Swal.fire('Congratulations!', "Your PetRecs account has been created", 'success');
                 history.push('/login');
             })

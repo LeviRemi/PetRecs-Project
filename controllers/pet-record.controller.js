@@ -21,11 +21,11 @@ exports.create = (req, res) => {
         FileName: req.body.FileName,
         UploadDate: req.body.UploadDate
     };
-    console.log(petrecord);
+    //console.log(petrecord);
     // Save Pet Weight to database
     PetRecord.create(petrecord)
         .then(data => {
-            console.log(data);
+            //console.log(data);
             res.send(data);
         })
         .catch(err => {

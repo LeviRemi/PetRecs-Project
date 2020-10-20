@@ -2,12 +2,11 @@
 
 import React from 'react'
 import { NavLink } from 'react-router-dom';
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
 
 function PetNavBar(props) {
   
-    console.log("Navbar PetId for links: " + props.value.PetId);
+    // console.log("Navbar PetId for links: " + props.value.PetId);
+
     return (
 
         <div className="petProfileNavBar">

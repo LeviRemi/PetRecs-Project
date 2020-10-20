@@ -9,7 +9,7 @@ const sequelizeSessionStore = new SessionStore({
 });
 
 module.exports = session({
-    secret: "krazy pet key", // store something cryptic in env later
+    secret: "62-gaQuAnqY317N>`OM-FlW:IuLElx", // store something cryptic in env later
     store: sequelizeSessionStore,
     resave: false,
     saveUninitialized: false,
@@ -19,6 +19,6 @@ module.exports = session({
         //sameSite: true, // helps prevent CSRF attacks
         secure: false, // if true: only transmit cookie over https
         httpOnly: false, // if true: prevents client-side JS from reading the cookie.. set to false to access cookie in React
-        maxAge: 1000 * 60 * 30 // session max age in milliseconds: 30 minutes   
+        maxAge: 1000 * 60 * 30 // session max age: 30 minutes
     }
 });

@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { usePromiseTracker } from "react-promise-tracker";
 import Loader from 'react-loader-spinner';
 
+// Renders loading progress bar if an Axios promise is in progress
 const LoadingIndicator = props => {
     const { promiseInProgress } = usePromiseTracker();
 

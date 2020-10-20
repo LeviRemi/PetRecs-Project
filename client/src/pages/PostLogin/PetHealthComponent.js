@@ -2,9 +2,8 @@
 
 import React, { Component } from 'react';
 import axios from 'axios';
-import trackPromise, { manuallyDecrementPromiseCounter, manuallyIncrementPromiseCounter } from 'react-promise-tracker';
 
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
 import moment from 'moment';
 
 import Form from 'react-bootstrap/Form';
@@ -29,7 +28,7 @@ export default class PetHealthComponent extends Component {
 
   render() {
     
-    console.log("Component: 'PetHealthComponent' loaded");
+    //console.log("Component: 'PetHealthComponent' loaded");
     
     return (
 
@@ -63,19 +62,6 @@ class ViewWeightComponent extends Component {
 
   handleShowUpdateWeight() { this.setState({ showUpdateWeight: true }); }
 
-  fetchWeights() {
-      axios.get(`/api/pet-weights/pet/` + this.props.petid, {withCredentials: true} )
-          .then(response=>{
-              this.setState({data: response.data});
-              document.getElementById("petHealthBodyId").hidden = false;
-              manuallyDecrementPromiseCounter();
-          })
-          .catch((error) => {
-              console.log(error);
-              manuallyDecrementPromiseCounter();
-          })
-  }
-
   componentDidMount() {
     this.setState({data: this.props.weights});
       if(this.props.acquired) {
@@ -102,7 +88,7 @@ class ViewWeightComponent extends Component {
           axios.delete(`/api/pet-weights/` + WeightId, {withCredentials: true} )
           .then(response=>{
             //console.log(response);
-            console.log("WeightId " + WeightId + " deleted sucessfully.");
+            //console.log("WeightId " + WeightId + " deleted sucessfully.");
             Swal.fire('Weight Deleted', '', 'success');
             this.props.fetch();
           })
@@ -240,7 +226,7 @@ class ViewWeightComponent extends Component {
                                     <span className="FormAddButtonText"> Add Weight </span>
                                     <span className="FormAddButtonIcon">
                                       <svg fill="none" viewBox="0 0 24 24" height="20" width="20" xmlns="http://www.w3.org/2000/svg">
-                                      <path xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" d="M12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4ZM2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12ZM12 7C12.5523 7 13 7.44772 13 8V11H16C16.5523 11 17 11.4477 17 12C17 12.5523 16.5523 13 16 13H13V16C13 16.5523 12.5523 17 12 17C11.4477 17 11 16.5523 11 16V13H8C7.44772 13 7 12.5523 7 12C7 11.4477 7.44772 11 8 11H11V8C11 7.44772 11.4477 7 12 7Z" fill="#282828"></path>
+                                      <path xmlns="http://www.w3.org/2000/svg" fillRule="evenodd" clipRule="evenodd" d="M12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4ZM2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12ZM12 7C12.5523 7 13 7.44772 13 8V11H16C16.5523 11 17 11.4477 17 12C17 12.5523 16.5523 13 16 13H13V16C13 16.5523 12.5523 17 12 17C11.4477 17 11 16.5523 11 16V13H8C7.44772 13 7 12.5523 7 12C7 11.4477 7.44772 11 8 11H11V8C11 7.44772 11.4477 7 12 7Z" fill="#282828"></path>
                                       </svg>
                                     </span>
                                   </Button> <br/>
@@ -261,7 +247,7 @@ class AddWeightComponent extends Component {
   constructor(props) {
     super();
     this.state = { PetId: props.petid, Weight: '', Date: ''};
-    console.log("Component: 'AddWeightComponent' loaded");
+    //console.log("Component: 'AddWeightComponent' loaded");
   };
 
   handleWeightChange = event => {
@@ -288,7 +274,7 @@ class AddWeightComponent extends Component {
     axios.post(`/api/pet-weights/`, data, {withCredentials: true} )
         .then(response=>{
             //console.log(response);
-            console.log("Weight added successfully.");
+            //console.log("Weight added successfully.");
             Swal.fire('Weight Added', '', 'success');
             this.props.fetch();
       })
@@ -333,7 +319,7 @@ class UpdateWeightComponent extends Component {
     this.state = { WeightId: props.weightid,
                    Weight: '',
                    Date: '' }
-    console.log("Component: 'UpdateWeightComponent' loaded for WeightId: " + this.state.WeightId);
+    //console.log("Component: 'UpdateWeightComponent' loaded for WeightId: " + this.state.WeightId);
   };
 
   componentDidMount() {
@@ -371,7 +357,7 @@ class UpdateWeightComponent extends Component {
     axios.put(`/api/pet-weights/` + this.state.WeightId, data, {withCredentials: true} )
         .then(response=>{
             //console.log(response);
-            console.log("Event updated successfully.");
+            //console.log("Event updated successfully.");
             Swal.fire('Weight Updated', '', 'success');
             this.props.fetch();
       })

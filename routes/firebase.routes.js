@@ -9,6 +9,7 @@ const uploader = multer({
         fileSize: 5 * 1024 * 1024, // keep images size < 5 MB
     },
 });
+
 // Root: "/api/upload"
 
 // Upload File

@@ -1,22 +1,22 @@
-const medication = require("../controllers/medication.controller.js");
+const medications = require("../controllers/medication.controller.js");
 
 const router = require("express").Router();
 
 // Root: "/api/medications"
 
 // Create a new medication
-router.post("/", medication.create);
+router.post("/", medications.create);
 
 // Retrieve all medications for a specific Pet Id
-router.get("/pet/:id", medication.findAll);
+router.get("/pet/:id", medications.findAll);
 
 // Retrieve a single medication with id
-router.get("/:id", medication.findOne);
+router.get("/:id", medications.findOne);
 
 // Update a medication with id
-router.put("/:id", medication.update);
+router.put("/:id", medications.update);
 
 // Delete a medication with id
-router.delete("/:id", medication.delete);
+router.delete("/:id", medications.delete);
 
 module.exports = router;
