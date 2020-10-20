@@ -438,7 +438,8 @@ exports.findSharedAccounts = (req, res) => {
     })
         .then(data => {
             if (data === null) {
-                res.status(401).send("This user is not owner of this pet, or pet does not exist");
+                // This user is not owner of this pet, or pet does not exist
+                res.send([]);
             } else {
                 // Get list of accounts that have access to this pet that AREN'T the current user
                 Contact.findAll({

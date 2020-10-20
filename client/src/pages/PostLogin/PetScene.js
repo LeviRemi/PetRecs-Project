@@ -253,7 +253,12 @@ function PetScene(props) {
   function fetchSharedAccounts() {
       axios.get(`/api/pets/${props.match.params.PetId}/getShared`, {withCredentials: true})
           .then(response=> {
-              setSharedAccts(response.data);
+              if (response.status === 200) {
+                  setSharedAccts(response.data);
+              } else {
+                  setSharedAccts([]);
+              }
+              
               //console.log(response.data);
           })
           .catch(err => {
