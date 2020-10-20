@@ -2,7 +2,6 @@
 
 import React, { Component, useState, useEffect } from 'react';
 import axios from 'axios';
-import { manuallyDecrementPromiseCounter, manuallyIncrementPromiseCounter, trackPromise } from 'react-promise-tracker';
 import { useParams } from 'react-router';
 import Swal from 'sweetalert2'
 
@@ -21,14 +20,11 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
-import { FormatListBulleted } from '@material-ui/icons';
 
 function PetRecordsComponent(props) {
 
-  const PetId = props.match.params.PetId;
   const records = props.records;
-  const [urlpetid, setUrlpetid] = useState(useParams());
+  const [urlpetid] = useState(useParams());
   const [recordId, setRecordId] = useState(useParams());
   const [recordName, setRecordName] = useState(useParams());
   const [recordNotes, setRecordNotes] = useState(useParams());
@@ -51,7 +47,7 @@ function PetRecordsComponent(props) {
 
   function UpdateRecords() {
     props.fetch();
-  };
+  }
 
   function DeleteRecord(RecordName, PetRecordId, FireReference) {
     Swal.fire({
@@ -78,7 +74,7 @@ function PetRecordsComponent(props) {
         .then(response=>{
           UpdateRecords();
           Swal.fire('Record Deleted', ``, 'success');
-          console.log(response.data);
+          //console.log(response.data);
         })
         .catch((error) => {
           Swal.fire('Oops...', `Record could not be deleted`, 'error');
@@ -93,7 +89,7 @@ function PetRecordsComponent(props) {
       
     }
   })
-  };
+  }
 
   function openInNewTab(url) {
     var win = window.open(url, '_blank');
@@ -112,21 +108,9 @@ function PetRecordsComponent(props) {
     hiddenFileInput.current.click();
   };
 
-
-
-  const handleRecordNameChange = (event) => {
-    records.RecordName = event.target.value;
-    console.log(event.target.value);
-  }
-
-  const handleRecordNotesChange = (event) => {
-    records.RecordNotes = event.target.value;
-    console.log(event.target.value);
-  }
-
   // Handling file selection from input
   const onFileSelected = async (e) => {
-      console.log("File Selected");
+      //console.log("File Selected");
     if (e.target.files[0]) {
       handleFileUpload(e);
     }
@@ -134,7 +118,7 @@ function PetRecordsComponent(props) {
 
   // Uploading image to Cloud Storage
   const handleFileUpload = async (e) => {
-    console.log("File Uploaded");
+    //console.log("File Uploaded");
     e.preventDefault();
     const fileUploaded = e.target.files[0];
 
@@ -142,7 +126,7 @@ function PetRecordsComponent(props) {
       if (fileUploaded !== '') {
         // Creating a FormData object
         let fileData = new FormData();
-        console.log(fileUploaded);
+        //console.log(fileUploaded);
 
         // Adding the 'image' field and the selected file as value to our FormData object
         // Changing file name to make it unique and avoid potential later overrides
@@ -169,7 +153,7 @@ function PetRecordsComponent(props) {
           }
         })
 
-        console.log(enteredFileName);
+        //console.log(enteredFileName);
 
         if (enteredFileName != null) {
           Swal.fire({
@@ -180,7 +164,7 @@ function PetRecordsComponent(props) {
 
           axios.post("/api/upload/record", fileData, {withCredentials: true})
           .then((response) => {
-            console.log("upload success");
+            //console.log("upload success");
 
 
 
@@ -193,10 +177,10 @@ function PetRecordsComponent(props) {
                 RecordNotes: ""
               };
 
-            console.log(data);
+            //console.log(data);
             axios.post('/api/pet-records/', data, {withCredentials: true })
               .then((res) => {
-                  console.log(res);
+                  //console.log(res);
                   UpdateRecords();
                   Swal.fire('Congratulations!', `${data.RecordName} has been added!`, 'success');
             })
@@ -233,7 +217,7 @@ function PetRecordsComponent(props) {
                 icon: UpdateRounded,
                 tooltip: 'Update Event',
                 onClick: (event, rowData) => {
-                  console.log("From Table Record Id: " + rowData.PetRecordId);
+                  //console.log("From Table Record Id: " + rowData.PetRecordId);
                   updateStateRecordId(rowData.PetRecordId, rowData.RecordName, rowData.RecordNotes);
                   handleShowUpdate();
                }
@@ -248,7 +232,7 @@ function PetRecordsComponent(props) {
             detailPanel={rowData => {
 
               if (rowData.RecordNotes == null) {
-                rowData.RecordNotes = "No Notes.";
+                rowData.RecordNotes = "";
               } 
 
               return (
@@ -258,12 +242,6 @@ function PetRecordsComponent(props) {
                     <Form.Text name="recordNotes" style={{padding: 5, fontSize: 15}} >
                       {rowData.RecordNotes}
                     </Form.Text>
-                    {/* <Form.Control name="recordNotes" type="textarea" as="textarea" rows={5}
-                                  defaultValue={rowData.RecordNotes}
-                                  onChange={handleRecordNotesChange}
-                                  disabled={true}
-                                  style={{}}
-                                  required/> */}
                 </Form.Group>
               )
             }}
@@ -284,7 +262,7 @@ function PetRecordsComponent(props) {
                                     <span className="FormAddButtonText"> Upload Record </span>
                                     <span className="FormAddButtonIcon">
                                       <svg fill="none" viewBox="0 0 24 24" height="20" width="20" xmlns="http://www.w3.org/2000/svg">
-                                      <path xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" d="M4 4C4 2.89543 4.89543 2 6 2H14C14.2652 2 14.5196 2.10536 14.7071 2.29289L19.7071 7.29289C19.8946 7.48043 20 7.73478 20 8V20C20 21.1046 19.1046 22 18 22H6C4.89543 22 4 21.1046 4 20V4ZM17.5858 8H14V4.41421L17.5858 8ZM12 4V9C12 9.55228 12.4477 10 13 10H18V20H6V4L12 4ZM12 12C12.5523 12 13 12.4477 13 13V14H14C14.5523 14 15 14.4477 15 15C15 15.5523 14.5523 16 14 16H13V17C13 17.5523 12.5523 18 12 18C11.4477 18 11 17.5523 11 17V16H10C9.44772 16 9 15.5523 9 15C9 14.4477 9.44772 14 10 14H11V13C11 12.4477 11.4477 12 12 12Z" fill="#282828"></path>
+                                      <path xmlns="http://www.w3.org/2000/svg" fillRule="evenodd" clipRule="evenodd" d="M4 4C4 2.89543 4.89543 2 6 2H14C14.2652 2 14.5196 2.10536 14.7071 2.29289L19.7071 7.29289C19.8946 7.48043 20 7.73478 20 8V20C20 21.1046 19.1046 22 18 22H6C4.89543 22 4 21.1046 4 20V4ZM17.5858 8H14V4.41421L17.5858 8ZM12 4V9C12 9.55228 12.4477 10 13 10H18V20H6V4L12 4ZM12 12C12.5523 12 13 12.4477 13 13V14H14C14.5523 14 15 14.4477 15 15C15 15.5523 14.5523 16 14 16H13V17C13 17.5523 12.5523 18 12 18C11.4477 18 11 17.5523 11 17V16H10C9.44772 16 9 15.5523 9 15C9 14.4477 9.44772 14 10 14H11V13C11 12.4477 11.4477 12 12 12Z" fill="#282828"></path>
                                       </svg>
                                     </span>
                         </Button> <br/>
@@ -320,38 +298,23 @@ function PetRecordsComponent(props) {
 
   class UpdateRecordComponent extends Component {
     constructor(props) {
-      console.log(props);
+      //console.log(props);
       super();
       this.state = {
         RecordId: props.recordId.recordId,
         RecordName: props.recordName.recordName,
         RecordNotes: props.recordNotes.recordNotes};
-        console.log("Component: 'UpdateRecordComponent' loaded");
+        //console.log("Component: 'UpdateRecordComponent' loaded");
     }
-
-    
-  
-    //componentDidMount() {
-    //  axios.get(`/api/pet-events/` + this.state.EventId, {withCredentials: true} )
-    //    .then(response=>{
-    //      this.setState({EventTypeId: response.data.EventTypeId,
-    //                      EventId: response.data.EventId,
-    //                      EventDescription: response.data.EventDescription,
-    //                      Date: response.data.Date});
-    //    })
-    //    .catch((error) => {
-    //        console.log(error);
-    //    })
-    //}
   
     handleRecordNameChange = event => {
       this.setState({RecordName: event.target.value});
-      console.log(event.target.value);
+      //console.log(event.target.value);
     }
   
     handleRecordNotesChange = event => {
       this.setState({RecordNotes: event.target.value});
-      console.log(event.target.value);
+      //console.log(event.target.value);
     }
   
     handleUpdate = (event) => {
@@ -368,11 +331,11 @@ function PetRecordsComponent(props) {
         RecordName: this.state.RecordName,
         RecordNotes: this.state.RecordNotes
       }
-      console.log(data);
-      console.log(this.state.RecordId);
+      //console.log(data);
+      //console.log(this.state.RecordId);
       axios.put('/api/pet-records/' + this.state.RecordId, data, {withCredentials: true })
         .then((response) => {
-          console.log("Axios response:" + response.statusText);
+          //console.log("Axios response:" + response.statusText);
           Swal.fire('Congratulations!', `${data.RecordName} has been updated!`, 'success');
           this.props.fetch();
         })
@@ -389,7 +352,7 @@ function PetRecordsComponent(props) {
 
                 <Col>
                   <Form.Group controlId="formRecordName">
-                  <Form.Label>RecordName</Form.Label>
+                  <Form.Label>Record Name</Form.Label>
                   <Form.Control name="recordName" type="text" min={0}
                                 defaultValue={this.state.RecordName}
                                 onChange={this.handleRecordNameChange}
@@ -405,7 +368,7 @@ function PetRecordsComponent(props) {
                       <Form.Control name="recordNotes" type="textarea" as="textarea" rows={5} maxLength={300}
                                   defaultValue={this.state.RecordNotes}
                                   onChange={this.handleRecordNotesChange}
-                                  required/>
+                      />
                   </Form.Group>
                 </Col>
               </Form.Row>

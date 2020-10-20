@@ -14,7 +14,7 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING(45)
         }
     }, {
-        // creates a model named Species, pointing to a table named Species
+        // creates a model named Breed, pointing to a table named Breed
         freezeTableName: true,
         timestamps: false
     });

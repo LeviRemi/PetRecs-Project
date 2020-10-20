@@ -1,5 +1,6 @@
 const dbConfig = require("../config/db.config.js");
 
+// Connect sequelize to the database server
 const Sequelize = require("sequelize");
 const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
     host: dbConfig.HOST,
@@ -12,6 +13,8 @@ const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
     }
 });
 
+// Construct a database object containing all models
+// Exported to be used by the controllers and server
 const db = {};
 
 db.Sequelize = Sequelize;

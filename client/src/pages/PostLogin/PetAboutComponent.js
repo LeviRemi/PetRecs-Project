@@ -2,9 +2,8 @@
 
 import React, {useEffect, useState} from 'react';
 import { useParams } from 'react-router';
-import PetImage, {PetCardImage, PetProfileImage} from "../../components/PetImage";
+import {PetProfileImage} from "../../components/PetImage";
 import axios from "axios";
-import trackPromise, { manuallyDecrementPromiseCounter, manuallyIncrementPromiseCounter } from 'react-promise-tracker';
 
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -16,12 +15,9 @@ import {useForm} from "react-hook-form";
 import Swal from "sweetalert2";
 import Spinner from "react-bootstrap/Spinner";
 import {useHistory} from "react-router";
-import Alert from "react-bootstrap/Alert";
 
 import '../../utils/FileUpload/FileUpload.css'
 import tableIcons from "../../utils/TableIcons";
-import DownloadRounded from "@material-ui/icons/GetAppRounded";
-import DeleteRounded from "@material-ui/icons/DeleteRounded";
 import MaterialTable, {MTableToolbar} from "material-table";
 import {HighlightOff} from "@material-ui/icons";
 
@@ -39,13 +35,10 @@ function PetAboutComponent(props) {
     const catBreedList = props.catList;
     const { register, handleSubmit, errors, watch } = useForm();
     const [isLoading, setLoading] = useState({display: "none"});
-    const acquired = props.acquired === undefined? false : props.acquired;
 
     const [selectedFile, setSelectedFile] = useState(null);
     const [fileName, setFileName] = useState("");
-    const [urlpetid, setUrlpetid] = useState(useParams());
-
-    //const handleCloseUpload = () => props.closeModal();
+    const [urlpetid] = useState(useParams());
 
     // Create a reference to the hidden file input element
     const hiddenFileInput = React.useRef(null);
@@ -71,7 +64,7 @@ function PetAboutComponent(props) {
 
     // Handling file selection from input
     const onFileSelected = async (e) => {
-        console.log("File Selected");
+        //console.log("File Selected");
       if (e.target.files[0]) {
         setSelectedFile(e.target.files[0], handleFileUpload);
         setFileName(e.target.files[0].name);
@@ -82,7 +75,7 @@ function PetAboutComponent(props) {
     const onSubmit = (data) => {
         setLoading({display: "initial"});
         let bod = data.petBirthdate;
-        console.log("petdogbreed", data.petDogBreed)
+        //console.log("petdogbreed", data.petDogBreed)
 
         axios.put(`/api/pets/${petprofile.PetId}`, {
             PetName: data.petName,
@@ -98,7 +91,7 @@ function PetAboutComponent(props) {
         }, {withCredentials: true})
             .then((res) => {
                 setLoading({display: "none"});
-                console.log(res);
+                //console.log(res);
                 handleClose();
                 Swal.fire('Congratulations!', "This pet profile has been updated", 'success');
                 props.fetch();
@@ -109,11 +102,10 @@ function PetAboutComponent(props) {
                 Swal.fire('Oops...', "You do not have permission to update this pet profile", 'error');
             })
 
-
     }
 
     const onShare = (data) => {
-        console.log(data);
+        //console.log(data);
         setLoading({display: "initial"});
 
         axios.post(`/api/pets/${petprofile.PetId}/share`, {
@@ -121,7 +113,7 @@ function PetAboutComponent(props) {
         }, {withCredentials: true})
             .then((res) => {
                 setLoading({display: "none"});
-                console.log(res);
+                //console.log(res);
                 Swal.fire('Congratulations!', "This pet profile has been shared with " + data.email, 'success');
                 props.refreshShares();
             }, (err) => {
@@ -158,7 +150,7 @@ function PetAboutComponent(props) {
                 Swal.showLoading();
                 axios.delete(`/api/pets/${petprofile.PetId}`, {withCredentials: true})
                     .then((res) => {
-                        console.log(res);
+                        //console.log(res);
                         Swal.fire('Pet Profile Deleted', '', 'success');
                         history.push("/pets");
                     }, (err) => {
@@ -183,7 +175,6 @@ function PetAboutComponent(props) {
                     && !allowedFileTypes.includes(fileName.substr(fileName.length - 4).toLowerCase())) {
                     setLoading({display: "none"});
                     Swal.fire("Oops...", "We only accept jpg or png files", "error");
-                    return;
                 } else {
                     // If validations pass, attempt the upload
                     try {
@@ -198,14 +189,14 @@ function PetAboutComponent(props) {
                                 selectedFile,
                                 `${Date.now()}-${selectedFile.name}`,
                             );
-                            console.log(fileData);
+                            //console.log(fileData);
                             axios.post("/api/upload", fileData, {withCredentials: true})
                                 .then((response) => {
                                     axios.put('/api/pets/' + urlpetid.PetId, {"ProfileUrl": response.data.fileLocation},
                                         {Params: {id: urlpetid.PetId}, withCredentials: true })
                                         .then((res) => {
                                             setLoading({display: "none"});
-                                            console.log(res);
+                                            //console.log(res);
                                             handleCloseUpload();
                                             Swal.fire("Congratulations!", "Profile picture updated", "success");
                                             props.fetch();
@@ -226,7 +217,6 @@ function PetAboutComponent(props) {
             .catch(err => {
                 setLoading({display: "none"});
                 Swal.fire("Oops...", "Only owners can change a pet's profile photo", "error");
-                return;
             })
     };
 

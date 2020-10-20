@@ -1,6 +1,5 @@
-import React, { Component } from 'react';
+import React from 'react';
 import MaterialTable from "material-table";
-import axios from 'axios';
 
  const Table = () => {
 

@@ -11,7 +11,7 @@ function Logout() {
     // Destroy session
     axios.get("/api/sessions/destroy", { withCredentials: true })
         .then(response=>{
-            console.log(response);
+            //console.log(response);
         })
         .catch((error) => {
             console.log(error);

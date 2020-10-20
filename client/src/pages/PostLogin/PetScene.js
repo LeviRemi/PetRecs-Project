@@ -2,7 +2,7 @@
 
 import React, {useEffect, useState} from 'react';
 import {useHistory, useParams} from 'react-router';
-import {Link, Route, Switch} from 'react-router-dom';
+import {Link, Route} from 'react-router-dom';
 
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
@@ -10,7 +10,6 @@ import Row from 'react-bootstrap/Row';
 import Header from '../../components/Header.js';
 import Footer from '../../components/Footer.js';
 import PetNavBar from '../../components/PetNavBar.js';
-import PetCard from '../../components/PetCard.js';
 
 import PetRecordsComponent from './PetRecordsComponent.js';
 import PetHealthComponent from './PetHealthComponent.js';
@@ -21,7 +20,6 @@ import PetAboutComponent from "./PetAboutComponent";
 import isUserLoggedIn from '../../utils/AuthApi';
 import {Redirect} from 'react-router-dom';
 
-import NotFound from "../NotFound";
 import LoadingIndicator from '../../utils/LoadingIndicator.js'
 import axios from "axios";
 import moment from "moment";
@@ -31,25 +29,19 @@ import {manuallyDecrementPromiseCounter, manuallyIncrementPromiseCounter} from "
 import * as Swal from "sweetalert2";
 
 function PetScene(props) {
-  console.log("'PetScene' loaded");
+  //console.log("'PetScene' loaded");
 
-  const [urlpetid, setUrlpetid] = useState(useParams());
+  const [urlpetid] = useState(useParams());
   const [petprofile, setPetprofile] = useState({pet: '', species: '', breed: ''});
   const [cardAcquired, setCardAcquired] = useState(false);
   const [infoAcquired, setInfoAcquired] = useState(undefined);
-  const [petSpecies, setPetSpecies] = useState('');
-  const [petBreed, setPetBreed] = useState('');
   const [speciesList, setSpeciesList] = useState([]);
   const [dogBreedList, setDogBreedList] = useState([]);
   const [catBreedList, setCatBreedList] = useState([]);
   const [records, setRecords] = useState([]);
-  const [recordsAcquired, setRecordsAcquired] = useState(false);
   const [events, setEvents] = useState([]);
-  const [eventsAcquired, setEventsAcquired] = useState(false);
   const [weights, setWeights] = useState([]);
-  const [weightsAcquired, setWeightsAcquired] = useState(false);
   const [meds, setMeds] = useState([]);
-  const [medsAcquired, setMedsAcquired] = useState(false);
   const [sharedAccts, setSharedAccts] = useState([]);
 
 
@@ -60,9 +52,9 @@ function PetScene(props) {
     axios.get(`/api/pets/${props.match.params.PetId}`, {withCredentials: true} )
         .then(response=>{
           const profile = response.data;
-
           const requestSpecies = axios.get(`/api/species/${response.data.SpeciesId}`, {withCredentials: true});
           const requestBreed = (response.data.SpeciesId === 1 || response.data.SpeciesId === 2)? axios.get(`/api/breeds/${response.data.BreedId}`, {withCredentials: true}) : "";
+
           axios.all([requestSpecies, requestBreed]).then(axios.spread((...responses) => {
             const responseSpecies = responses[0];
             const responseBreed = responses[1];
@@ -144,7 +136,7 @@ function PetScene(props) {
   }
 
   let date = (petprofile.pet.PetAgeYear + '-' + petprofile.pet.PetAgeMonth + ' ' +petprofile.pet.PetAgeDay);
-  let ageYears = 10;
+  let ageYears;
 
   if ( moment().diff(date, 'year') >= 1) {
     ageYears = moment().diff(date, 'years') + 'y';
@@ -163,7 +155,7 @@ function PetScene(props) {
       axios.get(`/api/pet-records/pet/${props.match.params.PetId}`, {withCredentials: true} )
           .then(response=>{
               setRecords(response.data);
-              console.log(response.data);
+              //console.log(response.data);
               manuallyDecrementPromiseCounter();
           })
           .catch((error) => {
@@ -176,7 +168,7 @@ function PetScene(props) {
       axios.get(`/api/pet-records/pet/${props.match.params.PetId}`, {withCredentials: true} )
           .then(response=>{
               setRecords(response.data);
-              console.log(response.data);
+              //console.log(response.data);
           })
           .catch((error) => {
               console.log(error);
@@ -262,7 +254,7 @@ function PetScene(props) {
       axios.get(`/api/pets/${props.match.params.PetId}/getShared`, {withCredentials: true})
           .then(response=> {
               setSharedAccts(response.data);
-              console.log(response.data);
+              //console.log(response.data);
           })
           .catch(err => {
               console.log(err);

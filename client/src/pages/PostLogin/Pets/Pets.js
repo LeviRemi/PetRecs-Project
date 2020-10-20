@@ -4,7 +4,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import trackPromise, { manuallyDecrementPromiseCounter, manuallyIncrementPromiseCounter } from 'react-promise-tracker';
+import { manuallyDecrementPromiseCounter, manuallyIncrementPromiseCounter } from 'react-promise-tracker';
 
 // Style
 import './Pets.css'
@@ -18,8 +18,6 @@ import LoadingIndicator from '../../../utils/LoadingIndicator.js'
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 export default class Pets extends Component {
-
-
 
     state = { pets: [],
               sharedPets: [],
@@ -70,7 +68,7 @@ export default class Pets extends Component {
         if (this.state.sharedPets.length == 0) {
             sharedPetsList = <h4>No Shared Pets</h4>
         } else {
-            console.log("shared pets list")
+            //console.log("shared pets list")
             sharedPetsList = this.state.sharedPets.map(pet =>
                 <div className="PetContainer" key={pet.PetId}>
                     <Link id="PetLink" to={"/pets/" + pet.PetId + "/about"} key={pet.PetId}>

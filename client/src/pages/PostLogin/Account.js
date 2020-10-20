@@ -3,25 +3,18 @@
 import React, {useEffect, useState} from 'react'
 import Header from "../../components/Header";
 import Container from "react-bootstrap/Container";
-import {Link} from "react-router-dom";
-import PetImage from "../../components/PetImage";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import Footer from "../../components/Footer";
-import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import {useHistory} from "react-router";
 import {useForm} from "react-hook-form";
-import Swal from "sweetalert2";
 import * as swal from "sweetalert2";
 
 function Account() {
 
     const [acct, setAcct] = useState("");
-    const history = useHistory();
-    const { register, handleSubmit, errors, watch } = useForm();
+    const { register, handleSubmit, errors } = useForm();
 
     function fetchAccount() {
         axios.get("/api/accounts/current", {withCredentials: true})
@@ -106,28 +99,6 @@ function Account() {
                                 </Col>
 
                             </Form.Row>
-                            {/*<Form.Row>*/}
-                            {/*    <Col>*/}
-                            {/*        <Form.Group controlId="formBasicPassword">*/}
-                            {/*            <Form.Label>New Password</Form.Label>*/}
-                            {/*            <Form.Control name="password" type="password" placeholder="Password"*/}
-                            {/*                          ref={register({*/}
-                            {/*                              minLength: {value: 6, message: "Password must be at least 6 characters in length"},*/}
-                            {/*                              maxLength: {value: 20, message: "Password must be at or under 20 characters in length"}*/}
-                            {/*                          })} />*/}
-                            {/*            <div className="text-danger">{errors.password && (errors.password.message || "Password is required")}</div>*/}
-                            {/*        </Form.Group>*/}
-                            {/*    </Col>*/}
-                            {/*    <Col>*/}
-                            {/*        <Form.Group controlId="formBasicRepeatPassword">*/}
-                            {/*            <Form.Label>Verify</Form.Label>*/}
-                            {/*            <Form.Control name="password_confirm" type="password" placeholder="Password"*/}
-                            {/*                          ref={register({ validate: value => value === watch('password') })} />*/}
-                            {/*            <div className="text-danger">{errors.password_confirm && "Both passwords must match"}</div>*/}
-                            {/*        </Form.Group>*/}
-                            {/*    </Col>*/}
-                            {/*</Form.Row>*/}
-
 
                             <br />
                             <div className="text-center">

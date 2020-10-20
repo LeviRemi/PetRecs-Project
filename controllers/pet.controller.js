@@ -5,9 +5,10 @@ const Contact = db.petContact;
 const Account = db.account;
 const Event = db.petEvent;
 const Weight = db.petWeight;
+const Record = db.petRecord;
 
 // Create and Save a new Pet
-exports.create = (req, res, next) => {
+exports.create = (req, res) => {
     // Validate request
     if (!req.body.SpeciesId || !req.body.PetName || !req.body.PetGender) {
         res.status(400).send({
@@ -81,7 +82,8 @@ exports.create = (req, res, next) => {
                 PetId: data.PetId,
                 Owner: 1
             }).then(data => {
-                console.log(data)
+                //console.log(data)
+                res.send(data);
             }).catch(err => {
                 res.status(500).send({
                     message:
@@ -186,6 +188,7 @@ exports.findOne = (req, res) => {
             if (data === null) {
                 res.status(401).send("This user does not have access to this pet, or pet does not exist");
             } else {
+                // Find and return pet by id
                 return Pet.findByPk(id)
                     .then(data => {
                         if (data === null) {
@@ -234,7 +237,7 @@ exports.update = (req, res) => {
                                 message: "Pet was updated successfully."
                             });
                         } else {
-                            console.log(req.body)
+                            //console.log(req.body)
                             res.send({
                                 message: `Cannot update Pet with id=${id}. Maybe Pet was not found or request body was empty.`
                             });
@@ -283,27 +286,39 @@ exports.delete = (req, res) => {
                                     where: {PetId: req.params.id}
                                 })
                                     .then(data => {
-                                        // Destroy pet
-                                        return Pet.destroy({
-                                            where: {PetId: id}
+                                        // Destroy associated Pet Records
+                                        return Record.destroy({
+                                            where: {PetId: req.params.id}
                                         })
-                                            .then(num => {
-                                                if (num === 1) {
-                                                    res.status(200).send({
-                                                        message: "Pet was deleted successfully!"
+                                            .then(data => {
+                                                // Destroy pet
+                                                return Pet.destroy({
+                                                    where: {PetId: id}
+                                                })
+                                                    .then(num => {
+                                                        if (num === 1) {
+                                                            res.status(200).send({
+                                                                message: "Pet was deleted successfully!"
+                                                            });
+                                                        } else {
+                                                            res.status(500).send({
+                                                                message: `Cannot delete Pet with id=${id}. Maybe Pet was not found.`
+                                                            });
+                                                        }
+                                                    })
+                                                    .catch(err => {
+                                                        res.status(500).send({
+                                                            message:
+                                                                err.message || "Could not delete Pet with id=" + id
+                                                        });
                                                     });
-                                                } else {
-                                                    res.status(500).send({
-                                                        message: `Cannot delete Pet with id=${id}. Maybe Pet was not found.`
-                                                    });
-                                                }
                                             })
                                             .catch(err => {
-                                                res.status(500).send({
+                                                res.status(500).send( {
                                                     message:
-                                                        err.message || "Could not delete Pet with id=" + id
+                                                        err.message || "Some error occurred while destroying associated records"
                                                 });
-                                            });
+                                            })
                                     })
                                     .catch(err => {
                                         res.status(500).send( {
@@ -468,7 +483,7 @@ exports.deleteSharedAccount = (req, res) => {
                     where: {PetId: petId, AccountId: accountId}
                 })
                     .then(data => {
-                        console.log(data);
+                        //console.log(data);
                         if (data === 0) {
                             res.status(401).send("This account already does not have share access to this pet, or the account does not exist");
                         } else {

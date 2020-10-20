@@ -75,7 +75,7 @@ exports.login = (req, res) => {
         });
         return;
     }
-    console.log("Validating...");
+    //console.log("Validating...");
     const email = req.body.Email;
     const pass = req.body.Password;
 

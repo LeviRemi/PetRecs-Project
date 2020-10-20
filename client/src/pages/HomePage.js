@@ -63,15 +63,15 @@ function HomePage() {
                         <Row>
                             <Col>
                                 <p style={featureTitleStyle}>Create Pet Profiles</p>
-                                <img style={featureTitleImageStyle} src={require('../pet-house.png')} alt='Create Pet Profiles image' width='125' height='125' />
+                                <img style={featureTitleImageStyle} src={require('../pet-house.png')} alt='dog in a dog house' width='125' height='125' />
                             </Col>
                             <Col>
                                 <p style={featureTitleStyle}>Store Records Online<br /></p>
-                                <img style={featureTitleImageStyle} src={require('../file-icon.png')} alt='Create Pet Profiles image' width='125' height='125' />
+                                <img style={featureTitleImageStyle} src={require('../file-icon.png')} alt='document with an upload symbol' width='125' height='125' />
                             </Col>
                             <Col>
                                 <p style={featureTitleStyle}>Monitor Health Data<br /></p>
-                                <img style={featureTitleImageStyle} src={require('../veterinary-icon.png')} alt='Create Pet Profiles image' width='125' height='125' />
+                                <img style={featureTitleImageStyle} src={require('../veterinary-icon.png')} alt='paw with a red cross' width='125' height='125' />
                             </Col>
                         </Row>
                         <Row>

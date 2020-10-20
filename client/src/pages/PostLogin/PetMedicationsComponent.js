@@ -2,9 +2,7 @@
 
 import React, { Component } from 'react';
 import axios from 'axios';
-import trackPromise, { manuallyDecrementPromiseCounter, manuallyIncrementPromiseCounter } from 'react-promise-tracker';
 
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import moment from 'moment';
 
 import Form from 'react-bootstrap/Form';
@@ -18,7 +16,6 @@ import MaterialTable, {MTableToolbar} from "material-table";
 
 // MT Icons
 import tableIcons from '../../utils/TableIcons.js'
-import AddRounded from '@material-ui/icons/AddRounded';
 import UpdateRounded from '@material-ui/icons/EditRounded';
 import DeleteRounded from '@material-ui/icons/DeleteRounded';
 
@@ -35,7 +32,7 @@ export default class PetMedicationsComponent extends Component {
     this.handleCloseAddMed = this.handleCloseAddMed.bind(this);
     this.handleShowUpdateMed = this.handleShowUpdateMed.bind(this);
     this.handleCloseUpdateMed = this.handleCloseUpdateMed.bind(this);
-    console.log("PetMedicationsComponent - Using PetId: " + this.state.PetId);
+    //console.log("PetMedicationsComponent - Using PetId: " + this.state.PetId);
   }
 
   handleCloseAddMed() { this.setState({ showAddMed: false }); }
@@ -43,21 +40,6 @@ export default class PetMedicationsComponent extends Component {
   handleCloseUpdateMed() { this.setState({ showUpdateMed: false }); }
   handleShowUpdateMed() { this.setState({ showUpdateMed: true }); }
   updateStateMedicationId(buttonMedicationId) { this.setState({ MedicationId: buttonMedicationId }); }
-
-  fetchMeds() {
-      axios.get(`/api/medications/pet/` + this.state.PetId, {withCredentials: true} )
-          .then(response=>{
-              this.setState({medications: response.data});
-              //console.log(this.state.medications);
-              document.getElementById("PetMedTableId").hidden=false;
-              manuallyDecrementPromiseCounter();
-              console.log(response.data);
-          })
-          .catch((error) => {
-              console.log(error);
-              manuallyDecrementPromiseCounter();
-          })
-  }
 
   componentDidMount() {
     this.setState({medications: this.props.meds});
@@ -84,7 +66,7 @@ export default class PetMedicationsComponent extends Component {
         axios.delete(`/api/medications/` + MedicationId, {withCredentials: true} )
           .then(response=>{
             //console.log(response);
-            console.log("Medication " + MedicationId + " deleted sucessfully.");
+            //console.log("Medication " + MedicationId + " deleted sucessfully.");
             Swal.fire('Medication Deleted', '', 'success');
             this.props.fetch();
           })
@@ -98,7 +80,7 @@ export default class PetMedicationsComponent extends Component {
 
   checkNullDate(date) {
     if (date === null) { return (<span>NA</span>) }
-    else { return ( <span> { moment(date).format("MM/DD/YYYY") } </span>) };
+    else { return ( <span> { moment(date).format("MM/DD/YYYY") } </span>) }
   }
 
   render(){
@@ -149,7 +131,7 @@ export default class PetMedicationsComponent extends Component {
                                     <span className="FormAddButtonText"> Add Medication </span>
                                     <span className="FormAddButtonIcon">
                                       <svg fill="none" viewBox="0 0 24 24" height="20" width="20" xmlns="http://www.w3.org/2000/svg">
-                                      <path xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" d="M12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4ZM2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12ZM12 7C12.5523 7 13 7.44772 13 8V11H16C16.5523 11 17 11.4477 17 12C17 12.5523 16.5523 13 16 13H13V16C13 16.5523 12.5523 17 12 17C11.4477 17 11 16.5523 11 16V13H8C7.44772 13 7 12.5523 7 12C7 11.4477 7.44772 11 8 11H11V8C11 7.44772 11.4477 7 12 7Z" fill="#282828"></path>
+                                      <path xmlns="http://www.w3.org/2000/svg" fillRule="evenodd" clipRule="evenodd" d="M12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4ZM2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12ZM12 7C12.5523 7 13 7.44772 13 8V11H16C16.5523 11 17 11.4477 17 12C17 12.5523 16.5523 13 16 13H13V16C13 16.5523 12.5523 17 12 17C11.4477 17 11 16.5523 11 16V13H8C7.44772 13 7 12.5523 7 12C7 11.4477 7.44772 11 8 11H11V8C11 7.44772 11.4477 7 12 7Z" fill="#282828"></path>
                                       </svg>
                                     </span>
                                   </Button> <br/>
@@ -213,7 +195,7 @@ class AddMedicationComponent extends Component {
                    EndDate: "",
                    Notes: ""};
 
-    console.log("Component: 'AddMedicationComponent' loaded");
+    //console.log("Component: 'AddMedicationComponent' loaded");
   }
 
   handleNameChange = event => { this.setState({Name: event.target.value}); }
@@ -244,14 +226,14 @@ class AddMedicationComponent extends Component {
 
     axios.post(`/api/medications/`, data, {withCredentials: true} )
         .then(response=>{
-            console.log(response);
-            console.log("Medication added successfully.");
+            //console.log(response);
+            //console.log("Medication added successfully.");
             Swal.fire('Medication Added', '', 'success');
             this.props.fetch();
           })
         .catch((error) => {
             console.log(error);
-            console.log(data);
+            //console.log(data);
             Swal.fire('Oops...', "You do not have permission to add this medication", 'error');
         })
   }
@@ -366,7 +348,7 @@ class UpdateMedicationComponent extends Component {
   componentDidMount() {
     axios.get(`/api/medications/` + this.state.MedId, {withCredentials: true} )
       .then(response=>{
-        console.log(response);
+        //console.log(response);
         this.setState({ Name: response.data.Name,
                         DosageAmount: response.data.DosageAmount,
                         DosageUnit: response.data.DosageUnit,
@@ -415,8 +397,8 @@ class UpdateMedicationComponent extends Component {
 
     axios.put(`/api/medications/` + this.state.MedId, data, {withCredentials: true} )
         .then(response=>{
-          console.log(response);
-          console.log("Medication updated successfully.");
+          //console.log(response);
+          //console.log("Medication updated successfully.");
           Swal.fire('Medication Updated', '', 'success');
           this.props.fetch();
         })
@@ -431,15 +413,15 @@ class UpdateMedicationComponent extends Component {
     var endDateElement = document.getElementById("formEndDate");
 
     if (checkbox.checked) {
-      console.log("initial check: noEndCheckBox is checked");
+      //console.log("initial check: noEndCheckBox is checked");
       endDateElement.setAttribute("disabled", "true")
       this.setState( {EndDate: null} );
       
     }
     else {
-      console.log("initial check: noEndCheckBox is unchecked");
+      //console.log("initial check: noEndCheckBox is unchecked");
       endDateElement.removeAttribute("disabled")
-    };
+    }
   }
 
   checkBoxDisableDate() {
@@ -447,26 +429,16 @@ class UpdateMedicationComponent extends Component {
     var endDateElement = document.getElementById("formEndDate");
 
     if (checkbox.checked) {
-      console.log("noEndCheckBox is checked");
+      //console.log("noEndCheckBox is checked");
       endDateElement.setAttribute("disabled", "true")
       this.setState( {EndDate: null} );
       
     }
     else {
-      console.log("noEndCheckBox is unchecked");
+      //console.log("noEndCheckBox is unchecked");
       endDateElement.removeAttribute("disabled")
       this.setState( {EndDate: "" } );
-    };
-  }
-
-  checkNullDate(date) {
-    if (date === null) { return (<span> No end date</span>) } 
-    else { return ( <span> { moment(date).format("MM/DD/YYYY") } </span>) };
-  }
-
-  getDateValue(date) {
-    if (date === null) { return null; }
-    else { return ( moment(date).format("MM/DD/YYYY") ); };
+    }
   }
 
   render() {

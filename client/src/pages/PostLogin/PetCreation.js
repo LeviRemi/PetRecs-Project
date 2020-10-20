@@ -55,7 +55,7 @@ function PetCreation() {
     }, [])
 
     const onSubmit = (data) => {
-        console.log(data);
+        //console.log(data);
         let bod = data.petBirthdate;
 
         axios.post('/api/pets/', {
@@ -68,11 +68,10 @@ function PetCreation() {
             PetAgeDay: bod.substring(8, 10)
         }, { withCredentials: true })
             .then((res) => {
-                console.log(res);
+                //console.log(res);
                 Swal.fire('Congratulations!', `${data.petName} has been added!`, 'success');
                 history.push('/pets');
             }, (err) => {
-                console.log(err.response.status)
                 if (err.response.status === 409) {
                     Swal.fire('Oops...', err.response.data.message, 'error');
                 }
