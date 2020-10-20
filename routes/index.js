@@ -33,9 +33,4 @@ router.use('/api/pet-records', apiPetRecord);
 const apiMedication = require('./medication.routes');
 router.use('/api/medications', apiMedication);
 
-// If no API routes are hit, send the React app
-router.use(function(req, res) {
-	res.sendFile(path.join(__dirname, '../client/build/index.html'));
-});
-
 module.exports = router;
